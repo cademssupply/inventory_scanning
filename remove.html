@@ -6,34 +6,132 @@
   <title>Remove Inventory</title>
   <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
   <style>
-    body{margin:0;background:#f3f4f6;color:#111827;font-family:Arial,Helvetica,sans-serif}.wrap{max-width:620px;margin:0 auto;padding:16px}.card{background:#fff;border-radius:16px;padding:18px;box-shadow:0 4px 16px rgba(0,0,0,.10)}h1{font-size:24px;margin:0 0 8px;text-align:center}.sub{text-align:center;color:#6b7280;margin-bottom:14px}#reader{width:100%;overflow:hidden;border-radius:12px}.status{margin-top:12px;padding:12px;border-radius:10px;background:#f9fafb;text-align:center;font-weight:700}.status.success{background:#dcfce7}.status.error{background:#fee2e2}.item{display:none;margin-top:14px;padding:14px;background:#f9fafb;border-radius:10px}.name{font-size:21px;font-weight:700;margin-bottom:6px}label{display:block;margin-top:14px;font-weight:700}input{width:100%;box-sizing:border-box;margin-top:6px;padding:14px;font-size:18px;border:1px solid #d1d5db;border-radius:9px;background:#fff}button{width:100%;padding:15px;margin-top:12px;border:0;border-radius:10px;font-size:18px;font-weight:700}.primary{background:#c2410c;color:#fff}.dark{background:#111827;color:#fff}.secondary{background:#e5e7eb;color:#111827}.danger{background:#991b1b;color:#fff}.divider{margin:18px 0 8px;border-top:1px solid #e5e7eb}.small{font-size:13px;color:#6b7280;margin-top:8px;text-align:center}.mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}@media(max-width:520px){.mode-grid{grid-template-columns:1fr}}
+    body{margin:0;background:#f3f4f6;color:#111827;font-family:Arial,Helvetica,sans-serif}
+    .wrap{max-width:620px;margin:0 auto;padding:16px}
+    .card{background:#fff;border-radius:16px;padding:18px;box-shadow:0 4px 16px rgba(0,0,0,.10)}
+    h1{font-size:24px;margin:0 0 8px;text-align:center}.sub{text-align:center;color:#6b7280;margin-bottom:14px}
+    #reader{width:100%;overflow:hidden;border-radius:12px}
+    .status{margin-top:12px;padding:12px;border-radius:10px;background:#f9fafb;text-align:center;font-weight:700}
+    .status.success{background:#dcfce7}.status.error{background:#fee2e2}
+    .item{display:none;margin-top:14px;padding:14px;background:#f9fafb;border-radius:10px}
+    .name{font-size:21px;font-weight:700;margin-bottom:6px}
+    label{display:block;margin-top:14px;font-weight:700}
+    input{width:100%;box-sizing:border-box;margin-top:6px;padding:14px;font-size:18px;border:1px solid #d1d5db;border-radius:9px;background:#fff}
+    button{width:100%;padding:15px;margin-top:12px;border:0;border-radius:10px;font-size:18px;font-weight:700}
+    .primary{background:#c2410c;color:#fff}.dark{background:#111827;color:#fff}.secondary{background:#e5e7eb;color:#111827}.danger{background:#991b1b;color:#fff}
+    .mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.small{font-size:13px;color:#6b7280;margin-top:8px;text-align:center}
+    @media(max-width:520px){.mode-grid{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
-<div class="wrap"><div class="card">
-<h1>Remove Inventory</h1><div class="sub">Staff supply removal</div>
-<div class="mode-grid"><button class="dark" id="startBtn" onclick="startScanner()">Start Camera Scanner</button><button class="secondary" onclick="focusHardware()">Use Barcode Scanner</button></div>
-<div id="reader"></div><div id="status" class="status">Choose camera or hardware scanner</div>
-<div class="divider"></div><label for="hardwareBarcode">Wireless / USB Scanner Input</label><input id="hardwareBarcode" type="text" autocomplete="off" inputmode="text" placeholder="Scan barcode here" onkeydown="hardwareKey(event)">
-<div id="itemBox" class="item"><div id="itemName" class="name"></div><div>Barcode: <strong id="itemId"></strong></div><div>Current Qty: <strong id="currentQty"></strong></div>
-<label for="qty">Quantity Removed</label><input id="qty" type="number" min="1" step="1" inputmode="numeric" placeholder="Enter quantity removed">
-<button id="submitBtn" class="primary" onclick="submitTransaction()">Remove Inventory</button><button class="danger" onclick="resetForNextScan()">← Wrong Item — Scan Again</button></div>
-<div class="small">This page can only remove inventory. Add and Count are not available here.</div>
-</div></div>
+<div class="wrap">
+<div class="card">
+  <h1>Remove Inventory</h1>
+  <div class="sub">Scan item, enter amount used, remove</div>
+
+  <div class="mode-grid">
+    <button class="dark" id="startBtn" onclick="startScanner()">Start Camera Scanner</button>
+    <button class="secondary" onclick="focusHardware()">Use Barcode Scanner</button>
+  </div>
+
+  <div id="reader"></div>
+  <div id="status" class="status">Choose camera or hardware scanner</div>
+
+  <label for="hardwareBarcode">Wireless / USB Scanner Input</label>
+  <input id="hardwareBarcode" type="text" autocomplete="off" placeholder="Scan barcode here" onkeydown="hardwareKey(event)">
+
+  <div id="itemBox" class="item">
+    <div id="itemName" class="name"></div>
+    <div>Barcode: <strong id="itemId"></strong></div>
+
+    <label for="qty">Quantity Removed</label>
+    <input id="qty" type="number" min="1" step="1" inputmode="numeric" placeholder="Enter quantity removed">
+
+    <button class="primary" id="submitBtn" onclick="submitTransaction()">Remove Inventory</button>
+    <button class="danger" onclick="resetForNextScan()">← Wrong Item — Scan Again</button>
+  </div>
+
+  <div class="small">No inventory quantity is displayed on this interface.</div>
+</div>
+</div>
+
 <iframe name="saveFrame" id="saveFrame" style="display:none"></iframe>
+
 <script>
-const API_URL="https://script.google.com/macros/s/AKfycbzqxTts9uWW0FG_HpPfBIB-4kytuAmASXkoHsvLYEiwEMcnnRXn7U-pyPP2PJJ8YOOXXw/exec";
-let scanner=null,scanLocked=false,currentBarcode="",currentBeforeQty=null,pendingExpectedQty=null;
-function setStatus(msg,type=""){const box=document.getElementById("status");box.className="status"+(type?" "+type:"");box.textContent=msg}
-function startScanner(){if(!API_URL.startsWith("https://script.google.com/")){setStatus("Add your Apps Script /exec URL to this file first.","error");return}document.getElementById("startBtn").style.display="none";setStatus("Requesting camera permission...");scanner=new Html5Qrcode("reader");scanner.start({facingMode:"environment"},{fps:12,aspectRatio:1.777778,qrbox:(w,h)=>({width:Math.floor(w*.9),height:Math.min(180,Math.floor(h*.35))}),formatsToSupport:[Html5QrcodeSupportedFormats.QR_CODE,Html5QrcodeSupportedFormats.CODE_128,Html5QrcodeSupportedFormats.CODE_39,Html5QrcodeSupportedFormats.UPC_A,Html5QrcodeSupportedFormats.UPC_E,Html5QrcodeSupportedFormats.EAN_13,Html5QrcodeSupportedFormats.EAN_8]},decodedText=>{if(scanLocked)return;scanLocked=true;lookupItem(String(decodedText).trim())},()=>{}).then(()=>setStatus("Point camera at an item barcode")).catch(err=>{document.getElementById("startBtn").style.display="block";setStatus("Camera error: "+err,"error")})}
+const API_URL = "https://script.google.com/macros/s/AKfycbyGwziqfDHZpnLlTVnCHxtXAZYn0FZHeOqfdoWl-wJ0MmIOKFWXD7qWS5m0GpGBdbH8tg/exec";
+
+let scanner=null,scanLocked=false,currentBarcode="";
+
+function setStatus(msg,type=""){const b=document.getElementById("status");b.className="status"+(type?" "+type:"");b.textContent=msg}
+
+function startScanner(){
+  if(!API_URL.startsWith("https://script.google.com/"))return setStatus("Add your Apps Script /exec URL first.","error");
+  document.getElementById("startBtn").style.display="none";
+  scanner=new Html5Qrcode("reader");
+  scanner.start({facingMode:"environment"},
+    {fps:12,aspectRatio:1.777778,qrbox:(w,h)=>({width:Math.floor(w*.9),height:Math.min(180,Math.floor(h*.35))}),
+     formatsToSupport:[Html5QrcodeSupportedFormats.QR_CODE,Html5QrcodeSupportedFormats.CODE_128,Html5QrcodeSupportedFormats.CODE_39,Html5QrcodeSupportedFormats.UPC_A,Html5QrcodeSupportedFormats.UPC_E,Html5QrcodeSupportedFormats.EAN_13,Html5QrcodeSupportedFormats.EAN_8]},
+    txt=>{if(scanLocked)return;scanLocked=true;lookupItem(String(txt).trim())},()=>{}
+  ).then(()=>setStatus("Point camera at an item barcode"))
+   .catch(err=>{document.getElementById("startBtn").style.display="block";setStatus("Camera error: "+err,"error")});
+}
+
 function focusHardware(){document.getElementById("hardwareBarcode").focus();setStatus("Ready for wireless / USB barcode scanner")}
-function hardwareKey(event){if(event.key!=="Enter")return;event.preventDefault();const value=event.target.value.trim();if(!value||scanLocked)return;scanLocked=true;lookupItem(value)}
-function lookupItem(barcode){currentBarcode=barcode;setStatus("Looking up item...");jsonp({mode:"lookup",item:barcode},data=>{if(!data||!data.success){setStatus((data&&data.message)||"Item not found.","error");clearItem();setTimeout(()=>{scanLocked=false;focusHardware()},1000);return}currentBeforeQty=Number(data.currentQty);document.getElementById("itemName").textContent=data.name;document.getElementById("itemId").textContent=barcode;document.getElementById("currentQty").textContent=data.currentQty;document.getElementById("hardwareBarcode").value="";document.getElementById("itemBox").style.display="block";setStatus("Item loaded","success");document.getElementById("qty").focus()})}
-function submitTransaction(){const qtyText=document.getElementById("qty").value;if(qtyText===""||Number(qtyText)<=0)return setStatus("Enter the quantity removed.","error");const qty=Number(qtyText);pendingExpectedQty=currentBeforeQty-qty;document.getElementById("submitBtn").disabled=true;setStatus("Saving transaction...");postSave(qty);setTimeout(verifySave,1200)}
-function postSave(qty){const form=document.createElement("form");form.method="POST";form.action=API_URL;form.target="saveFrame";form.style.display="none";const fields={mode:"save",item:currentBarcode,action:"Remove",qty:String(qty)};Object.entries(fields).forEach(([k,v])=>{const input=document.createElement("input");input.type="hidden";input.name=k;input.value=v;form.appendChild(input)});document.body.appendChild(form);form.submit();form.remove()}
-function verifySave(){jsonp({mode:"lookup",item:currentBarcode,t:Date.now()},data=>{document.getElementById("submitBtn").disabled=false;if(!data||!data.success)return setStatus("Transaction was sent, but verification failed. Check the sheet before retrying.","error");const actual=Number(data.currentQty);if(actual!==Number(pendingExpectedQty)){currentBeforeQty=actual;document.getElementById("currentQty").textContent=actual;return setStatus("Could not verify expected quantity. Sheet currently shows "+actual+".","error")}setStatus("✓ REMOVED — New Qty: "+actual,"success");setTimeout(resetForNextScan,900)})}
+
+function hardwareKey(e){
+  if(e.key!=="Enter")return;e.preventDefault();
+  const v=e.target.value.trim();if(!v||scanLocked)return;
+  scanLocked=true;lookupItem(v);
+}
+
+function lookupItem(barcode){
+  currentBarcode=barcode;setStatus("Looking up item...");
+  jsonp({mode:"item",item:barcode},data=>{
+    if(!data||!data.success){
+      setStatus((data&&data.message)||"Item not found.","error");clearItem();
+      setTimeout(()=>{scanLocked=false;focusHardware()},900);return;
+    }
+    document.getElementById("itemName").textContent=data.name;
+    document.getElementById("itemId").textContent=barcode;
+    document.getElementById("hardwareBarcode").value="";
+    document.getElementById("itemBox").style.display="block";
+    setStatus("Item loaded","success");
+    document.getElementById("qty").focus();
+  });
+}
+
+function submitTransaction(){
+  const qtyText=document.getElementById("qty").value;
+  if(qtyText===""||Number(qtyText)<=0)return setStatus("Enter the quantity removed.","error");
+
+  const btn=document.getElementById("submitBtn");btn.disabled=true;setStatus("Saving...");
+  const form=document.createElement("form");
+  form.method="POST";form.action=API_URL;form.target="saveFrame";form.style.display="none";
+  const fields={mode:"save",item:currentBarcode,action:"Remove",qty:String(Number(qtyText))};
+  Object.entries(fields).forEach(([k,v])=>{const i=document.createElement("input");i.type="hidden";i.name=k;i.value=v;form.appendChild(i)});
+  document.body.appendChild(form);form.submit();form.remove();
+
+  setTimeout(()=>{btn.disabled=false;setStatus("✓ REMOVED","success");setTimeout(resetForNextScan,550)},650);
+}
+
 function resetForNextScan(){clearItem();scanLocked=false;setStatus("SCAN NEXT ITEM");focusHardware()}
-function clearItem(){currentBarcode="";currentBeforeQty=null;pendingExpectedQty=null;document.getElementById("itemName").textContent="";document.getElementById("itemId").textContent="";document.getElementById("currentQty").textContent="";document.getElementById("qty").value="";document.getElementById("hardwareBarcode").value="";document.getElementById("itemBox").style.display="none"}
-function jsonp(params,callback){const cb="__inventoryCb_"+Date.now()+"_"+Math.floor(Math.random()*100000),script=document.createElement("script");window[cb]=data=>{try{callback(data)}finally{delete window[cb];script.remove()}};const query=new URLSearchParams(params);query.set("prefix",cb);script.src=API_URL+"?"+query.toString();script.onerror=()=>{delete window[cb];script.remove();setStatus("Unable to reach inventory service.","error")};document.body.appendChild(script)}
+
+function clearItem(){
+  currentBarcode="";
+  document.getElementById("itemName").textContent="";
+  document.getElementById("itemId").textContent="";
+  document.getElementById("qty").value="";
+  document.getElementById("hardwareBarcode").value="";
+  document.getElementById("itemBox").style.display="none";
+}
+
+function jsonp(params,cb){
+  const name="__inv_"+Date.now()+"_"+Math.floor(Math.random()*100000),s=document.createElement("script");
+  window[name]=data=>{try{cb(data)}finally{delete window[name];s.remove()}};
+  const q=new URLSearchParams(params);q.set("prefix",name);s.src=API_URL+"?"+q.toString();
+  s.onerror=()=>{delete window[name];s.remove();setStatus("Unable to reach inventory service.","error")};
+  document.body.appendChild(s);
+}
 </script>
-</body></html>
+</body>
+</html>
