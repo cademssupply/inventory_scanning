@@ -1,168 +1,1779 @@
 <!doctype html>
 <html lang="en">
+
 <head>
+
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-  <title>Full Inventory</title>
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+  >
+
+  <title>Cameron EMS Inventory Management</title>
+
   <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+
   <style>
-    body{margin:0;background:#f3f4f6;color:#111827;font-family:Arial,Helvetica,sans-serif}
-    .wrap{max-width:620px;margin:0 auto;padding:16px}
-    .card{background:#fff;border-radius:16px;padding:18px;box-shadow:0 4px 16px rgba(0,0,0,.10)}
-    h1{font-size:24px;margin:0 0 8px;text-align:center}
-    .sub{text-align:center;color:#6b7280;margin-bottom:14px}
-    #reader{width:100%;overflow:hidden;border-radius:12px}
-    .status{margin-top:12px;padding:12px;border-radius:10px;background:#f9fafb;text-align:center;font-weight:700}
-    .status.success{background:#dcfce7}.status.error{background:#fee2e2}
-    .item{display:none;margin-top:14px;padding:14px;background:#f9fafb;border-radius:10px}
-    .name{font-size:21px;font-weight:700;margin-bottom:6px}
-    label{display:block;margin-top:14px;font-weight:700}
-    select,input{width:100%;box-sizing:border-box;margin-top:6px;padding:14px;font-size:18px;border:1px solid #d1d5db;border-radius:9px;background:#fff}
-    button{width:100%;padding:15px;margin-top:12px;border:0;border-radius:10px;font-size:18px;font-weight:700}
-    .primary{background:#c2410c;color:#fff}.dark{background:#111827;color:#fff}.secondary{background:#e5e7eb;color:#111827}.danger{background:#991b1b;color:#fff}
-    .mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-    .qtybox{display:none;margin-top:12px;padding:12px;border-radius:10px;background:#eef2ff;text-align:center;font-weight:700;font-size:18px}
-    .small{font-size:13px;color:#6b7280;margin-top:8px;text-align:center}
-    @media(max-width:520px){.mode-grid{grid-template-columns:1fr}}
+
+    :root {
+      --bg: #1f2328;
+      --panel: #2b3036;
+      --panel2: #343a40;
+      --border: #4b535c;
+
+      --text: #f3f4f6;
+      --muted: #b7bdc5;
+
+      --orange: #f97316;
+      --orange-light: #fb923c;
+      --orange-dark: #c2410c;
+
+      --success: #14532d;
+      --danger: #7f1d1d;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+
+      background:
+        linear-gradient(
+          180deg,
+          #171a1e 0%,
+          var(--bg) 100%
+        );
+
+      color: var(--text);
+
+      font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+      min-height: 100vh;
+    }
+
+    .wrap {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 18px;
+    }
+
+    .card {
+      background: var(--panel);
+
+      border: 1px solid var(--border);
+
+      border-radius: 18px;
+
+      padding: 20px;
+
+      box-shadow:
+        0 8px 28px rgba(0,0,0,.28);
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 18px;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 27px;
+      letter-spacing: .3px;
+    }
+
+    .accent {
+      color: var(--orange-light);
+    }
+
+    .sub {
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    /* =========================
+       BUTTONS
+    ========================= */
+
+    button,
+    .home-button {
+      width: 100%;
+
+      padding: 15px;
+
+      border: 0;
+
+      border-radius: 11px;
+
+      font-size: 17px;
+
+      font-weight: 700;
+
+      cursor: pointer;
+
+      text-align: center;
+    }
+
+    .mode-grid {
+      display: grid;
+
+      grid-template-columns:
+        1fr 1fr;
+
+      gap: 10px;
+
+      margin-bottom: 12px;
+    }
+
+    .camera-btn {
+      background: var(--orange);
+      color: white;
+    }
+
+    .hardware-btn {
+      background: var(--panel2);
+
+      color: var(--text);
+
+      border:
+        1px solid
+        var(--border);
+    }
+
+    .submit-btn {
+      margin-top: 16px;
+
+      background:
+        linear-gradient(
+          180deg,
+          var(--orange-light),
+          var(--orange-dark)
+        );
+
+      color: white;
+
+      font-size: 20px;
+
+      min-height: 60px;
+    }
+
+    .submit-btn:disabled {
+      opacity: .55;
+      cursor: default;
+    }
+
+    .qty-btn {
+      margin-top: 10px;
+
+      background: #171a1e;
+
+      color: var(--text);
+
+      border:
+        1px solid
+        var(--orange);
+    }
+
+    .wrong-btn {
+      margin-top: 10px;
+
+      background: transparent;
+
+      color: #ffd7c2;
+
+      border:
+        1px solid
+        var(--orange-dark);
+    }
+
+    .home-button {
+      display: block;
+
+      margin-top: 25px;
+
+      background: #171a1e;
+
+      color: #d1d5db;
+
+      border:
+        1px solid
+        var(--border);
+
+      text-decoration: none;
+    }
+
+    /* =========================
+       SCANNER
+    ========================= */
+
+    #reader {
+      width: 100%;
+
+      overflow: hidden;
+
+      border-radius: 12px;
+
+      background: #111;
+
+      margin-top: 10px;
+    }
+
+    .scanner-section {
+      margin-top: 14px;
+
+      padding-top: 14px;
+
+      border-top:
+        1px solid
+        var(--border);
+    }
+
+    /* =========================
+       STATUS
+    ========================= */
+
+    .status {
+      margin-top: 12px;
+
+      padding: 13px;
+
+      border-radius: 10px;
+
+      background: #20252a;
+
+      border:
+        1px solid
+        var(--border);
+
+      text-align: center;
+
+      font-weight: 700;
+
+      color: var(--text);
+    }
+
+    .status.success {
+      background: var(--success);
+      border-color: #166534;
+    }
+
+    .status.error {
+      background: var(--danger);
+      border-color: #991b1b;
+    }
+
+    /* =========================
+       INPUTS
+    ========================= */
+
+    label {
+      display: block;
+
+      font-weight: 700;
+
+      margin-bottom: 7px;
+
+      color: white;
+    }
+
+    input,
+    select {
+      width: 100%;
+
+      padding: 14px;
+
+      border:
+        1px solid
+        var(--border);
+
+      border-radius: 10px;
+
+      background: #171a1e;
+
+      color: white;
+
+      font-size: 18px;
+
+      outline: none;
+    }
+
+    input:focus,
+    select:focus {
+      border-color:
+        var(--orange);
+
+      box-shadow:
+        0 0 0 3px
+        rgba(249,115,22,.18);
+    }
+
+    input::placeholder {
+      color: #7f8790;
+    }
+
+    select {
+      cursor: pointer;
+    }
+
+    /* =========================
+       ITEM DISPLAY
+    ========================= */
+
+    .item {
+      display: none;
+
+      margin-top: 16px;
+
+      padding: 16px;
+
+      background: var(--panel2);
+
+      border:
+        1px solid
+        var(--border);
+
+      border-left:
+        5px solid
+        var(--orange);
+
+      border-radius: 12px;
+    }
+
+    .item-name {
+      font-size: 23px;
+
+      font-weight: 800;
+
+      margin-bottom: 7px;
+    }
+
+    .barcode {
+      color: var(--muted);
+
+      font-size: 14px;
+
+      margin-bottom: 18px;
+    }
+
+    .field-label {
+      margin-top: 15px;
+
+      color: var(--orange-light);
+
+      font-size: 15px;
+
+      text-transform: uppercase;
+
+      letter-spacing: .5px;
+    }
+
+    /* =========================
+       QUANTITY DISPLAY
+    ========================= */
+
+    .qty-box {
+      display: none;
+
+      margin-top: 12px;
+
+      padding: 16px;
+
+      border-radius: 10px;
+
+      background: #20252a;
+
+      border:
+        1px solid
+        var(--orange);
+
+      text-align: center;
+
+      font-weight: 800;
+
+      font-size: 20px;
+
+      color: white;
+    }
+
+    .tip {
+      margin-top: 14px;
+
+      text-align: center;
+
+      color: var(--muted);
+
+      font-size: 13px;
+
+      line-height: 1.4;
+    }
+
+    @media(max-width: 520px) {
+
+      .mode-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .wrap {
+        padding: 12px;
+      }
+
+      .card {
+        padding: 16px;
+      }
+
+      .header h1 {
+        font-size: 24px;
+      }
+
+    }
+
   </style>
+
 </head>
+
+
 <body>
+
+
 <div class="wrap">
-<div class="card">
-  <h1>Full Inventory</h1>
-  <div class="sub">Add, Remove, Count, or check quantity</div>
 
-  <div class="mode-grid">
-    <button class="dark" id="startBtn" onclick="startScanner()">Start Camera Scanner</button>
-    <button class="secondary" onclick="focusHardware()">Use Barcode Scanner</button>
+  <div class="card">
+
+
+    <!-- HEADER -->
+
+    <div class="header">
+
+      <h1>
+        Cameron EMS
+        <span class="accent">
+          Inventory Management
+        </span>
+      </h1>
+
+      <div class="sub">
+        Add • Remove • Count • Check Quantity
+      </div>
+
+    </div>
+
+
+    <!-- SCANNER OPTIONS -->
+
+    <div class="mode-grid">
+
+      <button
+        id="startBtn"
+        class="camera-btn"
+        onclick="startScanner()"
+      >
+        Start Camera Scanner
+      </button>
+
+
+      <button
+        class="hardware-btn"
+        onclick="focusHardware()"
+      >
+        Use Barcode Scanner / Keyboard
+      </button>
+
+    </div>
+
+
+    <div id="reader"></div>
+
+
+    <div
+      id="status"
+      class="status"
+    >
+      Type, scan, or use camera
+    </div>
+
+
+    <!-- BARCODE ENTRY -->
+
+    <div class="scanner-section">
+
+      <label for="hardwareBarcode">
+        Barcode Entry / Scanner
+      </label>
+
+      <input
+        id="hardwareBarcode"
+        type="text"
+        autocomplete="off"
+        placeholder="Type or scan barcode, then press Enter"
+        onkeydown="hardwareKey(event)"
+      >
+
+    </div>
+
+
+    <!-- ITEM INFORMATION -->
+
+    <div
+      id="itemBox"
+      class="item"
+    >
+
+
+      <div
+        id="itemName"
+        class="item-name"
+      ></div>
+
+
+      <div class="barcode">
+
+        Barcode:
+
+        <strong id="itemId"></strong>
+
+      </div>
+
+
+      <!-- ACTION -->
+
+      <label
+        class="field-label"
+        for="action"
+      >
+        Inventory Action
+      </label>
+
+
+      <select
+        id="action"
+        onchange="actionChanged()"
+      >
+
+        <option value="">
+          Choose action...
+        </option>
+
+        <option value="Add">
+          Add Inventory
+        </option>
+
+        <option value="Remove">
+          Remove Inventory
+        </option>
+
+        <option value="Count">
+          Count Inventory
+        </option>
+
+      </select>
+
+
+      <!-- QUANTITY -->
+
+      <label
+        class="field-label"
+        for="qty"
+      >
+        Quantity
+      </label>
+
+
+      <input
+        id="qty"
+        type="number"
+        min="0"
+        step="1"
+        inputmode="numeric"
+        placeholder="Enter quantity"
+        onkeydown="qtyEnter(event)"
+      >
+
+
+      <!-- SUBMIT -->
+
+      <button
+        id="submitBtn"
+        class="submit-btn"
+        onclick="submitTransaction()"
+      >
+        SUBMIT TRANSACTION
+      </button>
+
+
+      <!-- CHECK QTY -->
+
+      <button
+        class="qty-btn"
+        onclick="showQty()"
+      >
+        SEE QTY ON HAND
+      </button>
+
+
+      <div
+        id="qtyBox"
+        class="qty-box"
+      ></div>
+
+
+      <!-- WRONG ITEM -->
+
+      <button
+        class="wrong-btn"
+        onclick="resetForNextScan()"
+      >
+        ← Wrong Item — Scan Again
+      </button>
+
+
+    </div>
+
+
+    <div class="tip">
+      After a saved transaction, the interface automatically
+      resets and is ready for the next barcode.
+    </div>
+
+
+    <!-- DASHBOARD -->
+
+    <a
+      href="index.html"
+      class="home-button"
+    >
+      ← Return to Employee Dashboard
+    </a>
+
+
   </div>
 
-  <div id="reader"></div>
-  <div id="status" class="status">Choose camera or hardware scanner</div>
-
-  <label for="hardwareBarcode">Wireless / USB Scanner Input</label>
-  <input id="hardwareBarcode" type="text" autocomplete="off" placeholder="Scan barcode here" onkeydown="hardwareKey(event)">
-
-  <div id="itemBox" class="item">
-    <div id="itemName" class="name"></div>
-    <div>Barcode: <strong id="itemId"></strong></div>
-
-    <label for="action">Action</label>
-    <select id="action">
-      <option value="">Choose action...</option>
-      <option value="Add">Add Inventory</option>
-      <option value="Remove">Remove Inventory</option>
-      <option value="Count">Count Inventory</option>
-    </select>
-
-    <label for="qty">Quantity</label>
-    <input id="qty" type="number" min="0" step="1" inputmode="numeric" placeholder="Enter quantity">
-
-    <button class="primary" id="submitBtn" onclick="submitTransaction()">Submit Transaction</button>
-    <button class="secondary" onclick="showQty()">See Qty on Hand</button>
-    <div id="qtyBox" class="qtybox"></div>
-    <button class="danger" onclick="resetForNextScan()">← Wrong Item — Scan Again</button>
-  </div>
-
-  <div class="small">After a saved transaction, the page automatically prepares for the next scan.</div>
-</div>
 </div>
 
-<iframe name="saveFrame" id="saveFrame" style="display:none"></iframe>
+
+<!-- HIDDEN GOOGLE APPS SCRIPT FRAME -->
+
+<iframe
+  name="saveFrame"
+  id="saveFrame"
+  style="display:none"
+></iframe>
+
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbyGwziqfDHZpnLlTVnCHxtXAZYn0FZHeOqfdoWl-wJ0MmIOKFWXD7qWS5m0GpGBdbH8tg/exec";
 
-let scanner=null, scanLocked=false, currentBarcode="";
 
-function setStatus(msg,type=""){const b=document.getElementById("status");b.className="status"+(type?" "+type:"");b.textContent=msg}
+// =====================================================
+// GOOGLE APPS SCRIPT CONNECTION
+// =====================================================
 
-function startScanner(){
-  if(!API_URL.startsWith("https://script.google.com/")) return setStatus("Add your Apps Script /exec URL first.","error");
-  document.getElementById("startBtn").style.display="none";
-  scanner=new Html5Qrcode("reader");
-  scanner.start({facingMode:"environment"},
-    {fps:12,aspectRatio:1.777778,qrbox:(w,h)=>({width:Math.floor(w*.9),height:Math.min(180,Math.floor(h*.35))}),
-     formatsToSupport:[Html5QrcodeSupportedFormats.QR_CODE,Html5QrcodeSupportedFormats.CODE_128,Html5QrcodeSupportedFormats.CODE_39,Html5QrcodeSupportedFormats.UPC_A,Html5QrcodeSupportedFormats.UPC_E,Html5QrcodeSupportedFormats.EAN_13,Html5QrcodeSupportedFormats.EAN_8]},
-    txt=>{if(scanLocked)return;scanLocked=true;lookupItem(String(txt).trim())},
-    ()=>{}
-  ).then(()=>setStatus("Point camera at an item barcode"))
-   .catch(err=>{document.getElementById("startBtn").style.display="block";setStatus("Camera error: "+err,"error")});
+
+const API_URL =
+  "https://script.google.com/macros/s/AKfycbyGwziqfDHZpnLlTVnCHxtXAZYn0FZHeOqfdoWl-wJ0MmIOKFWXD7qWS5m0GpGBdbH8tg/exec";
+
+
+
+// =====================================================
+// STATE
+// =====================================================
+
+
+let scanner = null;
+
+let scanLocked = false;
+
+let currentBarcode = "";
+
+
+
+// =====================================================
+// STATUS
+// =====================================================
+
+
+function setStatus(message, type = "") {
+
+  const box =
+    document.getElementById("status");
+
+
+  box.className =
+    "status" +
+    (type ? " " + type : "");
+
+
+  box.textContent =
+    message;
+
 }
 
-function focusHardware(){document.getElementById("hardwareBarcode").focus();setStatus("Ready for wireless / USB barcode scanner")}
 
-function hardwareKey(e){
-  if(e.key!=="Enter")return;
-  e.preventDefault();
-  const v=e.target.value.trim();
-  if(!v||scanLocked)return;
-  scanLocked=true;lookupItem(v);
-}
 
-function lookupItem(barcode){
-  currentBarcode=barcode;setStatus("Looking up item...");
-  jsonp({mode:"item",item:barcode},data=>{
-    if(!data||!data.success){
-      setStatus((data&&data.message)||"Item not found.","error");clearItem();
-      setTimeout(()=>{scanLocked=false;focusHardware()},900);return;
+// =====================================================
+// CAMERA SCANNER
+// =====================================================
+
+
+function startScanner() {
+
+
+  if (
+    !API_URL.startsWith(
+      "https://script.google.com/"
+    )
+  ) {
+
+    setStatus(
+      "Inventory connection is not configured.",
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  document.getElementById(
+    "startBtn"
+  ).style.display =
+    "none";
+
+
+  setStatus(
+    "Requesting camera permission..."
+  );
+
+
+  scanner =
+    new Html5Qrcode(
+      "reader"
+    );
+
+
+  scanner.start(
+
+    {
+
+      facingMode:
+        "environment"
+
+    },
+
+    {
+
+      fps:
+        12,
+
+
+      aspectRatio:
+        1.777778,
+
+
+      qrbox:
+        (width, height) => ({
+
+          width:
+            Math.floor(
+              width * .9
+            ),
+
+          height:
+            Math.min(
+              180,
+              Math.floor(
+                height * .35
+              )
+            )
+
+        }),
+
+
+      formatsToSupport: [
+
+        Html5QrcodeSupportedFormats.QR_CODE,
+
+        Html5QrcodeSupportedFormats.CODE_128,
+
+        Html5QrcodeSupportedFormats.CODE_39,
+
+        Html5QrcodeSupportedFormats.UPC_A,
+
+        Html5QrcodeSupportedFormats.UPC_E,
+
+        Html5QrcodeSupportedFormats.EAN_13,
+
+        Html5QrcodeSupportedFormats.EAN_8
+
+      ]
+
+    },
+
+
+    decodedText => {
+
+
+      if (scanLocked) {
+        return;
+      }
+
+
+      scanLocked =
+        true;
+
+
+      lookupItem(
+        String(
+          decodedText
+        ).trim()
+      );
+
+    },
+
+
+    () => {}
+
+
+  )
+
+
+  .then(
+    () => {
+
+      setStatus(
+        "Point camera at an item barcode"
+      );
+
     }
-    document.getElementById("itemName").textContent=data.name;
-    document.getElementById("itemId").textContent=barcode;
-    document.getElementById("hardwareBarcode").value="";
-    document.getElementById("itemBox").style.display="block";
-    setStatus("Item loaded","success");
-    document.getElementById("action").focus();
-  });
+  )
+
+
+  .catch(
+    error => {
+
+      document.getElementById(
+        "startBtn"
+      ).style.display =
+        "block";
+
+
+      setStatus(
+        "Camera error: " +
+        error,
+        "error"
+      );
+
+    }
+  );
+
 }
 
-function submitTransaction(){
-  const action=document.getElementById("action").value;
-  const qtyText=document.getElementById("qty").value;
-  if(!action)return setStatus("Choose Add, Remove, or Count.","error");
-  if(qtyText===""||Number(qtyText)<0)return setStatus("Enter a valid quantity.","error");
 
-  const btn=document.getElementById("submitBtn");btn.disabled=true;setStatus("Saving transaction...");
-  const form=document.createElement("form");
-  form.method="POST";form.action=API_URL;form.target="saveFrame";form.style.display="none";
-  const fields={mode:"save",item:currentBarcode,action:action,qty:String(Number(qtyText))};
-  Object.entries(fields).forEach(([k,v])=>{const i=document.createElement("input");i.type="hidden";i.name=k;i.value=v;form.appendChild(i)});
-  document.body.appendChild(form);form.submit();form.remove();
 
-  setTimeout(()=>{btn.disabled=false;setStatus("✓ SAVED","success");setTimeout(resetForNextScan,650)},700);
+// =====================================================
+// FOCUS BARCODE ENTRY
+// =====================================================
+
+
+function focusHardware() {
+
+
+  const barcodeBox =
+    document.getElementById(
+      "hardwareBarcode"
+    );
+
+
+  barcodeBox.focus();
+
+
+  setStatus(
+    "Type or scan barcode, then press Enter"
+  );
+
 }
 
-function showQty(){
-  if(!currentBarcode)return;
-  const box=document.getElementById("qtyBox");
-  box.style.display="block";box.textContent="Checking quantity...";
-  jsonp({mode:"qty",item:currentBarcode,t:Date.now()},data=>{
-    if(!data||!data.success){box.textContent=(data&&data.message)||"Unable to read quantity.";return}
-    box.textContent="Qty on Hand: "+data.currentQty;
-  });
+
+
+// =====================================================
+// TYPED / WIRELESS / USB BARCODE
+// =====================================================
+
+
+function hardwareKey(event) {
+
+
+  if (
+    event.key !== "Enter"
+  ) {
+
+    return;
+
+  }
+
+
+  event.preventDefault();
+
+
+  const barcode =
+    document.getElementById(
+      "hardwareBarcode"
+    )
+    .value
+    .trim();
+
+
+  if (!barcode) {
+
+    setStatus(
+      "Enter or scan a barcode first.",
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  if (scanLocked) {
+    return;
+  }
+
+
+  scanLocked =
+    true;
+
+
+  lookupItem(
+    barcode
+  );
+
 }
 
-function resetForNextScan(){clearItem();scanLocked=false;setStatus("SCAN NEXT ITEM");focusHardware()}
 
-function clearItem(){
-  currentBarcode="";
-  document.getElementById("itemName").textContent="";
-  document.getElementById("itemId").textContent="";
-  document.getElementById("action").value="";
-  document.getElementById("qty").value="";
-  document.getElementById("hardwareBarcode").value="";
-  document.getElementById("qtyBox").style.display="none";
-  document.getElementById("qtyBox").textContent="";
-  document.getElementById("itemBox").style.display="none";
+
+// =====================================================
+// LOOK UP ITEM
+// =====================================================
+
+
+function lookupItem(barcode) {
+
+
+  currentBarcode =
+    barcode;
+
+
+  setStatus(
+    "Looking up item..."
+  );
+
+
+  jsonp(
+
+    {
+
+      mode:
+        "item",
+
+      item:
+        barcode
+
+    },
+
+
+    data => {
+
+
+      if (
+        !data ||
+        !data.success
+      ) {
+
+
+        setStatus(
+
+          (
+            data &&
+            data.message
+          ) ||
+
+          "Item not found.",
+
+          "error"
+
+        );
+
+
+        clearItem();
+
+
+        setTimeout(
+          () => {
+
+            scanLocked =
+              false;
+
+            focusHardware();
+
+          },
+
+          900
+        );
+
+
+        return;
+
+      }
+
+
+      document.getElementById(
+        "itemName"
+      ).textContent =
+        data.name;
+
+
+      document.getElementById(
+        "itemId"
+      ).textContent =
+        barcode;
+
+
+      document.getElementById(
+        "hardwareBarcode"
+      ).value =
+        "";
+
+
+      document.getElementById(
+        "itemBox"
+      ).style.display =
+        "block";
+
+
+      setStatus(
+        "Item loaded",
+        "success"
+      );
+
+
+      document.getElementById(
+        "action"
+      ).focus();
+
+
+    }
+
+  );
+
 }
 
-function jsonp(params,cb){
-  const name="__inv_"+Date.now()+"_"+Math.floor(Math.random()*100000),s=document.createElement("script");
-  window[name]=data=>{try{cb(data)}finally{delete window[name];s.remove()}};
-  const q=new URLSearchParams(params);q.set("prefix",name);s.src=API_URL+"?"+q.toString();
-  s.onerror=()=>{delete window[name];s.remove();setStatus("Unable to reach inventory service.","error")};
-  document.body.appendChild(s);
+
+
+// =====================================================
+// ACTION CHANGED
+// =====================================================
+
+
+function actionChanged() {
+
+
+  const action =
+    document.getElementById(
+      "action"
+    ).value;
+
+
+  const qty =
+    document.getElementById(
+      "qty"
+    );
+
+
+  const button =
+    document.getElementById(
+      "submitBtn"
+    );
+
+
+  if (
+    action === "Add"
+  ) {
+
+    qty.placeholder =
+      "Enter quantity being added";
+
+    qty.min =
+      "1";
+
+    button.textContent =
+      "ADD INVENTORY";
+
+  }
+
+
+  else if (
+    action === "Remove"
+  ) {
+
+    qty.placeholder =
+      "Enter quantity being removed";
+
+    qty.min =
+      "1";
+
+    button.textContent =
+      "REMOVE INVENTORY";
+
+  }
+
+
+  else if (
+    action === "Count"
+  ) {
+
+    qty.placeholder =
+      "Enter actual quantity counted";
+
+    qty.min =
+      "0";
+
+    button.textContent =
+      "SAVE INVENTORY COUNT";
+
+  }
+
+
+  else {
+
+    qty.placeholder =
+      "Enter quantity";
+
+    qty.min =
+      "0";
+
+    button.textContent =
+      "SUBMIT TRANSACTION";
+
+  }
+
+
+  if (action) {
+
+    qty.focus();
+
+  }
+
 }
+
+
+
+// =====================================================
+// ENTER ON QUANTITY
+// =====================================================
+
+
+function qtyEnter(event) {
+
+
+  if (
+    event.key !== "Enter"
+  ) {
+
+    return;
+
+  }
+
+
+  event.preventDefault();
+
+
+  const button =
+    document.getElementById(
+      "submitBtn"
+    );
+
+
+  if (
+    !button.disabled
+  ) {
+
+    submitTransaction();
+
+  }
+
+}
+
+
+
+// =====================================================
+// SAVE TRANSACTION
+// =====================================================
+
+
+function submitTransaction() {
+
+
+  const action =
+    document.getElementById(
+      "action"
+    ).value;
+
+
+  const qtyText =
+    document.getElementById(
+      "qty"
+    ).value;
+
+
+
+  if (!currentBarcode) {
+
+    setStatus(
+      "Scan or enter an item first.",
+      "error"
+    );
+
+    return;
+
+  }
+
+
+
+  if (!action) {
+
+    setStatus(
+      "Choose Add, Remove, or Count.",
+      "error"
+    );
+
+    return;
+
+  }
+
+
+
+  if (
+    qtyText === "" ||
+    Number(qtyText) < 0
+  ) {
+
+    setStatus(
+      "Enter a valid quantity.",
+      "error"
+    );
+
+    return;
+
+  }
+
+
+
+  if (
+    (
+      action === "Add" ||
+      action === "Remove"
+    ) &&
+    Number(qtyText) <= 0
+  ) {
+
+    setStatus(
+      "Quantity must be at least 1.",
+      "error"
+    );
+
+    return;
+
+  }
+
+
+
+  const button =
+    document.getElementById(
+      "submitBtn"
+    );
+
+
+  button.disabled =
+    true;
+
+
+  setStatus(
+    "Saving transaction..."
+  );
+
+
+  const form =
+    document.createElement(
+      "form"
+    );
+
+
+  form.method =
+    "POST";
+
+
+  form.action =
+    API_URL;
+
+
+  form.target =
+    "saveFrame";
+
+
+  form.style.display =
+    "none";
+
+
+  const fields = {
+
+    mode:
+      "save",
+
+    item:
+      currentBarcode,
+
+    action:
+      action,
+
+    qty:
+      String(
+        Number(
+          qtyText
+        )
+      )
+
+  };
+
+
+  Object.entries(
+    fields
+  ).forEach(
+
+    ([key, value]) => {
+
+
+      const input =
+        document.createElement(
+          "input"
+        );
+
+
+      input.type =
+        "hidden";
+
+
+      input.name =
+        key;
+
+
+      input.value =
+        value;
+
+
+      form.appendChild(
+        input
+      );
+
+    }
+
+  );
+
+
+  document.body.appendChild(
+    form
+  );
+
+
+  form.submit();
+
+
+  form.remove();
+
+
+  setTimeout(
+    () => {
+
+
+      button.disabled =
+        false;
+
+
+      if (
+        action === "Add"
+      ) {
+
+        setStatus(
+          "✓ INVENTORY ADDED",
+          "success"
+        );
+
+      }
+
+
+      else if (
+        action === "Remove"
+      ) {
+
+        setStatus(
+          "✓ INVENTORY REMOVED",
+          "success"
+        );
+
+      }
+
+
+      else {
+
+        setStatus(
+          "✓ COUNT SAVED",
+          "success"
+        );
+
+      }
+
+
+      setTimeout(
+        resetForNextScan,
+        650
+      );
+
+
+    },
+
+    700
+  );
+
+}
+
+
+
+// =====================================================
+// SEE QUANTITY ON HAND
+// =====================================================
+
+
+function showQty() {
+
+
+  if (!currentBarcode) {
+
+    setStatus(
+      "Scan or enter an item first.",
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  const box =
+    document.getElementById(
+      "qtyBox"
+    );
+
+
+  box.style.display =
+    "block";
+
+
+  box.textContent =
+    "Checking quantity...";
+
+
+  jsonp(
+
+    {
+
+      mode:
+        "qty",
+
+      item:
+        currentBarcode,
+
+      t:
+        Date.now()
+
+    },
+
+
+    data => {
+
+
+      if (
+        !data ||
+        !data.success
+      ) {
+
+        box.textContent =
+          (
+            data &&
+            data.message
+          ) ||
+          "Unable to read quantity.";
+
+        return;
+
+      }
+
+
+      box.textContent =
+        "Qty on Hand: " +
+        data.currentQty;
+
+    }
+
+  );
+
+}
+
+
+
+// =====================================================
+// RESET
+// =====================================================
+
+
+function resetForNextScan() {
+
+
+  clearItem();
+
+
+  scanLocked =
+    false;
+
+
+  setStatus(
+    "READY FOR NEXT ITEM"
+  );
+
+
+  focusHardware();
+
+}
+
+
+
+// =====================================================
+// CLEAR ITEM
+// =====================================================
+
+
+function clearItem() {
+
+
+  currentBarcode =
+    "";
+
+
+  document.getElementById(
+    "itemName"
+  ).textContent =
+    "";
+
+
+  document.getElementById(
+    "itemId"
+  ).textContent =
+    "";
+
+
+  document.getElementById(
+    "action"
+  ).value =
+    "";
+
+
+  document.getElementById(
+    "qty"
+  ).value =
+    "";
+
+
+  document.getElementById(
+    "qty"
+  ).placeholder =
+    "Enter quantity";
+
+
+  document.getElementById(
+    "hardwareBarcode"
+  ).value =
+    "";
+
+
+  document.getElementById(
+    "qtyBox"
+  ).style.display =
+    "none";
+
+
+  document.getElementById(
+    "qtyBox"
+  ).textContent =
+    "";
+
+
+  document.getElementById(
+    "submitBtn"
+  ).textContent =
+    "SUBMIT TRANSACTION";
+
+
+  document.getElementById(
+    "itemBox"
+  ).style.display =
+    "none";
+
+}
+
+
+
+// =====================================================
+// JSONP
+// =====================================================
+
+
+function jsonp(
+  params,
+  callback
+) {
+
+
+  const callbackName =
+
+    "__inv_" +
+
+    Date.now() +
+
+    "_" +
+
+    Math.floor(
+      Math.random() *
+      100000
+    );
+
+
+  const script =
+    document.createElement(
+      "script"
+    );
+
+
+  window[
+    callbackName
+  ] =
+
+    data => {
+
+
+      try {
+
+        callback(
+          data
+        );
+
+      }
+
+      finally {
+
+        delete window[
+          callbackName
+        ];
+
+        script.remove();
+
+      }
+
+    };
+
+
+  const query =
+    new URLSearchParams(
+      params
+    );
+
+
+  query.set(
+    "prefix",
+    callbackName
+  );
+
+
+  script.src =
+
+    API_URL +
+
+    "?" +
+
+    query.toString();
+
+
+  script.onerror =
+    () => {
+
+
+      delete window[
+        callbackName
+      ];
+
+
+      script.remove();
+
+
+      scanLocked =
+        false;
+
+
+      setStatus(
+        "Unable to reach inventory service.",
+        "error"
+      );
+
+
+      document.getElementById(
+        "hardwareBarcode"
+      ).focus();
+
+    };
+
+
+  document.body.appendChild(
+    script
+  );
+
+}
+
+
+
+// =====================================================
+// READY ON PAGE LOAD
+// =====================================================
+
+
+window.addEventListener(
+  "load",
+  () => {
+
+
+    document.getElementById(
+      "hardwareBarcode"
+    ).focus();
+
+
+  }
+);
+
+
 </script>
+
+
 </body>
+
 </html>
