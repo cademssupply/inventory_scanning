@@ -686,7 +686,80 @@ function qtyEnter(
 // REMOVE INVENTORY
 // =====================================================
 
-function submitTransaction() {
+function function submitTransaction() {
+
+  const qtyText = document.getElementById("qty").value;
+
+  if (qtyText === "" || Number(qtyText) <= 0) {
+    setStatus("Enter the quantity removed.", "error");
+    return;
+  }
+
+  if (!currentBarcode) {
+    setStatus("No item selected. Scan the item again.", "error");
+    return;
+  }
+
+  const button = document.getElementById("submitBtn");
+
+  button.disabled = true;
+  setStatus("Saving removal...");
+
+  const form = document.createElement("form");
+
+  form.method = "POST";
+  form.action = API_URL;
+  form.target = "saveFrame";
+  form.style.display = "none";
+
+  const fields = {
+    mode: "save",
+    item: currentBarcode,
+    action: "Remove",
+    qty: String(Number(qtyText))
+  };
+
+  Object.entries(fields).forEach(([key, value]) => {
+
+    const input = document.createElement("input");
+
+    input.type = "hidden";
+    input.name = key;
+    input.value = value;
+
+    form.appendChild(input);
+
+  });
+
+  document.body.appendChild(form);
+
+  form.submit();
+
+  /*
+    IMPORTANT:
+    Don't immediately remove the form.
+    Give the browser time to actually send the POST.
+  */
+  setTimeout(() => {
+    form.remove();
+  }, 2000);
+
+  /*
+    Give Google Apps Script more time to process
+    before resetting the interface.
+  */
+  setTimeout(() => {
+
+    button.disabled = false;
+
+    setStatus("✓ REMOVED", "success");
+
+    setTimeout(() => {
+      resetForNextScan();
+    }, 1000);
+
+  }, 1500);
+}{
 
   const qtyText =
     document.getElementById(
