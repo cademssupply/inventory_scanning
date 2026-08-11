@@ -1,249 +1,569 @@
 <!doctype html>
 <html lang="en">
+
 <head>
+
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-  <title>Cameron EMS Supply Usage</title>
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+  >
+
+  <title>Cameron EMS Supply Removal</title>
 
   <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 
+
   <style>
-    :root{
-      --bg:#1f2328;
-      --panel:#2b3036;
-      --panel-2:#343a40;
-      --border:#4b535c;
-      --text:#f3f4f6;
-      --muted:#b7bdc5;
-      --orange:#f97316;
-      --orange-dark:#c2410c;
-      --orange-light:#fb923c;
-      --danger:#7f1d1d;
-      --success:#14532d;
+
+    :root {
+      --bg: #1f2328;
+      --panel: #2b3036;
+      --panel2: #343a40;
+      --border: #4b535c;
+
+      --text: #f3f4f6;
+      --muted: #b7bdc5;
+
+      --orange: #f97316;
+      --orange-light: #fb923c;
+      --orange-dark: #c2410c;
+
+      --success: #14532d;
+      --danger: #7f1d1d;
     }
 
-    *{box-sizing:border-box}
 
-    body{
-      margin:0;
-      background:linear-gradient(180deg,#171a1e 0%,var(--bg) 100%);
-      color:var(--text);
-      font-family:Arial,Helvetica,sans-serif;
-      min-height:100vh;
+    * {
+      box-sizing: border-box;
     }
 
-    .wrap{
-      max-width:640px;
-      margin:0 auto;
-      padding:18px;
+
+    body {
+
+      margin: 0;
+
+      background:
+        linear-gradient(
+          180deg,
+          #171a1e 0%,
+          var(--bg) 100%
+        );
+
+      color: var(--text);
+
+      font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+      min-height: 100vh;
     }
 
-    .card{
-      background:var(--panel);
-      border:1px solid var(--border);
-      border-radius:18px;
-      padding:20px;
-      box-shadow:0 8px 28px rgba(0,0,0,.28);
+
+    .wrap {
+
+      max-width: 640px;
+
+      margin: 0 auto;
+
+      padding: 18px;
     }
 
-    .header{
-      text-align:center;
-      margin-bottom:16px;
+
+    .card {
+
+      background: var(--panel);
+
+      border: 1px solid var(--border);
+
+      border-radius: 18px;
+
+      padding: 20px;
+
+      box-shadow:
+        0 8px 28px rgba(0,0,0,.28);
     }
 
-    .header h1{
-      margin:0;
-      font-size:26px;
-      letter-spacing:.3px;
+
+    .header {
+
+      text-align: center;
+
+      margin-bottom: 18px;
     }
 
-    .header .accent{
-      color:var(--orange-light);
+
+    .header h1 {
+
+      margin: 0;
+
+      font-size: 27px;
+
+      letter-spacing: .3px;
     }
 
-    .sub{
-      margin-top:6px;
-      color:var(--muted);
-      font-size:14px;
+
+    .accent {
+
+      color: var(--orange-light);
     }
 
-    .mode-grid{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:10px;
-      margin-bottom:12px;
+
+    .sub {
+
+      margin-top: 7px;
+
+      color: var(--muted);
+
+      font-size: 14px;
     }
 
-    button{
-      width:100%;
-      padding:15px;
-      border:0;
-      border-radius:11px;
-      font-size:17px;
-      font-weight:700;
-      cursor:pointer;
+
+    /* ===============================
+       BUTTONS
+    =============================== */
+
+
+    button,
+    .home-button {
+
+      width: 100%;
+
+      padding: 15px;
+
+      border: 0;
+
+      border-radius: 11px;
+
+      font-size: 17px;
+
+      font-weight: 700;
+
+      cursor: pointer;
+
+      text-align: center;
     }
 
-    .camera-btn{
-      background:var(--orange);
-      color:#fff;
+
+    .mode-grid {
+
+      display: grid;
+
+      grid-template-columns:
+        1fr 1fr;
+
+      gap: 10px;
+
+      margin-bottom: 12px;
     }
 
-    .hardware-btn{
-      background:var(--panel-2);
-      color:var(--text);
-      border:1px solid var(--border);
+
+    .camera-btn {
+
+      background: var(--orange);
+
+      color: white;
     }
 
-    .remove-btn{
-      background:linear-gradient(180deg,var(--orange-light),var(--orange-dark));
-      color:#fff;
-      font-size:19px;
-      margin-top:16px;
+
+    .hardware-btn {
+
+      background: var(--panel2);
+
+      color: var(--text);
+
+      border:
+        1px solid
+        var(--border);
     }
 
-    .wrong-btn{
-      background:transparent;
-      color:#ffd7c2;
-      border:1px solid var(--orange-dark);
-      margin-top:10px;
+
+    .remove-btn {
+
+      margin-top: 16px;
+
+      background:
+        linear-gradient(
+          180deg,
+          var(--orange-light),
+          var(--orange-dark)
+        );
+
+      color: white;
+
+      font-size: 20px;
+
+      min-height: 60px;
     }
 
-    #reader{
-      width:100%;
-      overflow:hidden;
-      border-radius:12px;
-      background:#111;
-      margin-top:10px;
+
+    .remove-btn:disabled {
+
+      opacity: .55;
+
+      cursor: default;
     }
 
-    .status{
-      margin-top:12px;
-      padding:13px;
-      border-radius:10px;
-      background:#20252a;
-      border:1px solid var(--border);
-      text-align:center;
-      font-weight:700;
-      color:var(--text);
+
+    .wrong-btn {
+
+      margin-top: 10px;
+
+      background: transparent;
+
+      color: #ffd7c2;
+
+      border:
+        1px solid
+        var(--orange-dark);
     }
 
-    .status.success{
-      background:var(--success);
-      border-color:#166534;
+
+    .home-button {
+
+      display: block;
+
+      margin-top: 25px;
+
+      background: #171a1e;
+
+      color: #d1d5db;
+
+      border:
+        1px solid
+        var(--border);
+
+      text-decoration: none;
     }
 
-    .status.error{
-      background:var(--danger);
-      border-color:#991b1b;
+
+    /* ===============================
+       SCANNER
+    =============================== */
+
+
+    #reader {
+
+      width: 100%;
+
+      overflow: hidden;
+
+      border-radius: 12px;
+
+      background: #111;
+
+      margin-top: 10px;
     }
 
-    .scanner-section{
-      margin-top:14px;
-      padding-top:14px;
-      border-top:1px solid var(--border);
+
+    .scanner-section {
+
+      margin-top: 14px;
+
+      padding-top: 14px;
+
+      border-top:
+        1px solid
+        var(--border);
     }
 
-    label{
-      display:block;
-      font-weight:700;
-      margin-bottom:7px;
-      color:#fff;
+
+    /* ===============================
+       STATUS
+    =============================== */
+
+
+    .status {
+
+      margin-top: 12px;
+
+      padding: 13px;
+
+      border-radius: 10px;
+
+      background: #20252a;
+
+      border:
+        1px solid
+        var(--border);
+
+      text-align: center;
+
+      font-weight: 700;
+
+      color: var(--text);
     }
 
-    input{
-      width:100%;
-      padding:14px;
-      border:1px solid var(--border);
-      border-radius:10px;
-      background:#171a1e;
-      color:#fff;
-      font-size:18px;
-      outline:none;
+
+    .status.success {
+
+      background: var(--success);
+
+      border-color: #166534;
     }
 
-    input:focus{
-      border-color:var(--orange);
-      box-shadow:0 0 0 3px rgba(249,115,22,.18);
+
+    .status.error {
+
+      background: var(--danger);
+
+      border-color: #991b1b;
     }
 
-    input::placeholder{
-      color:#7f8790;
+
+    /* ===============================
+       INPUTS
+    =============================== */
+
+
+    label {
+
+      display: block;
+
+      font-weight: 700;
+
+      margin-bottom: 7px;
+
+      color: white;
     }
 
-    .item{
-      display:none;
-      margin-top:16px;
-      padding:16px;
-      background:var(--panel-2);
-      border:1px solid var(--border);
-      border-left:5px solid var(--orange);
-      border-radius:12px;
+
+    input {
+
+      width: 100%;
+
+      padding: 14px;
+
+      border:
+        1px solid
+        var(--border);
+
+      border-radius: 10px;
+
+      background: #171a1e;
+
+      color: white;
+
+      font-size: 18px;
+
+      outline: none;
     }
 
-    .item-name{
-      font-size:22px;
-      font-weight:800;
-      margin-bottom:6px;
+
+    input:focus {
+
+      border-color:
+        var(--orange);
+
+      box-shadow:
+        0 0 0 3px
+        rgba(249,115,22,.18);
     }
 
-    .barcode{
-      color:var(--muted);
-      font-size:14px;
-      margin-bottom:16px;
+
+    input::placeholder {
+
+      color: #7f8790;
     }
 
-    .qty-label{
-      color:var(--orange-light);
-      font-size:15px;
-      text-transform:uppercase;
-      letter-spacing:.5px;
+
+    /* ===============================
+       ITEM DISPLAY
+    =============================== */
+
+
+    .item {
+
+      display: none;
+
+      margin-top: 16px;
+
+      padding: 16px;
+
+      background: var(--panel2);
+
+      border:
+        1px solid
+        var(--border);
+
+      border-left:
+        5px solid
+        var(--orange);
+
+      border-radius: 12px;
     }
 
-    .tip{
-      margin-top:12px;
-      text-align:center;
-      color:var(--muted);
-      font-size:13px;
-      line-height:1.4;
+
+    .item-name {
+
+      font-size: 23px;
+
+      font-weight: 800;
+
+      margin-bottom: 7px;
     }
 
-    @media(max-width:520px){
-      .mode-grid{grid-template-columns:1fr}
-      .wrap{padding:12px}
-      .card{padding:16px}
+
+    .barcode {
+
+      color: var(--muted);
+
+      font-size: 14px;
+
+      margin-bottom: 18px;
     }
+
+
+    .qty-label {
+
+      color: var(--orange-light);
+
+      font-size: 15px;
+
+      text-transform: uppercase;
+
+      letter-spacing: .5px;
+    }
+
+
+    .tip {
+
+      margin-top: 14px;
+
+      text-align: center;
+
+      color: var(--muted);
+
+      font-size: 13px;
+
+      line-height: 1.4;
+    }
+
+
+    @media(max-width: 520px) {
+
+      .mode-grid {
+
+        grid-template-columns: 1fr;
+      }
+
+
+      .wrap {
+
+        padding: 12px;
+      }
+
+
+      .card {
+
+        padding: 16px;
+      }
+
+
+      .header h1 {
+
+        font-size: 24px;
+      }
+
+    }
+
   </style>
+
 </head>
+
+
 
 <body>
 
+
 <div class="wrap">
+
   <div class="card">
 
+
+    <!-- =========================
+         HEADER
+    ========================== -->
+
     <div class="header">
-      <h1>Cameron EMS <span class="accent">Supply Usage</span></h1>
-      <div class="sub">Scan item • Enter quantity • Press Enter</div>
+
+      <h1>
+        Cameron EMS
+        <span class="accent">
+          Supply Removal
+        </span>
+      </h1>
+
+      <div class="sub">
+        Scan item • Enter quantity • Press Enter
+      </div>
+
     </div>
+
+
+
+    <!-- =========================
+         SCANNER OPTIONS
+    ========================== -->
 
     <div class="mode-grid">
-      <button id="startBtn" class="camera-btn" onclick="startScanner()">
+
+
+      <button
+        id="startBtn"
+        class="camera-btn"
+        onclick="startScanner()"
+      >
+
         Start Camera Scanner
+
       </button>
 
-      <button class="hardware-btn" onclick="focusHardware()">
+
+      <button
+        class="hardware-btn"
+        onclick="focusHardware()"
+      >
+
         Use Barcode Scanner
+
       </button>
+
+
     </div>
+
+
 
     <div id="reader"></div>
 
-    <div id="status" class="status">
+
+
+    <div
+      id="status"
+      class="status"
+    >
+
       Choose camera or hardware scanner
+
     </div>
 
+
+
+    <!-- =========================
+         HARDWARE SCANNER
+    ========================== -->
+
     <div class="scanner-section">
-      <label for="hardwareBarcode">Wireless / USB Scanner Input</label>
+
+
+      <label for="hardwareBarcode">
+
+        Wireless / USB Scanner Input
+
+      </label>
+
 
       <input
         id="hardwareBarcode"
@@ -252,20 +572,47 @@
         placeholder="Scan barcode here"
         onkeydown="hardwareKey(event)"
       >
+
+
     </div>
 
-    <div id="itemBox" class="item">
 
-      <div id="itemName" class="item-name"></div>
+
+    <!-- =========================
+         ITEM
+    ========================== -->
+
+    <div
+      id="itemBox"
+      class="item"
+    >
+
+
+      <div
+        id="itemName"
+        class="item-name"
+      ></div>
+
 
       <div class="barcode">
+
         Barcode:
+
         <strong id="itemId"></strong>
+
       </div>
 
-      <label class="qty-label" for="qty">
+
+
+      <label
+        class="qty-label"
+        for="qty"
+      >
+
         Quantity Removed
+
       </label>
+
 
       <input
         id="qty"
@@ -277,78 +624,131 @@
         onkeydown="qtyEnter(event)"
       >
 
+
+
       <button
         id="submitBtn"
         class="remove-btn"
         onclick="submitTransaction()"
       >
-        Remove Inventory
+
+        REMOVE INVENTORY
+
       </button>
+
+
 
       <button
         class="wrong-btn"
         onclick="resetForNextScan()"
       >
+
         ← Wrong Item — Scan Again
+
       </button>
 
+
     </div>
+
+
 
     <div class="tip">
-      After a successful removal, the page resets automatically and is ready for the next barcode.
+
+      After removal, the interface automatically resets
+      and prepares for the next item.
+
     </div>
 
+
+
+    <!-- =========================
+         DASHBOARD
+    ========================== -->
+
+    <a
+      href="index.html"
+      class="home-button"
+    >
+
+      ← Return to Employee Dashboard
+
+    </a>
+
+
   </div>
+
 </div>
+
+
+
+<!--
+  This hidden iframe receives the Google Apps Script POST.
+-->
 
 <iframe
   name="saveFrame"
   id="saveFrame"
-  style="display:none">
-</iframe>
+  style="display:none"
+></iframe>
+
 
 
 <script>
 
+
 // =====================================================
-// PASTE YOUR EXISTING APPS SCRIPT /exec URL HERE
+// GOOGLE APPS SCRIPT
 // =====================================================
 
-const API_URL = "https://script.google.com/macros/s/AKfycbyGwziqfDHZpnLlTVnCHxtXAZYn0FZHeOqfdoWl-wJ0MmIOKFWXD7qWS5m0GpGBdbH8tg/exec";
+
+const API_URL =
+  "https://script.google.com/macros/s/AKfycbyGwziqfDHZpnLlTVnCHxtXAZYn0FZHeOqfdoWl-wJ0MmIOKFWXD7qWS5m0GpGBdbH8tg/exec";
+
 
 
 // =====================================================
 // STATE
 // =====================================================
 
+
 let scanner = null;
+
 let scanLocked = false;
+
 let currentBarcode = "";
 
 
+
 // =====================================================
-// STATUS
+// STATUS MESSAGE
 // =====================================================
+
 
 function setStatus(message, type = "") {
 
   const box =
     document.getElementById("status");
 
+
   box.className =
     "status" +
     (type ? " " + type : "");
 
+
   box.textContent =
     message;
+
 }
+
 
 
 // =====================================================
 // CAMERA SCANNER
 // =====================================================
 
+
 function startScanner() {
+
 
   if (
     !API_URL.startsWith(
@@ -357,12 +757,14 @@ function startScanner() {
   ) {
 
     setStatus(
-      "Add your Apps Script /exec URL first.",
+      "Inventory connection is not configured.",
       "error"
     );
 
     return;
+
   }
+
 
 
   document.getElementById(
@@ -371,9 +773,11 @@ function startScanner() {
     "none";
 
 
+
   setStatus(
     "Requesting camera permission..."
   );
+
 
 
   scanner =
@@ -382,11 +786,14 @@ function startScanner() {
     );
 
 
+
   scanner.start(
 
     {
+
       facingMode:
         "environment"
+
     },
 
     {
@@ -394,8 +801,10 @@ function startScanner() {
       fps:
         12,
 
+
       aspectRatio:
         1.777778,
+
 
       qrbox:
         (width, height) => ({
@@ -414,6 +823,7 @@ function startScanner() {
             )
 
         }),
+
 
       formatsToSupport: [
 
@@ -435,13 +845,20 @@ function startScanner() {
 
     },
 
+
     decodedText => {
 
+
       if (scanLocked) {
+
         return;
+
       }
 
-      scanLocked = true;
+
+      scanLocked =
+        true;
+
 
       lookupItem(
         String(
@@ -451,9 +868,12 @@ function startScanner() {
 
     },
 
+
     () => {}
 
+
   )
+
 
   .then(
     () => {
@@ -465,6 +885,7 @@ function startScanner() {
     }
   )
 
+
   .catch(
     error => {
 
@@ -472,6 +893,7 @@ function startScanner() {
         "startBtn"
       ).style.display =
         "block";
+
 
       setStatus(
         "Camera error: " +
@@ -485,11 +907,14 @@ function startScanner() {
 }
 
 
+
 // =====================================================
-// HARDWARE SCANNER
+// HARDWARE / WIRELESS SCANNER
 // =====================================================
 
+
 function focusHardware() {
+
 
   document.getElementById(
     "hardwareBarcode"
@@ -503,16 +928,26 @@ function focusHardware() {
 }
 
 
+
+// =====================================================
+// HARDWARE SCANNER ENTER
+// =====================================================
+
+
 function hardwareKey(event) {
+
 
   if (
     event.key !== "Enter"
   ) {
+
     return;
+
   }
 
 
   event.preventDefault();
+
 
 
   const barcode =
@@ -521,16 +956,21 @@ function hardwareKey(event) {
       .trim();
 
 
+
   if (
     !barcode ||
     scanLocked
   ) {
+
     return;
+
   }
+
 
 
   scanLocked =
     true;
+
 
 
   lookupItem(
@@ -540,13 +980,14 @@ function hardwareKey(event) {
 }
 
 
+
 // =====================================================
-// LOOK UP ITEM NAME ONLY
+// LOOK UP ITEM
 // =====================================================
 
-function lookupItem(
-  barcode
-) {
+
+function lookupItem(barcode) {
+
 
   currentBarcode =
     barcode;
@@ -555,6 +996,7 @@ function lookupItem(
   setStatus(
     "Looking up item..."
   );
+
 
 
   jsonp(
@@ -569,24 +1011,33 @@ function lookupItem(
 
     },
 
+
     data => {
+
 
       if (
         !data ||
         !data.success
       ) {
 
+
         setStatus(
+
           (
             data &&
             data.message
           ) ||
+
           "Item not found.",
+
           "error"
+
         );
 
 
+
         clearItem();
+
 
 
         setTimeout(
@@ -598,12 +1049,15 @@ function lookupItem(
             focusHardware();
 
           },
-          800
+
+          900
         );
 
 
         return;
+
       }
+
 
 
       document.getElementById(
@@ -612,10 +1066,12 @@ function lookupItem(
         data.name;
 
 
+
       document.getElementById(
         "itemId"
       ).textContent =
         barcode;
+
 
 
       document.getElementById(
@@ -624,10 +1080,12 @@ function lookupItem(
         "";
 
 
+
       document.getElementById(
         "itemBox"
       ).style.display =
         "block";
+
 
 
       setStatus(
@@ -636,9 +1094,11 @@ function lookupItem(
       );
 
 
+
       document.getElementById(
         "qty"
       ).focus();
+
 
     }
 
@@ -647,32 +1107,37 @@ function lookupItem(
 }
 
 
+
 // =====================================================
-// ENTER KEY AUTO-SUBMIT
+// PRESS ENTER ON QUANTITY TO SUBMIT
 // =====================================================
 
-function qtyEnter(
-  event
-) {
+
+function qtyEnter(event) {
+
 
   if (
     event.key !== "Enter"
   ) {
+
     return;
+
   }
 
 
   event.preventDefault();
 
 
-  const submitButton =
+
+  const button =
     document.getElementById(
       "submitBtn"
     );
 
 
+
   if (
-    !submitButton.disabled
+    !button.disabled
   ) {
 
     submitTransaction();
@@ -682,89 +1147,35 @@ function qtyEnter(
 }
 
 
+
 // =====================================================
 // REMOVE INVENTORY
 // =====================================================
 
-function function submitTransaction() {
 
-  const qtyText = document.getElementById("qty").value;
+function submitTransaction() {
 
-  if (qtyText === "" || Number(qtyText) <= 0) {
-    setStatus("Enter the quantity removed.", "error");
-    return;
-  }
-
-  if (!currentBarcode) {
-    setStatus("No item selected. Scan the item again.", "error");
-    return;
-  }
-
-  const button = document.getElementById("submitBtn");
-
-  button.disabled = true;
-  setStatus("Saving removal...");
-
-  const form = document.createElement("form");
-
-  form.method = "POST";
-  form.action = API_URL;
-  form.target = "saveFrame";
-  form.style.display = "none";
-
-  const fields = {
-    mode: "save",
-    item: currentBarcode,
-    action: "Remove",
-    qty: String(Number(qtyText))
-  };
-
-  Object.entries(fields).forEach(([key, value]) => {
-
-    const input = document.createElement("input");
-
-    input.type = "hidden";
-    input.name = key;
-    input.value = value;
-
-    form.appendChild(input);
-
-  });
-
-  document.body.appendChild(form);
-
-  form.submit();
-
-  /*
-    IMPORTANT:
-    Don't immediately remove the form.
-    Give the browser time to actually send the POST.
-  */
-  setTimeout(() => {
-    form.remove();
-  }, 2000);
-
-  /*
-    Give Google Apps Script more time to process
-    before resetting the interface.
-  */
-  setTimeout(() => {
-
-    button.disabled = false;
-
-    setStatus("✓ REMOVED", "success");
-
-    setTimeout(() => {
-      resetForNextScan();
-    }, 1000);
-
-  }, 1500);
-}{
 
   const qtyText =
     document.getElementById(
       "qty"
     ).value;
+
+
+
+  if (
+    !currentBarcode
+  ) {
+
+    setStatus(
+      "Scan an item first.",
+      "error"
+    );
+
+    return;
+
+  }
+
 
 
   if (
@@ -778,7 +1189,9 @@ function function submitTransaction() {
     );
 
     return;
+
   }
+
 
 
   const button =
@@ -787,19 +1200,29 @@ function function submitTransaction() {
     );
 
 
+
   button.disabled =
     true;
 
 
+
   setStatus(
-    "Saving..."
+    "Saving transaction..."
   );
+
+
+
+  /*
+    This uses the SAME POST method
+    as the working Full Inventory page.
+  */
 
 
   const form =
     document.createElement(
       "form"
     );
+
 
 
   form.method =
@@ -818,16 +1241,21 @@ function function submitTransaction() {
     "none";
 
 
+
   const fields = {
+
 
     mode:
       "save",
 
+
     item:
       currentBarcode,
 
+
     action:
       "Remove",
+
 
     qty:
       String(
@@ -836,34 +1264,45 @@ function function submitTransaction() {
         )
       )
 
+
   };
+
 
 
   Object.entries(
     fields
   ).forEach(
+
     ([key, value]) => {
+
 
       const input =
         document.createElement(
           "input"
         );
 
+
       input.type =
         "hidden";
+
 
       input.name =
         key;
 
+
       input.value =
         value;
+
 
       form.appendChild(
         input
       );
 
+
     }
+
   );
+
 
 
   document.body.appendChild(
@@ -871,19 +1310,23 @@ function function submitTransaction() {
   );
 
 
+
   form.submit();
 
+
+
+  /*
+    This intentionally matches the
+    working Full Inventory interface.
+  */
 
   form.remove();
 
 
-  /*
-    This interface intentionally
-    does not re-query quantity.
-  */
 
   setTimeout(
     () => {
+
 
       button.disabled =
         false;
@@ -895,23 +1338,30 @@ function function submitTransaction() {
       );
 
 
+
       setTimeout(
         resetForNextScan,
-        500
+        650
       );
 
+
     },
-    550
+
+    700
+
   );
 
 }
 
 
+
 // =====================================================
-// RESET
+// RESET FOR NEXT ITEM
 // =====================================================
 
+
 function resetForNextScan() {
+
 
   clearItem();
 
@@ -930,10 +1380,18 @@ function resetForNextScan() {
 }
 
 
+
+// =====================================================
+// CLEAR CURRENT ITEM
+// =====================================================
+
+
 function clearItem() {
+
 
   currentBarcode =
     "";
+
 
 
   document.getElementById(
@@ -942,10 +1400,12 @@ function clearItem() {
     "";
 
 
+
   document.getElementById(
     "itemId"
   ).textContent =
     "";
+
 
 
   document.getElementById(
@@ -954,10 +1414,12 @@ function clearItem() {
     "";
 
 
+
   document.getElementById(
     "hardwareBarcode"
   ).value =
     "";
+
 
 
   document.getElementById(
@@ -968,23 +1430,31 @@ function clearItem() {
 }
 
 
+
 // =====================================================
-// JSONP ITEM LOOKUP
+// JSONP LOOKUP
 // =====================================================
+
 
 function jsonp(
   params,
   callback
 ) {
 
+
   const callbackName =
-    "__inventory_" +
+
+    "__inv_" +
+
     Date.now() +
+
     "_" +
+
     Math.floor(
       Math.random() *
       100000
     );
+
 
 
   const script =
@@ -993,28 +1463,39 @@ function jsonp(
     );
 
 
+
   window[
     callbackName
   ] =
+
     data => {
 
+
       try {
+
 
         callback(
           data
         );
 
-      } finally {
+
+      }
+
+      finally {
+
 
         delete window[
           callbackName
         ];
 
+
         script.remove();
+
 
       }
 
     };
+
 
 
   const query =
@@ -1023,20 +1504,27 @@ function jsonp(
     );
 
 
+
   query.set(
     "prefix",
     callbackName
   );
 
 
+
   script.src =
+
     API_URL +
+
     "?" +
+
     query.toString();
+
 
 
   script.onerror =
     () => {
+
 
       delete window[
         callbackName
@@ -1046,12 +1534,20 @@ function jsonp(
       script.remove();
 
 
+
+      scanLocked =
+        false;
+
+
+
       setStatus(
         "Unable to reach inventory service.",
         "error"
       );
 
+
     };
+
 
 
   document.body.appendChild(
@@ -1060,7 +1556,10 @@ function jsonp(
 
 }
 
+
 </script>
 
+
 </body>
+
 </html>
