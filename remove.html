@@ -41,7 +41,6 @@
 
 
     body {
-
       margin: 0;
 
       background:
@@ -63,17 +62,13 @@
 
 
     .wrap {
-
       max-width: 640px;
-
       margin: 0 auto;
-
       padding: 18px;
     }
 
 
     .card {
-
       background: var(--panel);
 
       border: 1px solid var(--border);
@@ -88,47 +83,37 @@
 
 
     .header {
-
       text-align: center;
-
       margin-bottom: 18px;
     }
 
 
     .header h1 {
-
       margin: 0;
-
       font-size: 27px;
-
       letter-spacing: .3px;
     }
 
 
     .accent {
-
       color: var(--orange-light);
     }
 
 
     .sub {
-
       margin-top: 7px;
-
       color: var(--muted);
-
       font-size: 14px;
     }
 
 
-    /* ===============================
+    /* ==========================
        BUTTONS
-    =============================== */
+    ========================== */
 
 
     button,
     .home-button {
-
       width: 100%;
 
       padding: 15px;
@@ -148,30 +133,21 @@
 
 
     .mode-grid {
-
       display: grid;
-
-      grid-template-columns:
-        1fr 1fr;
-
+      grid-template-columns: 1fr 1fr;
       gap: 10px;
-
       margin-bottom: 12px;
     }
 
 
     .camera-btn {
-
       background: var(--orange);
-
       color: white;
     }
 
 
     .hardware-btn {
-
       background: var(--panel2);
-
       color: var(--text);
 
       border:
@@ -181,7 +157,6 @@
 
 
     .remove-btn {
-
       margin-top: 16px;
 
       background:
@@ -200,15 +175,12 @@
 
 
     .remove-btn:disabled {
-
       opacity: .55;
-
       cursor: default;
     }
 
 
     .wrong-btn {
-
       margin-top: 10px;
 
       background: transparent;
@@ -222,7 +194,6 @@
 
 
     .home-button {
-
       display: block;
 
       margin-top: 25px;
@@ -239,13 +210,12 @@
     }
 
 
-    /* ===============================
+    /* ==========================
        SCANNER
-    =============================== */
+    ========================== */
 
 
     #reader {
-
       width: 100%;
 
       overflow: hidden;
@@ -259,7 +229,6 @@
 
 
     .scanner-section {
-
       margin-top: 14px;
 
       padding-top: 14px;
@@ -270,13 +239,12 @@
     }
 
 
-    /* ===============================
+    /* ==========================
        STATUS
-    =============================== */
+    ========================== */
 
 
     .status {
-
       margin-top: 12px;
 
       padding: 13px;
@@ -298,28 +266,23 @@
 
 
     .status.success {
-
       background: var(--success);
-
       border-color: #166534;
     }
 
 
     .status.error {
-
       background: var(--danger);
-
       border-color: #991b1b;
     }
 
 
-    /* ===============================
+    /* ==========================
        INPUTS
-    =============================== */
+    ========================== */
 
 
     label {
-
       display: block;
 
       font-weight: 700;
@@ -331,7 +294,6 @@
 
 
     input {
-
       width: 100%;
 
       padding: 14px;
@@ -353,7 +315,6 @@
 
 
     input:focus {
-
       border-color:
         var(--orange);
 
@@ -364,18 +325,16 @@
 
 
     input::placeholder {
-
       color: #7f8790;
     }
 
 
-    /* ===============================
+    /* ==========================
        ITEM DISPLAY
-    =============================== */
+    ========================== */
 
 
     .item {
-
       display: none;
 
       margin-top: 16px;
@@ -397,7 +356,6 @@
 
 
     .item-name {
-
       font-size: 23px;
 
       font-weight: 800;
@@ -407,7 +365,6 @@
 
 
     .barcode {
-
       color: var(--muted);
 
       font-size: 14px;
@@ -417,7 +374,6 @@
 
 
     .qty-label {
-
       color: var(--orange-light);
 
       font-size: 15px;
@@ -429,7 +385,6 @@
 
 
     .tip {
-
       margin-top: 14px;
 
       text-align: center;
@@ -445,25 +400,21 @@
     @media(max-width: 520px) {
 
       .mode-grid {
-
         grid-template-columns: 1fr;
       }
 
 
       .wrap {
-
         padding: 12px;
       }
 
 
       .card {
-
         padding: 16px;
       }
 
 
       .header h1 {
-
         font-size: 24px;
       }
 
@@ -483,9 +434,7 @@
   <div class="card">
 
 
-    <!-- =========================
-         HEADER
-    ========================== -->
+    <!-- HEADER -->
 
     <div class="header">
 
@@ -497,28 +446,23 @@
       </h1>
 
       <div class="sub">
-        Scan item • Enter quantity • Press Enter
+        Scan or type barcode • Enter quantity • Press Enter
       </div>
 
     </div>
 
 
 
-    <!-- =========================
-         SCANNER OPTIONS
-    ========================== -->
+    <!-- SCANNER OPTIONS -->
 
     <div class="mode-grid">
-
 
       <button
         id="startBtn"
         class="camera-btn"
         onclick="startScanner()"
       >
-
         Start Camera Scanner
-
       </button>
 
 
@@ -526,11 +470,8 @@
         class="hardware-btn"
         onclick="focusHardware()"
       >
-
-        Use Barcode Scanner
-
+        Use Barcode Scanner / Keyboard
       </button>
-
 
     </div>
 
@@ -544,24 +485,17 @@
       id="status"
       class="status"
     >
-
-      Choose camera or hardware scanner
-
+      Type, scan, or use camera
     </div>
 
 
 
-    <!-- =========================
-         HARDWARE SCANNER
-    ========================== -->
+    <!-- BARCODE ENTRY -->
 
     <div class="scanner-section">
 
-
       <label for="hardwareBarcode">
-
-        Wireless / USB Scanner Input
-
+        Barcode Entry / Scanner
       </label>
 
 
@@ -569,18 +503,15 @@
         id="hardwareBarcode"
         type="text"
         autocomplete="off"
-        placeholder="Scan barcode here"
+        placeholder="Type or scan barcode, then press Enter"
         onkeydown="hardwareKey(event)"
       >
-
 
     </div>
 
 
 
-    <!-- =========================
-         ITEM
-    ========================== -->
+    <!-- ITEM DISPLAY -->
 
     <div
       id="itemBox"
@@ -608,9 +539,7 @@
         class="qty-label"
         for="qty"
       >
-
         Quantity Removed
-
       </label>
 
 
@@ -631,9 +560,7 @@
         class="remove-btn"
         onclick="submitTransaction()"
       >
-
         REMOVE INVENTORY
-
       </button>
 
 
@@ -642,36 +569,27 @@
         class="wrong-btn"
         onclick="resetForNextScan()"
       >
-
         ← Wrong Item — Scan Again
-
       </button>
-
 
     </div>
 
 
 
     <div class="tip">
-
-      After removal, the interface automatically resets
-      and prepares for the next item.
-
+      After a removal, the interface automatically resets
+      and is ready for the next barcode.
     </div>
 
 
 
-    <!-- =========================
-         DASHBOARD
-    ========================== -->
+    <!-- DASHBOARD -->
 
     <a
       href="index.html"
       class="home-button"
     >
-
       ← Return to Employee Dashboard
-
     </a>
 
 
@@ -681,9 +599,7 @@
 
 
 
-<!--
-  This hidden iframe receives the Google Apps Script POST.
--->
+<!-- HIDDEN FRAME USED FOR GOOGLE APPS SCRIPT -->
 
 <iframe
   name="saveFrame"
@@ -697,7 +613,7 @@
 
 
 // =====================================================
-// GOOGLE APPS SCRIPT
+// GOOGLE APPS SCRIPT CONNECTION
 // =====================================================
 
 
@@ -720,7 +636,7 @@ let currentBarcode = "";
 
 
 // =====================================================
-// STATUS MESSAGE
+// STATUS
 // =====================================================
 
 
@@ -796,6 +712,7 @@ function startScanner() {
 
     },
 
+
     {
 
       fps:
@@ -850,14 +767,11 @@ function startScanner() {
 
 
       if (scanLocked) {
-
         return;
-
       }
 
 
-      scanLocked =
-        true;
+      scanLocked = true;
 
 
       lookupItem(
@@ -909,20 +823,24 @@ function startScanner() {
 
 
 // =====================================================
-// HARDWARE / WIRELESS SCANNER
+// FOCUS BARCODE BOX
 // =====================================================
 
 
 function focusHardware() {
 
 
-  document.getElementById(
-    "hardwareBarcode"
-  ).focus();
+  const barcodeBox =
+    document.getElementById(
+      "hardwareBarcode"
+    );
+
+
+  barcodeBox.focus();
 
 
   setStatus(
-    "Ready for wireless / USB barcode scanner"
+    "Type or scan barcode, then press Enter"
   );
 
 }
@@ -930,7 +848,11 @@ function focusHardware() {
 
 
 // =====================================================
-// HARDWARE SCANNER ENTER
+// BARCODE ENTRY
+// Works with:
+// 1. Typed barcode + Enter
+// 2. Wireless scanner + Enter
+// 3. USB scanner + Enter
 // =====================================================
 
 
@@ -951,19 +873,29 @@ function hardwareKey(event) {
 
 
   const barcode =
-    event.target
-      .value
-      .trim();
+    document.getElementById(
+      "hardwareBarcode"
+    )
+    .value
+    .trim();
 
 
 
-  if (
-    !barcode ||
-    scanLocked
-  ) {
+  if (!barcode) {
+
+    setStatus(
+      "Enter or scan a barcode first.",
+      "error"
+    );
 
     return;
 
+  }
+
+
+
+  if (scanLocked) {
+    return;
   }
 
 
@@ -1109,7 +1041,8 @@ function lookupItem(barcode) {
 
 
 // =====================================================
-// PRESS ENTER ON QUANTITY TO SUBMIT
+// PRESS ENTER AFTER QUANTITY
+// AUTOMATICALLY REMOVES INVENTORY
 // =====================================================
 
 
@@ -1168,7 +1101,7 @@ function submitTransaction() {
   ) {
 
     setStatus(
-      "Scan an item first.",
+      "Scan or enter an item first.",
       "error"
     );
 
@@ -1210,12 +1143,6 @@ function submitTransaction() {
     "Saving transaction..."
   );
 
-
-
-  /*
-    This uses the SAME POST method
-    as the working Full Inventory page.
-  */
 
 
   const form =
@@ -1315,11 +1242,6 @@ function submitTransaction() {
 
 
 
-  /*
-    This intentionally matches the
-    working Full Inventory interface.
-  */
-
   form.remove();
 
 
@@ -1330,6 +1252,7 @@ function submitTransaction() {
 
       button.disabled =
         false;
+
 
 
       setStatus(
@@ -1366,13 +1289,16 @@ function resetForNextScan() {
   clearItem();
 
 
+
   scanLocked =
     false;
 
 
+
   setStatus(
-    "SCAN NEXT ITEM"
+    "READY FOR NEXT ITEM"
   );
+
 
 
   focusHardware();
@@ -1473,11 +1399,9 @@ function jsonp(
 
       try {
 
-
         callback(
           data
         );
-
 
       }
 
@@ -1490,7 +1414,6 @@ function jsonp(
 
 
         script.remove();
-
 
       }
 
@@ -1531,6 +1454,7 @@ function jsonp(
       ];
 
 
+
       script.remove();
 
 
@@ -1546,6 +1470,10 @@ function jsonp(
       );
 
 
+      document.getElementById(
+        "hardwareBarcode"
+      ).focus();
+
     };
 
 
@@ -1555,6 +1483,39 @@ function jsonp(
   );
 
 }
+
+
+
+// =====================================================
+// AUTOMATIC DESKTOP READY MODE
+// =====================================================
+//
+// When the page opens, automatically put the cursor
+// in the barcode box. This means a computer user can:
+//
+// TYPE BARCODE → ENTER → QTY → ENTER
+//
+// A wireless/USB scanner can also begin scanning
+// immediately without clicking the input box.
+// =====================================================
+
+
+window.addEventListener(
+  "load",
+  () => {
+
+
+    const barcodeBox =
+      document.getElementById(
+        "hardwareBarcode"
+      );
+
+
+    barcodeBox.focus();
+
+
+  }
+);
 
 
 </script>
