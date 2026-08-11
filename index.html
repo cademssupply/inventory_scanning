@@ -1,254 +1,682 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
   <title>Cameron Ambulance Employee Dashboard</title>
 
+
   <style>
+
+    :root {
+      --bg: #181818;
+      --panel: #242424;
+      --card: #292929;
+      --card-hover: #383838;
+
+      --orange: #f58220;
+      --orange-light: #ff963d;
+
+      --resource-orange: #c9560a;
+      --resource-orange-hover: #e86c13;
+
+      --text: #ffffff;
+      --muted: #aaaaaa;
+      --border: #444444;
+    }
+
+
     * {
       box-sizing: border-box;
     }
 
+
     body {
+
       margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      background: #181818;
-      color: white;
+
+      font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+      background:
+        linear-gradient(
+          180deg,
+          #141414 0%,
+          var(--bg) 100%
+        );
+
+      color: var(--text);
+
       min-height: 100vh;
+
     }
 
-    /* HEADER */
+
+    /* =========================
+       HEADER
+    ========================= */
+
+
     .header {
-      background: #242424;
-      border-bottom: 4px solid #f58220;
+
+      background: var(--panel);
+
+      border-bottom:
+        4px solid
+        var(--orange);
+
       text-align: center;
+
       padding: 25px 15px;
+
     }
+
 
     .header h1 {
+
       margin: 0;
+
       font-size: 30px;
+
+      font-weight: 800;
+
     }
+
 
     .header p {
+
       margin: 8px 0 0;
-      color: #aaaaaa;
-      font-size: 14px;
+
+      color: var(--muted);
+
+      font-size: 15px;
+
     }
 
-    /* MAIN DASHBOARD */
+
+    /* =========================
+       MAIN DASHBOARD
+    ========================= */
+
+
     .dashboard {
-      max-width: 800px;
-      margin: auto;
-      padding: 30px 18px;
+
+      max-width: 850px;
+
+      margin: 0 auto;
+
+      padding: 30px 18px 50px;
+
     }
 
-    /* REMOVE INVENTORY */
+
+    /* =========================
+       REMOVE INVENTORY
+       PRIMARY BUTTON
+    ========================= */
+
+
     .remove-button {
+
       display: flex;
+
       align-items: center;
+
       justify-content: center;
 
       width: 100%;
+
       min-height: 150px;
 
-      background: #f58220;
-      color: #111;
+      padding: 20px;
+
+
+      background:
+        linear-gradient(
+          180deg,
+          #fb923c,
+          #ea580c
+        );
+
+
+      color: #111111;
+
 
       text-decoration: none;
+
       text-align: center;
 
+
       font-size: 34px;
-      font-weight: 800;
+
+      font-weight: 900;
+
 
       border-radius: 16px;
 
-      box-shadow: 0 6px 18px rgba(0,0,0,.4);
 
-      transition: 0.2s;
+      box-shadow:
+        0 7px 20px
+        rgba(0,0,0,.40);
+
+
+      transition:
+        .2s ease;
+
     }
+
 
     .remove-button:hover {
-      background: #ff963d;
-      transform: translateY(-2px);
+
+      background:
+        linear-gradient(
+          180deg,
+          #ffa45b,
+          #f97316
+        );
+
+
+      transform:
+        translateY(-2px);
+
     }
+
 
     .remove-button:active {
-      transform: scale(.98);
+
+      transform:
+        scale(.98);
+
     }
 
-    /* ADD / COUNT INVENTORY */
+
+    /* =========================
+       ADD / COUNT INVENTORY
+    ========================= */
+
+
     .inventory-button {
+
       display: flex;
+
       align-items: center;
+
       justify-content: center;
 
+
       width: 100%;
+
       min-height: 100px;
+
 
       margin-top: 18px;
 
-      background: #333333;
-      color: white;
 
-      border: 2px solid #f58220;
-
-      text-decoration: none;
-      text-align: center;
-
-      font-size: 24px;
-      font-weight: bold;
-
-      border-radius: 14px;
-
-      transition: 0.2s;
-    }
-
-    .inventory-button:hover {
-      background: #414141;
-    }
-
-    /* EMPLOYEE RESOURCES */
-    .section-title {
-      margin-top: 35px;
-      margin-bottom: 12px;
-
-      color: #999999;
-
-      font-size: 13px;
-      font-weight: bold;
-
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-    }
-
-    .resource-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 14px;
-    }
-
-    .resource-button {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-
-      min-height: 120px;
       padding: 18px;
 
-      background: #292929;
 
-      border: 1px solid #444444;
-      border-radius: 14px;
+      background: #333333;
 
       color: white;
+
+
+      border:
+        2px solid
+        var(--orange);
+
+
       text-decoration: none;
+
       text-align: center;
 
-      font-size: 21px;
-      font-weight: bold;
 
-      transition: 0.2s;
+      font-size: 24px;
+
+      font-weight: 800;
+
+
+      border-radius: 14px;
+
+
+      transition:
+        .2s ease;
+
     }
 
-    .resource-button:hover {
-      background: #383838;
-      border-color: #f58220;
-      transform: translateY(-2px);
+
+    .inventory-button:hover {
+
+      background: #414141;
+
+      transform:
+        translateY(-2px);
+
     }
 
-    .resource-button span {
-      display: block;
-      margin-top: 7px;
+
+    .inventory-button:active {
+
+      transform:
+        scale(.98);
+
+    }
+
+
+    /* =========================
+       SECTION TITLE
+    ========================= */
+
+
+    .section-title {
+
+      margin-top: 35px;
+
+      margin-bottom: 12px;
+
 
       color: #999999;
 
-      font-size: 12px;
-      font-weight: normal;
+
+      font-size: 13px;
+
+      font-weight: 800;
+
+
+      text-transform:
+        uppercase;
+
+
+      letter-spacing:
+        1.5px;
+
     }
 
-    /* FOOTER */
-    .footer {
-      margin-top: 40px;
+
+    /* =========================
+       RESOURCE GRID
+    ========================= */
+
+
+    .resource-grid {
+
+      display: grid;
+
+      grid-template-columns:
+        repeat(2, 1fr);
+
+      gap: 14px;
+
+    }
+
+
+    /* =========================
+       STANDARD RESOURCE BUTTON
+    ========================= */
+
+
+    .resource-button {
+
+      display: flex;
+
+      flex-direction: column;
+
+      align-items: center;
+
+      justify-content: center;
+
+
+      min-height: 120px;
+
+
+      padding: 18px;
+
+
+      background:
+        var(--card);
+
+
+      border:
+        1px solid
+        var(--border);
+
+
+      border-radius: 14px;
+
+
+      color: white;
+
+
+      text-decoration: none;
 
       text-align: center;
 
-      color: #666666;
-      font-size: 12px;
+
+      font-size: 21px;
+
+      font-weight: 800;
+
+
+      box-shadow:
+        0 4px 12px
+        rgba(0,0,0,.20);
+
+
+      transition:
+        .2s ease;
+
     }
 
-    /* PHONE / SMALL SCREEN */
-    @media (max-width: 600px) {
+
+    .resource-button:hover {
+
+      background:
+        var(--card-hover);
+
+
+      border-color:
+        var(--orange);
+
+
+      transform:
+        translateY(-2px);
+
+    }
+
+
+    .resource-button:active {
+
+      transform:
+        scale(.98);
+
+    }
+
+
+    .resource-button span {
+
+      display: block;
+
+
+      margin-top: 7px;
+
+
+      color: #999999;
+
+
+      font-size: 12px;
+
+      font-weight: normal;
+
+    }
+
+
+    /* =========================
+       ORANGE RESOURCE BUTTONS
+       SCHEDULE / LOT MAPS
+    ========================= */
+
+
+    .resource-orange {
+
+      background:
+        linear-gradient(
+          180deg,
+          #d8610c,
+          var(--resource-orange)
+        );
+
+
+      border:
+        1px solid
+        #fb923c;
+
+
+      color: white;
+
+    }
+
+
+    .resource-orange:hover {
+
+      background:
+        linear-gradient(
+          180deg,
+          #f27a22,
+          var(--resource-orange-hover)
+        );
+
+
+      border-color:
+        #ffb36b;
+
+    }
+
+
+    .resource-orange span {
+
+      color:
+        #ffe0c2;
+
+    }
+
+
+    /* =========================
+       FOOTER
+    ========================= */
+
+
+    .footer {
+
+      margin-top: 40px;
+
+
+      padding-top: 20px;
+
+
+      border-top:
+        1px solid
+        #333333;
+
+
+      text-align: center;
+
+
+      color: #666666;
+
+
+      font-size: 12px;
+
+    }
+
+
+    /* =========================
+       MOBILE
+    ========================= */
+
+
+    @media(max-width: 600px) {
+
+
+      .header {
+
+        padding:
+          20px 12px;
+
+      }
+
 
       .header h1 {
-        font-size: 24px;
+
+        font-size:
+          25px;
+
       }
+
 
       .dashboard {
-        padding: 20px 12px;
+
+        padding:
+          20px 12px 40px;
+
       }
+
 
       .remove-button {
-        min-height: 135px;
-        font-size: 29px;
+
+        min-height:
+          135px;
+
+
+        font-size:
+          29px;
+
       }
+
 
       .inventory-button {
-        min-height: 90px;
-        font-size: 21px;
+
+        min-height:
+          90px;
+
+
+        font-size:
+          21px;
+
       }
+
 
       .resource-grid {
-        grid-template-columns: 1fr;
+
+        grid-template-columns:
+          1fr 1fr;
+
+        gap:
+          10px;
+
       }
+
 
       .resource-button {
-        min-height: 90px;
+
+        min-height:
+          105px;
+
+
+        padding:
+          12px;
+
+
+        font-size:
+          18px;
+
       }
+
     }
 
+
+    /* VERY SMALL PHONES */
+
+    @media(max-width: 380px) {
+
+
+      .resource-grid {
+
+        grid-template-columns:
+          1fr;
+
+      }
+
+    }
+
+
   </style>
+
 </head>
+
 
 
 <body>
 
-  <!-- HEADER -->
-  <div class="header">
 
-    <h1>Cameron Ambulance</h1>
-
-    <p>Employee Dashboard</p>
-
-  </div>
+  <!-- =========================
+       HEADER
+  ========================== -->
 
 
-  <!-- DASHBOARD -->
+  <header class="header">
+
+
+    <h1>
+
+      Cameron Ambulance
+
+    </h1>
+
+
+    <p>
+
+      Employee Dashboard
+
+    </p>
+
+
+  </header>
+
+
+
+  <!-- =========================
+       DASHBOARD
+  ========================== -->
+
+
   <main class="dashboard">
 
 
-    <!-- PRIMARY ACTION -->
 
-    <a class="remove-button" href="remove.html">
+    <!-- =====================
+         REMOVE INVENTORY
+    ====================== -->
+
+
+    <a
+      class="remove-button"
+      href="remove.html"
+    >
 
       REMOVE INVENTORY
 
     </a>
 
 
-    <!-- INVENTORY MANAGEMENT -->
 
-    <a class="inventory-button" href="inventory.html">
+    <!-- =====================
+         ADD / COUNT
+    ====================== -->
+
+
+    <a
+      class="inventory-button"
+      href="inventory.html"
+    >
 
       ADD / COUNT INVENTORY
 
     </a>
 
 
-    <!-- EMPLOYEE RESOURCES -->
+
+    <!-- =====================
+         EMPLOYEE RESOURCES
+    ====================== -->
+
 
     <div class="section-title">
 
@@ -257,10 +685,15 @@
     </div>
 
 
+
     <div class="resource-grid">
 
 
-      <!-- PS TRAX -->
+
+      <!-- ===================
+           TRUCK CHECKS
+      ==================== -->
+
 
       <a
         class="resource-button"
@@ -271,12 +704,20 @@
 
         Truck Checks
 
-        <span>PS Trax</span>
+        <span>
+
+          PS Trax
+
+        </span>
 
       </a>
 
 
-      <!-- EMPLOYEE CERTIFICATES -->
+
+      <!-- ===================
+           EMPLOYEE CERTIFICATES
+      ==================== -->
+
 
       <a
         class="resource-button"
@@ -287,15 +728,72 @@
 
         Employee Certificates
 
-        <span>Licenses & Certifications</span>
+        <span>
+
+          Licenses & Certifications
+
+        </span>
 
       </a>
+
+
+
+      <!-- ===================
+           SCHEDULE
+      ==================== -->
+
+
+      <a
+        class="resource-button resource-orange"
+        href="https://cameronems.humanity.com/app/"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+
+        Schedule
+
+        <span>
+
+          Employee Scheduling
+
+        </span>
+
+      </a>
+
+
+
+      <!-- ===================
+           LOT MAPS
+      ==================== -->
+
+
+      <a
+        class="resource-button resource-orange"
+        href="https://drive.google.com/drive/folders/18gwUC5myQwDZkO5H6ks-7Vro4rRjaQi3?usp=drive_link"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+
+        Lot Maps
+
+        <span>
+
+          Hospital & Facility Maps
+
+        </span>
+
+      </a>
+
 
 
     </div>
 
 
-    <!-- FOOTER -->
+
+    <!-- =====================
+         FOOTER
+    ====================== -->
+
 
     <div class="footer">
 
@@ -304,7 +802,10 @@
     </div>
 
 
+
   </main>
 
+
 </body>
+
 </html>
