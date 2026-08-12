@@ -1,1368 +1,888 @@
 <!doctype html>
 <html lang="en">
-
 <head>
 
-  <meta charset="utf-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
-  >
-
-  <title>Cameron EMS Add Inventory</title>
-
-  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
-
-
-  <style>
-
-    :root {
-      --bg: #1f2328;
-      --panel: #2b3036;
-      --panel2: #343a40;
-      --border: #4b535c;
-
-      --text: #f3f4f6;
-      --muted: #b7bdc5;
-
-      --orange: #f97316;
-      --orange-light: #fb923c;
-      --orange-dark: #c2410c;
-
-      --success: #14532d;
-      --danger: #7f1d1d;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-
-      margin: 0;
-
-      background:
-        linear-gradient(
-          180deg,
-          #171a1e 0%,
-          var(--bg) 100%
-        );
-
-      color: var(--text);
-
-      font-family:
-        Arial,
-        Helvetica,
-        sans-serif;
-
-      min-height: 100vh;
-    }
-
-    .wrap {
-
-      max-width: 640px;
-
-      margin: 0 auto;
-
-      padding: 18px;
-    }
-
-    .card {
-
-      background: var(--panel);
-
-      border:
-        1px solid
-        var(--border);
-
-      border-radius: 18px;
-
-      padding: 20px;
-
-      box-shadow:
-        0 8px 28px
-        rgba(0,0,0,.28);
-    }
-
-    .header {
-
-      text-align: center;
-
-      margin-bottom: 18px;
-    }
-
-    .header h1 {
-
-      margin: 0;
-
-      font-size: 27px;
-
-      letter-spacing: .3px;
-    }
-
-    .accent {
-
-      color: var(--orange-light);
-    }
-
-    .sub {
-
-      margin-top: 7px;
-
-      color: var(--muted);
-
-      font-size: 14px;
-    }
-
-    .status {
-
-      margin-top: 14px;
-
-      padding: 14px;
-
-      border-radius: 10px;
-
-      background: #20252a;
-
-      border:
-        1px solid
-        var(--border);
-
-      text-align: center;
-
-      font-weight: 700;
-    }
-
-    .status.success {
-
-      background: var(--success);
-
-      border-color: #166534;
-    }
-
-    .status.error {
-
-      background: var(--danger);
-
-      border-color: #991b1b;
-    }
-
-    label {
-
-      display: block;
-
-      margin-bottom: 7px;
-
-      font-weight: 700;
-    }
-
-    input {
-
-      width: 100%;
-
-      padding: 16px;
-
-      border:
-        1px solid
-        var(--border);
-
-      border-radius: 10px;
-
-      background: #171a1e;
-
-      color: white;
-
-      font-size: 20px;
-
-      outline: none;
-    }
-
-    input:focus {
-
-      border-color: var(--orange);
-
-      box-shadow:
-        0 0 0 3px
-        rgba(249,115,22,.20);
-    }
-
-    input::placeholder {
-
-      color: #7f8790;
-    }
-
-    .barcode-section {
-
-      margin-top: 18px;
-    }
-
-    .item {
-
-      display: none;
-
-      margin-top: 18px;
-
-      padding: 18px;
-
-      background: var(--panel2);
-
-      border:
-        1px solid
-        var(--border);
-
-      border-left:
-        5px solid
-        var(--orange);
-
-      border-radius: 12px;
-    }
-
-    .item-name {
-
-      font-size: 25px;
-
-      font-weight: 800;
-
-      margin-bottom: 7px;
-    }
-
-    .barcode-display {
-
-      color: var(--muted);
-
-      font-size: 14px;
-
-      margin-bottom: 20px;
-    }
-
-    .qty-label {
-
-      color: var(--orange-light);
-
-      font-size: 15px;
-
-      text-transform: uppercase;
-
-      letter-spacing: .5px;
-    }
-
-    button,
-    .home-button {
-
-      width: 100%;
-
-      padding: 15px;
-
-      border: 0;
-
-      border-radius: 11px;
-
-      font-size: 17px;
-
-      font-weight: 700;
-
-      cursor: pointer;
-
-      text-align: center;
-    }
-
-    .save-btn {
-
-      margin-top: 15px;
-
-      min-height: 60px;
-
-      background:
-        linear-gradient(
-          180deg,
-          var(--orange-light),
-          var(--orange-dark)
-        );
-
-      color: white;
-
-      font-size: 20px;
-    }
-
-    .save-btn:disabled {
-
-      opacity: .55;
-
-      cursor: default;
-    }
-
-    .wrong-btn {
-
-      margin-top: 10px;
-
-      background: transparent;
-
-      color: #ffd7c2;
-
-      border:
-        1px solid
-        var(--orange-dark);
-    }
-
-    .camera-btn {
-
-      margin-top: 20px;
-
-      background: var(--panel2);
-
-      color: var(--text);
-
-      border:
-        1px solid
-        var(--border);
-    }
-
-    .home-button {
-
-      display: block;
-
-      margin-top: 15px;
-
-      background: #171a1e;
-
-      color: #d1d5db;
-
-      border:
-        1px solid
-        var(--border);
-
-      text-decoration: none;
-    }
-
-    #reader {
-
-      width: 100%;
-
-      overflow: hidden;
-
-      border-radius: 12px;
-
-      background: #111;
-
-      margin-top: 12px;
-    }
-
-    .workflow {
-
-      margin-top: 16px;
-
-      padding: 12px;
-
-      background: #20252a;
-
-      border-radius: 10px;
-
-      color: var(--muted);
-
-      font-size: 13px;
-
-      text-align: center;
-
-      line-height: 1.5;
-    }
-
-    .workflow strong {
-
-      color: var(--orange-light);
-    }
-
-    @media(max-width: 520px) {
-
-      .wrap {
-        padding: 12px;
-      }
-
-      .card {
-        padding: 16px;
-      }
-
-      .header h1 {
-        font-size: 24px;
-      }
-
-    }
-
-  </style>
-
+<meta charset="utf-8">
+
+<meta
+name="viewport"
+content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"
+>
+
+<title>Cameron EMS Add Inventory</title>
+
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+
+<style>
+
+:root{
+--bg:#1f2328;
+--panel:#2b3036;
+--panel2:#343a40;
+--border:#4b535c;
+--text:#f3f4f6;
+--muted:#b7bdc5;
+--orange:#f97316;
+--orange-light:#fb923c;
+--orange-dark:#c2410c;
+--success:#14532d;
+--danger:#7f1d1d;
+}
+
+*{box-sizing:border-box}
+
+body{
+margin:0;
+background:linear-gradient(180deg,#171a1e,var(--bg));
+color:var(--text);
+font-family:Arial,Helvetica,sans-serif;
+min-height:100vh;
+}
+
+.wrap{
+max-width:640px;
+margin:auto;
+padding:18px;
+}
+
+.card{
+background:var(--panel);
+border:1px solid var(--border);
+border-radius:18px;
+padding:20px;
+box-shadow:0 8px 28px rgba(0,0,0,.28);
+}
+
+.header{
+text-align:center;
+margin-bottom:18px;
+}
+
+.header h1{
+margin:0;
+font-size:27px;
+}
+
+.accent{
+color:var(--orange-light);
+}
+
+.sub{
+margin-top:7px;
+color:var(--muted);
+font-size:14px;
+}
+
+.status{
+margin-top:14px;
+padding:14px;
+border-radius:10px;
+background:#20252a;
+border:1px solid var(--border);
+text-align:center;
+font-weight:700;
+}
+
+.status.success{
+background:var(--success);
+}
+
+.status.error{
+background:var(--danger);
+}
+
+label{
+display:block;
+margin:18px 0 7px;
+font-weight:700;
+}
+
+input{
+width:100%;
+padding:16px;
+border:1px solid var(--border);
+border-radius:10px;
+background:#171a1e;
+color:white;
+font-size:20px;
+outline:none;
+}
+
+input:focus{
+border-color:var(--orange);
+box-shadow:0 0 0 3px rgba(249,115,22,.20);
+}
+
+.item{
+display:none;
+margin-top:18px;
+padding:18px;
+background:var(--panel2);
+border-left:5px solid var(--orange);
+border-radius:12px;
+}
+
+.item-name{
+font-size:25px;
+font-weight:800;
+}
+
+.barcode{
+color:var(--muted);
+margin-top:7px;
+}
+
+button,.home-button{
+width:100%;
+padding:15px;
+border-radius:11px;
+font-weight:700;
+font-size:17px;
+text-align:center;
+cursor:pointer;
+}
+
+.save-btn{
+margin-top:15px;
+border:0;
+background:linear-gradient(180deg,var(--orange-light),var(--orange-dark));
+color:white;
+font-size:20px;
+}
+
+.camera-btn{
+margin-top:20px;
+background:var(--panel2);
+color:white;
+border:1px solid var(--border);
+}
+
+.wrong-btn{
+margin-top:10px;
+background:transparent;
+color:#ffd7c2;
+border:1px solid var(--orange-dark);
+}
+
+.home-button{
+display:block;
+margin-top:15px;
+background:#171a1e;
+color:#d1d5db;
+border:1px solid var(--border);
+text-decoration:none;
+}
+
+#reader{
+width:100%;
+margin-top:12px;
+}
+
+.workflow{
+margin-top:16px;
+padding:12px;
+background:#20252a;
+border-radius:10px;
+color:var(--muted);
+font-size:13px;
+text-align:center;
+}
+
+</style>
 </head>
-
 
 <body>
 
-
 <div class="wrap">
-
-  <div class="card">
-
-
-    <div class="header">
-
-      <h1>
-
-        Cameron EMS
-
-        <span class="accent">
-
-          Add Inventory
-
-        </span>
-
-      </h1>
-
-
-      <div class="sub">
-
-        Scan barcode • Enter quantity received • Press Enter
-
-      </div>
-
-    </div>
-
-
-    <div
-      id="status"
-      class="status"
-    >
-      READY TO SCAN
-    </div>
-
-
-    <div class="barcode-section">
-
-      <label for="barcodeInput">
-
-        Barcode Scanner / Entry
-
-      </label>
-
-
-      <input
-        id="barcodeInput"
-        type="text"
-        autocomplete="off"
-        spellcheck="false"
-        placeholder="Scan or type barcode"
-        onkeydown="barcodeKey(event)"
-      >
-
-    </div>
-
-
-    <div
-      id="itemBox"
-      class="item"
-    >
-
-
-      <div
-        id="itemName"
-        class="item-name"
-      ></div>
-
-
-      <div class="barcode-display">
-
-        Barcode:
-
-        <strong id="itemId"></strong>
-
-      </div>
-
-
-      <label
-        class="qty-label"
-        for="qty"
-      >
-
-        Quantity Being Added
-
-      </label>
-
-
-      <input
-        id="qty"
-        type="number"
-        min="1"
-        step="1"
-        inputmode="numeric"
-        autocomplete="off"
-        placeholder="Enter quantity received"
-        onkeydown="qtyKey(event)"
-      >
-
-
-      <button
-        id="saveBtn"
-        class="save-btn"
-        onclick="saveAdd()"
-      >
-
-        ADD INVENTORY
-
-      </button>
-
-
-      <button
-        class="wrong-btn"
-        onclick="resetForNextItem()"
-      >
-
-        ← Wrong Item — Scan Again
-
-      </button>
-
-
-    </div>
-
-
-    <div class="workflow">
-
-      <strong>Fast Workflow</strong><br>
-
-      Scan barcode → Type quantity → Enter → Scan next item
-
-    </div>
-
-
-    <button
-      id="cameraBtn"
-      class="camera-btn"
-      onclick="startCamera()"
-    >
-
-      Use Camera Scanner
-
-    </button>
-
-
-    <div id="reader"></div>
-
-
-    <a
-      href="index.html"
-      class="home-button"
-    >
-
-      ← Return to Employee Dashboard
-
-    </a>
-
-
-  </div>
+<div class="card">
+
+<div class="header">
+
+<h1>
+Cameron EMS
+<span class="accent">
+Add Inventory
+</span>
+</h1>
+
+<div class="sub">
+Scan barcode • Enter quantity received • Press Enter
+</div>
 
 </div>
 
+<div id="status" class="status">
+READY TO SCAN
+</div>
+
+<label for="barcodeInput">
+Barcode Scanner / Entry
+</label>
+
+<input
+id="barcodeInput"
+type="text"
+autocomplete="off"
+spellcheck="false"
+placeholder="Scan or type barcode"
+onkeydown="barcodeKey(event)"
+>
+
+<div id="itemBox" class="item">
+
+<div id="itemName" class="item-name"></div>
+
+<div class="barcode">
+Barcode:
+<strong id="itemId"></strong>
+</div>
+
+<label for="qty">
+Quantity Being Added
+</label>
+
+<input
+id="qty"
+type="number"
+min="1"
+step="1"
+inputmode="numeric"
+placeholder="Enter quantity received"
+onkeydown="qtyKey(event)"
+>
+
+<button
+id="saveBtn"
+class="save-btn"
+onclick="saveAdd()"
+>
+ADD INVENTORY
+</button>
+
+<button
+class="wrong-btn"
+onclick="resetForNextItem()"
+>
+← Wrong Item — Scan Again
+</button>
+
+</div>
+
+<div class="workflow">
+Scan → Quantity Received → Enter → Scan Next Item
+</div>
+
+<button
+id="cameraBtn"
+class="camera-btn"
+onclick="startCamera()"
+>
+Use Camera Scanner
+</button>
+
+<div id="reader"></div>
+
+<a
+href="index.html"
+class="home-button"
+>
+← Return to Employee Dashboard
+</a>
+
+</div>
+</div>
 
 <iframe
-  name="saveFrame"
-  id="saveFrame"
-  style="display:none"
+name="saveFrame"
+style="display:none"
 ></iframe>
-
 
 <script>
 
+const API_URL=
+"https://script.google.com/macros/s/AKfycbyGwziqfDHZpnLlTVnCHxtXAZYn0FZHeOqfdoWl-wJ0MmIOKFWXD7qWS5m0GpGBdbH8tg/exec";
 
-const API_URL =
-  "https://script.google.com/macros/s/AKfycbyGwziqfDHZpnLlTVnCHxtXAZYn0FZHeOqfdoWl-wJ0MmIOKFWXD7qWS5m0GpGBdbH8tg/exec";
+let currentBarcode="";
+let scanLocked=false;
+let scanner=null;
 
-
-let currentBarcode = "";
-
-let scanLocked = false;
-
-let scanner = null;
-
-
-function barcodeBox() {
-
-  return document.getElementById(
-    "barcodeInput"
-  );
-
+function barcodeBox(){
+return document.getElementById(
+"barcodeInput"
+);
 }
 
-
-function quantityBox() {
-
-  return document.getElementById(
-    "qty"
-  );
-
+function quantityBox(){
+return document.getElementById(
+"qty"
+);
 }
-
 
 function setStatus(
-  message,
-  type = ""
-) {
+message,
+type=""
+){
 
-  const box =
-    document.getElementById(
-      "status"
-    );
+const box=
+document.getElementById(
+"status"
+);
 
+box.className=
+"status"+
+(type?" "+type:"");
 
-  box.className =
-    "status" +
-    (
-      type
-        ? " " + type
-        : ""
-    );
-
-
-  box.textContent =
-    message;
+box.textContent=
+message;
 
 }
 
+function barcodeKey(
+event
+){
 
-function barcodeKey(event) {
+if(
+event.key!=="Enter"
+) return;
 
-  if (
-    event.key !== "Enter"
-  ) {
+event.preventDefault();
 
-    return;
+const barcode=
+barcodeBox()
+.value
+.trim();
 
-  }
+if(!barcode) return;
 
+if(scanLocked) return;
 
-  event.preventDefault();
+scanLocked=true;
 
-
-  const barcode =
-    barcodeBox()
-      .value
-      .trim();
-
-
-  if (!barcode) {
-
-    setStatus(
-      "Scan or enter a barcode.",
-      "error"
-    );
-
-    barcodeBox().focus();
-
-    return;
-
-  }
-
-
-  if (scanLocked) {
-
-    return;
-
-  }
-
-
-  scanLocked =
-    true;
-
-
-  lookupItem(
-    barcode
-  );
+lookupItem(
+barcode
+);
 
 }
 
+function lookupItem(
+barcode
+){
 
-function lookupItem(barcode) {
+currentBarcode=
+barcode;
 
-  currentBarcode =
-    barcode;
+setStatus(
+"Looking up item..."
+);
 
-
-  setStatus(
-    "Looking up item..."
-  );
-
-
-  jsonp(
-
-    {
-
-      mode:
-        "item",
-
-      item:
-        barcode,
-
-      t:
-        Date.now()
-
-    },
-
-
-    data => {
-
-
-      if (
-        !data ||
-        !data.success
-      ) {
-
-
-        setStatus(
-
-          (
-            data &&
-            data.message
-          ) ||
-
-          "Item not found.",
-
-          "error"
-
-        );
-
-
-        currentBarcode =
-          "";
-
-
-        barcodeBox().value =
-          "";
-
-
-        scanLocked =
-          false;
-
-
-        setTimeout(
-          () => {
-
-            barcodeBox().focus();
-
-          },
-
-          100
-        );
-
-
-        return;
-
-      }
-
-
-      document.getElementById(
-        "itemName"
-      ).textContent =
-        data.name;
-
-
-      document.getElementById(
-        "itemId"
-      ).textContent =
-        barcode;
-
-
-      document.getElementById(
-        "itemBox"
-      ).style.display =
-        "block";
-
-
-      barcodeBox().value =
-        "";
-
-
-      setStatus(
-        "ITEM LOADED — ENTER QUANTITY",
-        "success"
-      );
-
-
-      setTimeout(
-        () => {
-
-          quantityBox().focus();
-
-          quantityBox().select();
-
-        },
-
-        100
-      );
-
-
-    }
-
-  );
+lookupWithRetry(
+barcode,
+1
+);
 
 }
 
+function lookupWithRetry(
+barcode,
+attempt
+){
 
-function qtyKey(event) {
+jsonpRequest(
 
-  if (
-    event.key !== "Enter"
-  ) {
+{
+mode:"item",
+item:barcode,
+t:Date.now()
+},
 
-    return;
+data=>{
 
-  }
+if(
+!data ||
+!data.success
+){
 
+scanLocked=false;
 
-  event.preventDefault();
+currentBarcode="";
 
+setStatus(
+(data&&data.message)||
+"Item not found.",
+"error"
+);
 
-  const button =
-    document.getElementById(
-      "saveBtn"
-    );
+barcodeBox().value="";
 
+barcodeBox().focus();
 
-  if (
-    !button.disabled
-  ) {
-
-    saveAdd();
-
-  }
+return;
 
 }
 
+document.getElementById(
+"itemName"
+).textContent=
+data.name;
 
-function saveAdd() {
+document.getElementById(
+"itemId"
+).textContent=
+barcode;
 
-  const qtyText =
-    quantityBox().value;
+document.getElementById(
+"itemBox"
+).style.display=
+"block";
 
+barcodeBox().value="";
 
-  if (!currentBarcode) {
+setStatus(
+"ITEM LOADED — ENTER QUANTITY",
+"success"
+);
 
-    setStatus(
-      "Scan an item first.",
-      "error"
-    );
+setTimeout(
+()=>{
 
-    resetForNextItem();
+quantityBox().focus();
 
-    return;
+quantityBox().select();
 
-  }
+},
+75
+);
 
+},
 
-  if (
-    qtyText === "" ||
-    Number(qtyText) <= 0 ||
-    !Number.isFinite(
-      Number(qtyText)
-    )
-  ) {
+()=>{
 
-    setStatus(
-      "Enter a valid quantity to add.",
-      "error"
-    );
+if(
+attempt<3
+){
 
+const delay=
+attempt===1
+?300
+:800;
 
-    quantityBox().focus();
+setStatus(
+"Connection delayed — retrying..."
+);
 
+setTimeout(
+()=>{
 
-    return;
+lookupWithRetry(
+barcode,
+attempt+1
+);
 
-  }
+},
+delay
+);
 
-
-  const button =
-    document.getElementById(
-      "saveBtn"
-    );
-
-
-  button.disabled =
-    true;
-
-
-  setStatus(
-    "Adding inventory..."
-  );
-
-
-  const form =
-    document.createElement(
-      "form"
-    );
-
-
-  form.method =
-    "POST";
-
-
-  form.action =
-    API_URL;
-
-
-  form.target =
-    "saveFrame";
-
-
-  form.style.display =
-    "none";
-
-
-  const fields = {
-
-    mode:
-      "save",
-
-    item:
-      currentBarcode,
-
-    action:
-      "Add",
-
-    qty:
-      String(
-        Number(
-          qtyText
-        )
-      )
-
-  };
-
-
-  Object.entries(
-    fields
-  ).forEach(
-
-    ([key, value]) => {
-
-
-      const input =
-        document.createElement(
-          "input"
-        );
-
-
-      input.type =
-        "hidden";
-
-
-      input.name =
-        key;
-
-
-      input.value =
-        value;
-
-
-      form.appendChild(
-        input
-      );
-
-
-    }
-
-  );
-
-
-  document.body.appendChild(
-    form
-  );
-
-
-  form.submit();
-
-
-  form.remove();
-
-
-  setTimeout(
-    () => {
-
-
-      button.disabled =
-        false;
-
-
-      setStatus(
-        "✓ INVENTORY ADDED — SCAN NEXT ITEM",
-        "success"
-      );
-
-
-      resetForNextItem(
-        false
-      );
-
-
-    },
-
-    700
-  );
+return;
 
 }
 
+scanLocked=false;
+currentBarcode="";
+
+setStatus(
+"Unable to reach inventory service. Scan again.",
+"error"
+);
+
+barcodeBox().value="";
+
+barcodeBox().focus();
+
+}
+
+);
+
+}
+
+function qtyKey(
+event
+){
+
+if(
+event.key!=="Enter"
+) return;
+
+event.preventDefault();
+
+if(
+!document.getElementById(
+"saveBtn"
+).disabled
+){
+
+saveAdd();
+
+}
+
+}
+
+function saveAdd(){
+
+const qtyText=
+quantityBox().value;
+
+if(
+qtyText==="" ||
+Number(qtyText)<=0 ||
+!Number.isFinite(
+Number(qtyText)
+)
+){
+
+setStatus(
+"Enter a valid quantity.",
+"error"
+);
+
+quantityBox().focus();
+
+return;
+
+}
+
+const button=
+document.getElementById(
+"saveBtn"
+);
+
+button.disabled=true;
+
+setStatus(
+"Adding inventory..."
+);
+
+postTransaction(
+currentBarcode,
+"Add",
+Number(qtyText)
+);
+
+setTimeout(
+()=>{
+
+button.disabled=false;
+
+setStatus(
+"✓ INVENTORY ADDED — SCAN NEXT ITEM",
+"success"
+);
+
+resetForNextItem(
+false
+);
+
+},
+700
+);
+
+}
+
+function postTransaction(
+barcode,
+action,
+qty
+){
+
+const form=
+document.createElement(
+"form"
+);
+
+form.method=
+"POST";
+
+form.action=
+API_URL;
+
+form.target=
+"saveFrame";
+
+form.style.display=
+"none";
+
+const fields={
+
+mode:"save",
+
+item:barcode,
+
+action:action,
+
+qty:String(qty)
+
+};
+
+Object.entries(
+fields
+)
+.forEach(
+([key,value])=>{
+
+const input=
+document.createElement(
+"input"
+);
+
+input.type=
+"hidden";
+
+input.name=
+key;
+
+input.value=
+value;
+
+form.appendChild(
+input
+);
+
+}
+);
+
+document.body.appendChild(
+form
+);
+
+form.submit();
+
+setTimeout(
+()=>{
+form.remove();
+},
+1500
+);
+
+}
 
 function resetForNextItem(
-  changeStatus = true
-) {
+changeStatus=true
+){
 
-  currentBarcode =
-    "";
+currentBarcode="";
 
+scanLocked=false;
 
-  scanLocked =
-    false;
+document.getElementById(
+"itemBox"
+).style.display=
+"none";
 
+document.getElementById(
+"itemName"
+).textContent="";
 
-  document.getElementById(
-    "itemName"
-  ).textContent =
-    "";
+document.getElementById(
+"itemId"
+).textContent="";
 
+quantityBox().value="";
 
-  document.getElementById(
-    "itemId"
-  ).textContent =
-    "";
+barcodeBox().value="";
 
+if(changeStatus){
 
-  document.getElementById(
-    "itemBox"
-  ).style.display =
-    "none";
-
-
-  quantityBox().value =
-    "";
-
-
-  barcodeBox().value =
-    "";
-
-
-  if (changeStatus) {
-
-    setStatus(
-      "READY TO SCAN"
-    );
-
-  }
-
-
-  setTimeout(
-    () => {
-
-      barcodeBox().focus();
-
-    },
-
-    75
-  );
+setStatus(
+"READY TO SCAN"
+);
 
 }
 
-
-function startCamera() {
-
-  const cameraButton =
-    document.getElementById(
-      "cameraBtn"
-    );
-
-
-  cameraButton.disabled =
-    true;
-
-
-  setStatus(
-    "Requesting camera permission..."
-  );
-
-
-  scanner =
-    new Html5Qrcode(
-      "reader"
-    );
-
-
-  scanner.start(
-
-    {
-
-      facingMode:
-        "environment"
-
-    },
-
-
-    {
-
-      fps:
-        12,
-
-
-      aspectRatio:
-        1.777778,
-
-
-      qrbox:
-        (width, height) => ({
-
-          width:
-            Math.floor(
-              width * .9
-            ),
-
-          height:
-            Math.min(
-              180,
-              Math.floor(
-                height * .35
-              )
-            )
-
-        }),
-
-
-      formatsToSupport: [
-
-        Html5QrcodeSupportedFormats.QR_CODE,
-
-        Html5QrcodeSupportedFormats.CODE_128,
-
-        Html5QrcodeSupportedFormats.CODE_39,
-
-        Html5QrcodeSupportedFormats.UPC_A,
-
-        Html5QrcodeSupportedFormats.UPC_E,
-
-        Html5QrcodeSupportedFormats.EAN_13,
-
-        Html5QrcodeSupportedFormats.EAN_8
-
-      ]
-
-    },
-
-
-    decodedText => {
-
-
-      if (scanLocked) {
-
-        return;
-
-      }
-
-
-      scanLocked =
-        true;
-
-
-      lookupItem(
-        String(
-          decodedText
-        ).trim()
-      );
-
-    },
-
-
-    () => {}
-
-
-  )
-
-
-  .then(
-    () => {
-
-      setStatus(
-        "Point camera at item barcode"
-      );
-
-    }
-  )
-
-
-  .catch(
-    error => {
-
-
-      cameraButton.disabled =
-        false;
-
-
-      setStatus(
-        "Camera error: " +
-        error,
-        "error"
-      );
-
-
-    }
-  );
+setTimeout(
+()=>{
+barcodeBox().focus();
+},
+75
+);
 
 }
 
+function startCamera(){
 
-function jsonp(
-  params,
-  callback
-) {
+const button=
+document.getElementById(
+"cameraBtn"
+);
 
+button.disabled=true;
 
-  const callbackName =
+scanner=
+new Html5Qrcode(
+"reader"
+);
 
-    "__add_" +
+scanner.start(
 
-    Date.now() +
+{
+facingMode:"environment"
+},
 
-    "_" +
+{
+fps:12
+},
 
-    Math.floor(
-      Math.random() *
-      100000
-    );
+decodedText=>{
 
+if(scanLocked) return;
 
-  const script =
-    document.createElement(
-      "script"
-    );
+scanLocked=true;
 
+lookupItem(
+String(
+decodedText
+).trim()
+);
 
-  window[
-    callbackName
-  ] =
+},
 
-    data => {
+()=>{}
 
+)
 
-      try {
+.then(
+()=>{
 
-        callback(
-          data
-        );
+setStatus(
+"Point camera at item barcode"
+);
 
-      }
+}
+)
 
+.catch(
+error=>{
 
-      finally {
+button.disabled=false;
 
+setStatus(
+"Camera error: "+
+error,
+"error"
+);
 
-        delete window[
-          callbackName
-        ];
-
-
-        script.remove();
-
-      }
-
-    };
-
-
-  const query =
-    new URLSearchParams(
-      params
-    );
-
-
-  query.set(
-    "prefix",
-    callbackName
-  );
-
-
-  script.src =
-
-    API_URL +
-
-    "?" +
-
-    query.toString();
-
-
-  script.onerror =
-    () => {
-
-
-      delete window[
-        callbackName
-      ];
-
-
-      script.remove();
-
-
-      scanLocked =
-        false;
-
-
-      setStatus(
-        "Unable to reach inventory service.",
-        "error"
-      );
-
-
-      barcodeBox().focus();
-
-    };
-
-
-  document.body.appendChild(
-    script
-  );
+}
+);
 
 }
 
+function jsonpRequest(
+params,
+success,
+failure
+){
+
+const callbackName=
+"__add_"+
+Date.now()+
+"_"+
+Math.floor(
+Math.random()*100000
+);
+
+const script=
+document.createElement(
+"script"
+);
+
+let finished=false;
+
+let timeout;
+
+function cleanup(){
+
+if(finished) return;
+
+finished=true;
+
+clearTimeout(
+timeout
+);
+
+try{
+
+delete window[
+callbackName
+];
+
+}catch(e){}
+
+script.remove();
+
+}
+
+window[
+callbackName
+]=data=>{
+
+cleanup();
+
+success(
+data
+);
+
+};
+
+const query=
+new URLSearchParams(
+params
+);
+
+query.set(
+"prefix",
+callbackName
+);
+
+script.src=
+API_URL+
+"?"+
+query.toString();
+
+script.onerror=
+()=>{
+
+cleanup();
+
+failure();
+
+};
+
+timeout=
+setTimeout(
+()=>{
+
+cleanup();
+
+failure();
+
+},
+5000
+);
+
+document.body.appendChild(
+script
+);
+
+}
 
 window.addEventListener(
-  "load",
-  () => {
+"load",
+()=>{
 
-    barcodeBox().focus();
+barcodeBox().focus();
 
-  }
+}
 );
-
-
-document.addEventListener(
-  "click",
-  event => {
-
-
-    if (
-      !currentBarcode &&
-      event.target.tagName !== "BUTTON" &&
-      event.target.tagName !== "A"
-    ) {
-
-
-      setTimeout(
-        () => {
-
-          barcodeBox().focus();
-
-        },
-
-        50
-      );
-
-    }
-
-  }
-);
-
 
 </script>
 
-
 </body>
-
 </html>
