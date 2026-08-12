@@ -67,12 +67,39 @@
         4px solid
         var(--orange);
 
-      text-align: center;
-
-      padding: 25px 15px;
+      padding:
+        18px 20px;
     }
 
-    .header h1 {
+    .header-content {
+      max-width: 850px;
+
+      margin: 0 auto;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      gap: 22px;
+    }
+
+    .dashboard-logo {
+      width: 125px;
+
+      height: 100px;
+
+      object-fit: contain;
+
+      flex-shrink: 0;
+    }
+
+    .header-text {
+      text-align: left;
+    }
+
+    .header-text h1 {
       margin: 0;
 
       font-size: 30px;
@@ -80,12 +107,12 @@
       font-weight: 800;
     }
 
-    .header p {
-      margin: 8px 0 0;
+    .header-text p {
+      margin: 6px 0 0;
 
       color: var(--muted);
 
-      font-size: 15px;
+      font-size: 16px;
     }
 
     /* =========================
@@ -97,7 +124,8 @@
 
       margin: 0 auto;
 
-      padding: 30px 18px 50px;
+      padding:
+        30px 18px 50px;
     }
 
     /* =========================
@@ -282,7 +310,7 @@
     }
 
     /* =========================
-       RESOURCE SECTION
+       EMPLOYEE RESOURCES
     ========================= */
 
     .section-title {
@@ -296,9 +324,11 @@
 
       font-weight: 800;
 
-      text-transform: uppercase;
+      text-transform:
+        uppercase;
 
-      letter-spacing: 1.5px;
+      letter-spacing:
+        1.5px;
     }
 
     .resource-grid {
@@ -441,12 +471,25 @@
 
       .header {
         padding:
-          20px 12px;
+          14px 12px;
       }
 
-      .header h1 {
-        font-size:
-          25px;
+      .header-content {
+        gap: 12px;
+      }
+
+      .dashboard-logo {
+        width: 90px;
+
+        height: 75px;
+      }
+
+      .header-text h1 {
+        font-size: 22px;
+      }
+
+      .header-text p {
+        font-size: 14px;
       }
 
       .dashboard {
@@ -455,46 +498,36 @@
       }
 
       .remove-button {
-        min-height:
-          135px;
+        min-height: 135px;
 
-        font-size:
-          29px;
+        font-size: 29px;
       }
 
       .count-button {
-        min-height:
-          100px;
+        min-height: 100px;
 
-        font-size:
-          23px;
+        font-size: 23px;
       }
 
       .add-button {
-        min-height:
-          70px;
+        min-height: 70px;
 
-        font-size:
-          19px;
+        font-size: 19px;
       }
 
       .resource-grid {
         grid-template-columns:
           1fr 1fr;
 
-        gap:
-          10px;
+        gap: 10px;
       }
 
       .resource-button {
-        min-height:
-          105px;
+        min-height: 105px;
 
-        padding:
-          12px;
+        padding: 12px;
 
-        font-size:
-          18px;
+        font-size: 18px;
       }
 
     }
@@ -504,6 +537,16 @@
       .resource-grid {
         grid-template-columns:
           1fr;
+      }
+
+      .dashboard-logo {
+        width: 75px;
+
+        height: 65px;
+      }
+
+      .header-text h1 {
+        font-size: 20px;
       }
 
     }
@@ -518,13 +561,27 @@
 
 <header class="header">
 
-  <h1>
-    Cameron Ambulance
-  </h1>
+  <div class="header-content">
 
-  <p>
-    Employee Dashboard
-  </p>
+    <img
+      src="logo.png"
+      alt="Cameron Ambulance District Logo"
+      class="dashboard-logo"
+    >
+
+    <div class="header-text">
+
+      <h1>
+        Cameron Ambulance
+      </h1>
+
+      <p>
+        Employee Dashboard
+      </p>
+
+    </div>
+
+  </div>
 
 </header>
 
@@ -532,7 +589,7 @@
 <main class="dashboard">
 
 
-  <!-- REMOVE -->
+  <!-- REMOVE INVENTORY -->
 
   <a
     class="remove-button"
@@ -542,7 +599,7 @@
   </a>
 
 
-  <!-- COUNT -->
+  <!-- COUNT INVENTORY -->
 
   <a
     class="count-button"
@@ -552,7 +609,7 @@
   </a>
 
 
-  <!-- ADD -->
+  <!-- ADD INVENTORY -->
 
   <a
     class="add-button"
