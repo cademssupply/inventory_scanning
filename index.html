@@ -12,7 +12,6 @@
 
   <title>Cameron Ambulance Employee Dashboard</title>
 
-
   <style>
 
     :root {
@@ -23,23 +22,21 @@
 
       --orange: #f58220;
       --orange-light: #ff963d;
+      --orange-dark: #c9560a;
 
-      --resource-orange: #c9560a;
-      --resource-orange-hover: #e86c13;
+      --count: #4b5563;
+      --count-hover: #5c6674;
 
       --text: #ffffff;
       --muted: #aaaaaa;
       --border: #444444;
     }
 
-
     * {
       box-sizing: border-box;
     }
 
-
     body {
-
       margin: 0;
 
       font-family:
@@ -57,17 +54,13 @@
       color: var(--text);
 
       min-height: 100vh;
-
     }
-
 
     /* =========================
        HEADER
     ========================= */
 
-
     .header {
-
       background: var(--panel);
 
       border-bottom:
@@ -77,56 +70,41 @@
       text-align: center;
 
       padding: 25px 15px;
-
     }
 
-
     .header h1 {
-
       margin: 0;
 
       font-size: 30px;
 
       font-weight: 800;
-
     }
 
-
     .header p {
-
       margin: 8px 0 0;
 
       color: var(--muted);
 
       font-size: 15px;
-
     }
 
-
     /* =========================
-       MAIN DASHBOARD
+       DASHBOARD
     ========================= */
 
-
     .dashboard {
-
       max-width: 850px;
 
       margin: 0 auto;
 
       padding: 30px 18px 50px;
-
     }
-
 
     /* =========================
        REMOVE INVENTORY
-       PRIMARY BUTTON
     ========================= */
 
-
     .remove-button {
-
       display: flex;
 
       align-items: center;
@@ -139,7 +117,6 @@
 
       padding: 20px;
 
-
       background:
         linear-gradient(
           180deg,
@@ -147,36 +124,27 @@
           #ea580c
         );
 
-
       color: #111111;
-
 
       text-decoration: none;
 
       text-align: center;
 
-
       font-size: 34px;
 
       font-weight: 900;
 
-
       border-radius: 16px;
-
 
       box-shadow:
         0 7px 20px
         rgba(0,0,0,.40);
 
-
       transition:
         .2s ease;
-
     }
 
-
     .remove-button:hover {
-
       background:
         linear-gradient(
           180deg,
@@ -184,147 +152,165 @@
           #f97316
         );
 
-
       transform:
         translateY(-2px);
-
     }
-
 
     .remove-button:active {
-
       transform:
         scale(.98);
-
     }
 
-
     /* =========================
-       ADD / COUNT INVENTORY
+       COUNT INVENTORY
     ========================= */
 
-
-    .inventory-button {
-
+    .count-button {
       display: flex;
 
       align-items: center;
 
       justify-content: center;
 
-
       width: 100%;
 
-      min-height: 100px;
-
+      min-height: 110px;
 
       margin-top: 18px;
 
-
       padding: 18px;
 
-
-      background: #333333;
+      background:
+        linear-gradient(
+          180deg,
+          #5b6572,
+          #404750
+        );
 
       color: white;
 
-
       border:
         2px solid
-        var(--orange);
-
+        #89919b;
 
       text-decoration: none;
 
       text-align: center;
 
+      font-size: 26px;
 
-      font-size: 24px;
-
-      font-weight: 800;
-
+      font-weight: 900;
 
       border-radius: 14px;
 
+      box-shadow:
+        0 5px 15px
+        rgba(0,0,0,.25);
 
       transition:
         .2s ease;
-
     }
 
-
-    .inventory-button:hover {
-
-      background: #414141;
+    .count-button:hover {
+      background:
+        linear-gradient(
+          180deg,
+          #697481,
+          #4b5563
+        );
 
       transform:
         translateY(-2px);
-
     }
 
-
-    .inventory-button:active {
-
+    .count-button:active {
       transform:
         scale(.98);
-
     }
 
-
     /* =========================
-       SECTION TITLE
+       ADD INVENTORY
     ========================= */
 
+    .add-button {
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      width: 100%;
+
+      min-height: 75px;
+
+      margin-top: 14px;
+
+      padding: 14px;
+
+      background: #292929;
+
+      color: white;
+
+      border:
+        1px solid
+        var(--orange);
+
+      text-decoration: none;
+
+      text-align: center;
+
+      font-size: 20px;
+
+      font-weight: 800;
+
+      border-radius: 12px;
+
+      transition:
+        .2s ease;
+    }
+
+    .add-button:hover {
+      background: #363636;
+
+      transform:
+        translateY(-2px);
+    }
+
+    .add-button:active {
+      transform:
+        scale(.98);
+    }
+
+    /* =========================
+       RESOURCE SECTION
+    ========================= */
 
     .section-title {
-
       margin-top: 35px;
 
       margin-bottom: 12px;
 
-
       color: #999999;
-
 
       font-size: 13px;
 
       font-weight: 800;
 
+      text-transform: uppercase;
 
-      text-transform:
-        uppercase;
-
-
-      letter-spacing:
-        1.5px;
-
+      letter-spacing: 1.5px;
     }
 
-
-    /* =========================
-       RESOURCE GRID
-    ========================= */
-
-
     .resource-grid {
-
       display: grid;
 
       grid-template-columns:
         repeat(2, 1fr);
 
       gap: 14px;
-
     }
 
-
-    /* =========================
-       STANDARD RESOURCE BUTTON
-    ========================= */
-
-
     .resource-button {
-
       display: flex;
 
       flex-direction: column;
@@ -333,477 +319,340 @@
 
       justify-content: center;
 
-
       min-height: 120px;
-
 
       padding: 18px;
 
-
-      background:
-        var(--card);
-
+      background: var(--card);
 
       border:
         1px solid
         var(--border);
 
-
       border-radius: 14px;
 
-
       color: white;
-
 
       text-decoration: none;
 
       text-align: center;
 
-
       font-size: 21px;
 
       font-weight: 800;
-
 
       box-shadow:
         0 4px 12px
         rgba(0,0,0,.20);
 
-
       transition:
         .2s ease;
-
     }
 
-
     .resource-button:hover {
-
       background:
         var(--card-hover);
-
 
       border-color:
         var(--orange);
 
-
       transform:
         translateY(-2px);
-
     }
-
 
     .resource-button:active {
-
       transform:
         scale(.98);
-
     }
 
-
     .resource-button span {
-
       display: block;
-
 
       margin-top: 7px;
 
-
       color: #999999;
-
 
       font-size: 12px;
 
       font-weight: normal;
-
     }
-
 
     /* =========================
        ORANGE RESOURCE BUTTONS
-       SCHEDULE / LOT MAPS
     ========================= */
 
-
     .resource-orange {
-
       background:
         linear-gradient(
           180deg,
           #d8610c,
-          var(--resource-orange)
+          var(--orange-dark)
         );
-
 
       border:
         1px solid
         #fb923c;
 
-
       color: white;
-
     }
 
-
     .resource-orange:hover {
-
       background:
         linear-gradient(
           180deg,
           #f27a22,
-          var(--resource-orange-hover)
+          #e86c13
         );
-
 
       border-color:
         #ffb36b;
-
     }
-
 
     .resource-orange span {
-
       color:
         #ffe0c2;
-
     }
-
 
     /* =========================
        FOOTER
     ========================= */
 
-
     .footer {
-
       margin-top: 40px;
 
-
       padding-top: 20px;
-
 
       border-top:
         1px solid
         #333333;
 
-
       text-align: center;
-
 
       color: #666666;
 
-
       font-size: 12px;
-
     }
-
 
     /* =========================
        MOBILE
     ========================= */
 
-
     @media(max-width: 600px) {
 
-
       .header {
-
         padding:
           20px 12px;
-
       }
-
 
       .header h1 {
-
         font-size:
           25px;
-
       }
-
 
       .dashboard {
-
         padding:
           20px 12px 40px;
-
       }
 
-
       .remove-button {
-
         min-height:
           135px;
 
-
         font-size:
           29px;
-
       }
 
-
-      .inventory-button {
-
+      .count-button {
         min-height:
-          90px;
-
+          100px;
 
         font-size:
-          21px;
-
+          23px;
       }
 
+      .add-button {
+        min-height:
+          70px;
+
+        font-size:
+          19px;
+      }
 
       .resource-grid {
-
         grid-template-columns:
           1fr 1fr;
 
         gap:
           10px;
-
       }
 
-
       .resource-button {
-
         min-height:
           105px;
-
 
         padding:
           12px;
 
-
         font-size:
           18px;
-
       }
 
     }
-
-
-    /* VERY SMALL PHONES */
 
     @media(max-width: 380px) {
 
-
       .resource-grid {
-
         grid-template-columns:
           1fr;
-
       }
 
     }
-
 
   </style>
 
 </head>
 
 
-
 <body>
 
 
-  <!-- =========================
-       HEADER
-  ========================== -->
+<header class="header">
+
+  <h1>
+    Cameron Ambulance
+  </h1>
+
+  <p>
+    Employee Dashboard
+  </p>
+
+</header>
 
 
-  <header class="header">
+<main class="dashboard">
 
 
-    <h1>
+  <!-- REMOVE -->
 
-      Cameron Ambulance
-
-    </h1>
-
-
-    <p>
-
-      Employee Dashboard
-
-    </p>
+  <a
+    class="remove-button"
+    href="remove.html"
+  >
+    REMOVE INVENTORY
+  </a>
 
 
-  </header>
+  <!-- COUNT -->
+
+  <a
+    class="count-button"
+    href="count.html"
+  >
+    COUNT INVENTORY
+  </a>
 
 
+  <!-- ADD -->
 
-  <!-- =========================
-       DASHBOARD
-  ========================== -->
+  <a
+    class="add-button"
+    href="inventory.html"
+  >
+    ADD INVENTORY
+  </a>
 
 
-  <main class="dashboard">
+  <!-- EMPLOYEE RESOURCES -->
+
+  <div class="section-title">
+    Employee Resources
+  </div>
 
 
+  <div class="resource-grid">
 
-    <!-- =====================
-         REMOVE INVENTORY
-    ====================== -->
 
+    <!-- TRUCK CHECKS -->
 
     <a
-      class="remove-button"
-      href="remove.html"
+      class="resource-button"
+      href="https://app1.pstrax.com/"
+      target="_blank"
+      rel="noopener noreferrer"
     >
 
-      REMOVE INVENTORY
+      Truck Checks
+
+      <span>
+        PS Trax
+      </span>
 
     </a>
 
 
-
-    <!-- =====================
-         ADD / COUNT
-    ====================== -->
-
+    <!-- EMPLOYEE CERTIFICATES -->
 
     <a
-      class="inventory-button"
-      href="inventory.html"
+      class="resource-button"
+      href="https://forms.gle/3Ngj756zt158egfg9"
+      target="_blank"
+      rel="noopener noreferrer"
     >
 
-      ADD / COUNT INVENTORY
+      Employee Certificates
+
+      <span>
+        Licenses & Certifications
+      </span>
 
     </a>
 
 
+    <!-- SCHEDULE -->
 
-    <!-- =====================
-         EMPLOYEE RESOURCES
-    ====================== -->
+    <a
+      class="resource-button resource-orange"
+      href="https://cameronems.humanity.com/app/"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
 
+      Schedule
 
-    <div class="section-title">
+      <span>
+        Employee Scheduling
+      </span>
 
-      Employee Resources
-
-    </div>
-
-
-
-    <div class="resource-grid">
-
-
-
-      <!-- ===================
-           TRUCK CHECKS
-      ==================== -->
+    </a>
 
 
-      <a
-        class="resource-button"
-        href="https://app1.pstrax.com/"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
+    <!-- LOT MAPS -->
 
-        Truck Checks
+    <a
+      class="resource-button resource-orange"
+      href="https://drive.google.com/drive/folders/18gwUC5myQwDZkO5H6ks-7Vro4rRjaQi3?usp=drive_link"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
 
-        <span>
+      Lot Maps
 
-          PS Trax
+      <span>
+        Hospital & Facility Maps
+      </span>
 
-        </span>
-
-      </a>
-
-
-
-      <!-- ===================
-           EMPLOYEE CERTIFICATES
-      ==================== -->
+    </a>
 
 
-      <a
-        class="resource-button"
-        href="https://forms.gle/3Ngj756zt158egfg9"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-
-        Employee Certificates
-
-        <span>
-
-          Licenses & Certifications
-
-        </span>
-
-      </a>
+  </div>
 
 
-
-      <!-- ===================
-           SCHEDULE
-      ==================== -->
-
-
-      <a
-        class="resource-button resource-orange"
-        href="https://cameronems.humanity.com/app/"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-
-        Schedule
-
-        <span>
-
-          Employee Scheduling
-
-        </span>
-
-      </a>
+  <div class="footer">
+    Cameron Ambulance District
+  </div>
 
 
-
-      <!-- ===================
-           LOT MAPS
-      ==================== -->
-
-
-      <a
-        class="resource-button resource-orange"
-        href="https://drive.google.com/drive/folders/18gwUC5myQwDZkO5H6ks-7Vro4rRjaQi3?usp=drive_link"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-
-        Lot Maps
-
-        <span>
-
-          Hospital & Facility Maps
-
-        </span>
-
-      </a>
-
-
-
-    </div>
-
-
-
-    <!-- =====================
-         FOOTER
-    ====================== -->
-
-
-    <div class="footer">
-
-      Cameron Ambulance District
-
-    </div>
-
-
-
-  </main>
+</main>
 
 
 </body>
