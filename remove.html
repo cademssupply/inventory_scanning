@@ -1,605 +1,326 @@
 <!doctype html>
 <html lang="en">
-
 <head>
-
-  <meta charset="utf-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
-  >
-
-  <title>Cameron EMS Supply Removal</title>
-
-  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
-
-
-  <style>
-
-    :root {
-      --bg: #1f2328;
-      --panel: #2b3036;
-      --panel2: #343a40;
-      --border: #4b535c;
-
-      --text: #f3f4f6;
-      --muted: #b7bdc5;
-
-      --orange: #f97316;
-      --orange-light: #fb923c;
-      --orange-dark: #c2410c;
-
-      --success: #14532d;
-      --danger: #7f1d1d;
-    }
-
-
-    * {
-      box-sizing: border-box;
-    }
-
-
-    body {
-      margin: 0;
-
-      background:
-        linear-gradient(
-          180deg,
-          #171a1e 0%,
-          var(--bg) 100%
-        );
-
-      color: var(--text);
-
-      font-family:
-        Arial,
-        Helvetica,
-        sans-serif;
-
-      min-height: 100vh;
-    }
-
-
-    .wrap {
-      max-width: 640px;
-      margin: 0 auto;
-      padding: 18px;
-    }
-
-
-    .card {
-      background: var(--panel);
-
-      border: 1px solid var(--border);
-
-      border-radius: 18px;
-
-      padding: 20px;
-
-      box-shadow:
-        0 8px 28px rgba(0,0,0,.28);
-    }
-
-
-    .header {
-      text-align: center;
-      margin-bottom: 18px;
-    }
-
-
-    .header h1 {
-      margin: 0;
-      font-size: 27px;
-      letter-spacing: .3px;
-    }
-
-
-    .accent {
-      color: var(--orange-light);
-    }
-
-
-    .sub {
-      margin-top: 7px;
-      color: var(--muted);
-      font-size: 14px;
-    }
-
-
-    /* ==========================
-       BUTTONS
-    ========================== */
-
-
-    button,
-    .home-button {
-      width: 100%;
-
-      padding: 15px;
-
-      border: 0;
-
-      border-radius: 11px;
-
-      font-size: 17px;
-
-      font-weight: 700;
-
-      cursor: pointer;
-
-      text-align: center;
-    }
-
-
-    .mode-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-bottom: 12px;
-    }
-
-
-    .camera-btn {
-      background: var(--orange);
-      color: white;
-    }
-
-
-    .hardware-btn {
-      background: var(--panel2);
-      color: var(--text);
-
-      border:
-        1px solid
-        var(--border);
-    }
-
-
-    .remove-btn {
-      margin-top: 16px;
-
-      background:
-        linear-gradient(
-          180deg,
-          var(--orange-light),
-          var(--orange-dark)
-        );
-
-      color: white;
-
-      font-size: 20px;
-
-      min-height: 60px;
-    }
-
-
-    .remove-btn:disabled {
-      opacity: .55;
-      cursor: default;
-    }
-
-
-    .wrong-btn {
-      margin-top: 10px;
-
-      background: transparent;
-
-      color: #ffd7c2;
-
-      border:
-        1px solid
-        var(--orange-dark);
-    }
-
-
-    .home-button {
-      display: block;
-
-      margin-top: 25px;
-
-      background: #171a1e;
-
-      color: #d1d5db;
-
-      border:
-        1px solid
-        var(--border);
-
-      text-decoration: none;
-    }
-
-
-    /* ==========================
-       SCANNER
-    ========================== */
-
-
-    #reader {
-      width: 100%;
-
-      overflow: hidden;
-
-      border-radius: 12px;
-
-      background: #111;
-
-      margin-top: 10px;
-    }
-
-
-    .scanner-section {
-      margin-top: 14px;
-
-      padding-top: 14px;
-
-      border-top:
-        1px solid
-        var(--border);
-    }
-
-
-    /* ==========================
-       STATUS
-    ========================== */
-
-
-    .status {
-      margin-top: 12px;
-
-      padding: 13px;
-
-      border-radius: 10px;
-
-      background: #20252a;
-
-      border:
-        1px solid
-        var(--border);
-
-      text-align: center;
-
-      font-weight: 700;
-
-      color: var(--text);
-    }
-
-
-    .status.success {
-      background: var(--success);
-      border-color: #166534;
-    }
-
-
-    .status.error {
-      background: var(--danger);
-      border-color: #991b1b;
-    }
-
-
-    /* ==========================
-       INPUTS
-    ========================== */
-
-
-    label {
-      display: block;
-
-      font-weight: 700;
-
-      margin-bottom: 7px;
-
-      color: white;
-    }
-
-
-    input {
-      width: 100%;
-
-      padding: 14px;
-
-      border:
-        1px solid
-        var(--border);
-
-      border-radius: 10px;
-
-      background: #171a1e;
-
-      color: white;
-
-      font-size: 18px;
-
-      outline: none;
-    }
-
-
-    input:focus {
-      border-color:
-        var(--orange);
-
-      box-shadow:
-        0 0 0 3px
-        rgba(249,115,22,.18);
-    }
-
-
-    input::placeholder {
-      color: #7f8790;
-    }
-
-
-    /* ==========================
-       ITEM DISPLAY
-    ========================== */
-
-
-    .item {
-      display: none;
-
-      margin-top: 16px;
-
-      padding: 16px;
-
-      background: var(--panel2);
-
-      border:
-        1px solid
-        var(--border);
-
-      border-left:
-        5px solid
-        var(--orange);
-
-      border-radius: 12px;
-    }
-
-
-    .item-name {
-      font-size: 23px;
-
-      font-weight: 800;
-
-      margin-bottom: 7px;
-    }
-
-
-    .barcode {
-      color: var(--muted);
-
-      font-size: 14px;
-
-      margin-bottom: 18px;
-    }
-
-
-    .qty-label {
-      color: var(--orange-light);
-
-      font-size: 15px;
-
-      text-transform: uppercase;
-
-      letter-spacing: .5px;
-    }
-
-
-    .tip {
-      margin-top: 14px;
-
-      text-align: center;
-
-      color: var(--muted);
-
-      font-size: 13px;
-
-      line-height: 1.4;
-    }
-
-
-    @media(max-width: 520px) {
-
-      .mode-grid {
-        grid-template-columns: 1fr;
-      }
-
-
-      .wrap {
-        padding: 12px;
-      }
-
-
-      .card {
-        padding: 16px;
-      }
-
-
-      .header h1 {
-        font-size: 24px;
-      }
-
-    }
-
-  </style>
-
+<meta charset="utf-8">
+
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"
+>
+
+<title>Cameron EMS Supply Removal</title>
+
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+
+<style>
+
+:root{
+  --bg:#1f2328;
+  --panel:#2b3036;
+  --panel2:#343a40;
+  --border:#4b535c;
+  --text:#f3f4f6;
+  --muted:#b7bdc5;
+  --orange:#f97316;
+  --orange-light:#fb923c;
+  --orange-dark:#c2410c;
+  --success:#14532d;
+  --danger:#7f1d1d;
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  background:linear-gradient(180deg,#171a1e 0%,var(--bg) 100%);
+  color:var(--text);
+  font-family:Arial,Helvetica,sans-serif;
+  min-height:100vh;
+}
+
+.wrap{
+  max-width:640px;
+  margin:0 auto;
+  padding:18px;
+}
+
+.card{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:20px;
+  box-shadow:0 8px 28px rgba(0,0,0,.28);
+}
+
+.header{
+  text-align:center;
+  margin-bottom:18px;
+}
+
+.header h1{
+  margin:0;
+  font-size:27px;
+}
+
+.accent{color:var(--orange-light)}
+
+.sub{
+  margin-top:7px;
+  color:var(--muted);
+  font-size:14px;
+}
+
+.status{
+  margin-top:14px;
+  padding:14px;
+  border-radius:10px;
+  background:#20252a;
+  border:1px solid var(--border);
+  text-align:center;
+  font-weight:700;
+}
+
+.status.success{
+  background:var(--success);
+  border-color:#166534;
+}
+
+.status.error{
+  background:var(--danger);
+  border-color:#991b1b;
+}
+
+label{
+  display:block;
+  margin-bottom:7px;
+  font-weight:700;
+}
+
+input{
+  width:100%;
+  padding:16px;
+  border:1px solid var(--border);
+  border-radius:10px;
+  background:#171a1e;
+  color:white;
+  font-size:20px;
+  outline:none;
+}
+
+input:focus{
+  border-color:var(--orange);
+  box-shadow:0 0 0 3px rgba(249,115,22,.20);
+}
+
+input::placeholder{color:#7f8790}
+
+.barcode-section{margin-top:18px}
+
+.item{
+  display:none;
+  margin-top:18px;
+  padding:18px;
+  background:var(--panel2);
+  border:1px solid var(--border);
+  border-left:5px solid var(--orange);
+  border-radius:12px;
+}
+
+.item-name{
+  font-size:25px;
+  font-weight:800;
+  margin-bottom:7px;
+}
+
+.barcode-display{
+  color:var(--muted);
+  font-size:14px;
+  margin-bottom:20px;
+}
+
+.qty-label{
+  color:var(--orange-light);
+  font-size:15px;
+  text-transform:uppercase;
+  letter-spacing:.5px;
+}
+
+button,.home-button{
+  width:100%;
+  padding:15px;
+  border:0;
+  border-radius:11px;
+  font-size:17px;
+  font-weight:700;
+  cursor:pointer;
+  text-align:center;
+}
+
+.save-btn{
+  margin-top:15px;
+  min-height:60px;
+  background:linear-gradient(180deg,var(--orange-light),var(--orange-dark));
+  color:white;
+  font-size:20px;
+}
+
+.save-btn:disabled{
+  opacity:.55;
+  cursor:default;
+}
+
+.wrong-btn{
+  margin-top:10px;
+  background:transparent;
+  color:#ffd7c2;
+  border:1px solid var(--orange-dark);
+}
+
+.camera-btn{
+  margin-top:20px;
+  background:var(--panel2);
+  color:var(--text);
+  border:1px solid var(--border);
+}
+
+.home-button{
+  display:block;
+  margin-top:15px;
+  background:#171a1e;
+  color:#d1d5db;
+  border:1px solid var(--border);
+  text-decoration:none;
+}
+
+#reader{
+  width:100%;
+  overflow:hidden;
+  border-radius:12px;
+  background:#111;
+  margin-top:12px;
+}
+
+.workflow{
+  margin-top:16px;
+  padding:12px;
+  background:#20252a;
+  border-radius:10px;
+  color:var(--muted);
+  font-size:13px;
+  text-align:center;
+  line-height:1.5;
+}
+
+.workflow strong{color:var(--orange-light)}
+
+@media(max-width:520px){
+  .wrap{padding:12px}
+  .card{padding:16px}
+  .header h1{font-size:24px}
+}
+
+</style>
 </head>
-
-
 
 <body>
 
-
 <div class="wrap">
+<div class="card">
 
-  <div class="card">
+<div class="header">
+  <h1>
+    Cameron EMS
+    <span class="accent">Supply Removal</span>
+  </h1>
 
-
-    <!-- HEADER -->
-
-    <div class="header">
-
-      <h1>
-        Cameron EMS
-        <span class="accent">
-          Supply Removal
-        </span>
-      </h1>
-
-      <div class="sub">
-        Scan or type barcode • Enter quantity • Press Enter
-      </div>
-
-    </div>
-
-
-
-    <!-- SCANNER OPTIONS -->
-
-    <div class="mode-grid">
-
-      <button
-        id="startBtn"
-        class="camera-btn"
-        onclick="startScanner()"
-      >
-        Start Camera Scanner
-      </button>
-
-
-      <button
-        class="hardware-btn"
-        onclick="focusHardware()"
-      >
-        Use Barcode Scanner / Keyboard
-      </button>
-
-    </div>
-
-
-
-    <div id="reader"></div>
-
-
-
-    <div
-      id="status"
-      class="status"
-    >
-      Type, scan, or use camera
-    </div>
-
-
-
-    <!-- BARCODE ENTRY -->
-
-    <div class="scanner-section">
-
-      <label for="hardwareBarcode">
-        Barcode Entry / Scanner
-      </label>
-
-
-      <input
-        id="hardwareBarcode"
-        type="text"
-        autocomplete="off"
-        placeholder="Type or scan barcode, then press Enter"
-        onkeydown="hardwareKey(event)"
-      >
-
-    </div>
-
-
-
-    <!-- ITEM DISPLAY -->
-
-    <div
-      id="itemBox"
-      class="item"
-    >
-
-
-      <div
-        id="itemName"
-        class="item-name"
-      ></div>
-
-
-      <div class="barcode">
-
-        Barcode:
-
-        <strong id="itemId"></strong>
-
-      </div>
-
-
-
-      <label
-        class="qty-label"
-        for="qty"
-      >
-        Quantity Removed
-      </label>
-
-
-      <input
-        id="qty"
-        type="number"
-        min="1"
-        step="1"
-        inputmode="numeric"
-        placeholder="Enter quantity removed"
-        onkeydown="qtyEnter(event)"
-      >
-
-
-
-      <button
-        id="submitBtn"
-        class="remove-btn"
-        onclick="submitTransaction()"
-      >
-        REMOVE INVENTORY
-      </button>
-
-
-
-      <button
-        class="wrong-btn"
-        onclick="resetForNextScan()"
-      >
-        ← Wrong Item — Scan Again
-      </button>
-
-    </div>
-
-
-
-    <div class="tip">
-      After a removal, the interface automatically resets
-      and is ready for the next barcode.
-    </div>
-
-
-
-    <!-- DASHBOARD -->
-
-    <a
-      href="index.html"
-      class="home-button"
-    >
-      ← Return to Employee Dashboard
-    </a>
-
-
+  <div class="sub">
+    Scan barcode • Enter quantity • Press Enter
   </div>
+</div>
+
+<div id="status" class="status">
+  READY TO SCAN
+</div>
+
+<div class="barcode-section">
+
+<label for="barcodeInput">
+  Barcode Scanner / Entry
+</label>
+
+<input
+  id="barcodeInput"
+  type="text"
+  autocomplete="off"
+  spellcheck="false"
+  placeholder="Scan or type barcode"
+  onkeydown="barcodeKey(event)"
+>
 
 </div>
 
+<div id="itemBox" class="item">
 
+<div id="itemName" class="item-name"></div>
 
-<!-- HIDDEN FRAME USED FOR GOOGLE APPS SCRIPT -->
+<div class="barcode-display">
+  Barcode:
+  <strong id="itemId"></strong>
+</div>
+
+<label class="qty-label" for="qty">
+  Quantity Removed
+</label>
+
+<input
+  id="qty"
+  type="number"
+  min="1"
+  step="1"
+  inputmode="numeric"
+  autocomplete="off"
+  placeholder="Enter quantity removed"
+  onkeydown="qtyKey(event)"
+>
+
+<button
+  id="saveBtn"
+  class="save-btn"
+  onclick="saveRemove()"
+>
+  REMOVE INVENTORY
+</button>
+
+<button
+  class="wrong-btn"
+  onclick="resetForNextItem()"
+>
+  ← Wrong Item — Scan Again
+</button>
+
+</div>
+
+<div class="workflow">
+  <strong>Fast Workflow</strong><br>
+  Scan → Quantity → Enter → Next Scan
+</div>
+
+<button
+  id="cameraBtn"
+  class="camera-btn"
+  onclick="startCamera()"
+>
+  Use Camera Scanner
+</button>
+
+<div id="reader"></div>
+
+<a href="index.html" class="home-button">
+  ← Return to Employee Dashboard
+</a>
+
+</div>
+</div>
 
 <iframe
   name="saveFrame"
@@ -607,920 +328,441 @@
   style="display:none"
 ></iframe>
 
-
-
 <script>
 
-
-// =====================================================
-// GOOGLE APPS SCRIPT CONNECTION
-// =====================================================
-
-
 const API_URL =
-  "https://script.google.com/macros/s/AKfycbyGwziqfDHZpnLlTVnCHxtXAZYn0FZHeOqfdoWl-wJ0MmIOKFWXD7qWS5m0GpGBdbH8tg/exec";
+"https://script.google.com/macros/s/AKfycbyGwziqfDHZpnLlTVnCHxtXAZYn0FZHeOqfdoWl-wJ0MmIOKFWXD7qWS5m0GpGBdbH8tg/exec";
 
+let currentBarcode="";
+let scanLocked=false;
+let scanner=null;
 
+function barcodeBox(){
+  return document.getElementById("barcodeInput");
+}
 
-// =====================================================
-// STATE
-// =====================================================
+function quantityBox(){
+  return document.getElementById("qty");
+}
 
+function setStatus(message,type=""){
+  const box=document.getElementById("status");
+  box.className="status"+(type?" "+type:"");
+  box.textContent=message;
+}
 
-let scanner = null;
+function barcodeKey(event){
 
-let scanLocked = false;
+  if(event.key!=="Enter") return;
 
-let currentBarcode = "";
+  event.preventDefault();
 
+  const barcode=barcodeBox().value.trim();
 
+  if(!barcode){
+    setStatus("Scan or enter a barcode.","error");
+    barcodeBox().focus();
+    return;
+  }
 
-// =====================================================
-// STATUS
-// =====================================================
+  if(scanLocked) return;
 
+  scanLocked=true;
 
-function setStatus(message, type = "") {
-
-  const box =
-    document.getElementById("status");
-
-
-  box.className =
-    "status" +
-    (type ? " " + type : "");
-
-
-  box.textContent =
-    message;
+  lookupItem(barcode);
 
 }
 
+function lookupItem(barcode){
 
+  currentBarcode=barcode;
 
-// =====================================================
-// CAMERA SCANNER
-// =====================================================
+  setStatus("Looking up item...");
 
+  lookupWithRetry(
+    barcode,
+    1
+  );
 
-function startScanner() {
+}
 
+function lookupWithRetry(barcode,attempt){
 
-  if (
-    !API_URL.startsWith(
-      "https://script.google.com/"
-    )
-  ) {
+  jsonpRequest(
+
+    {
+      mode:"item",
+      item:barcode,
+      t:Date.now()
+    },
+
+    data=>{
+
+      if(!data || !data.success){
+
+        scanLocked=false;
+
+        setStatus(
+          (data && data.message) || "Item not found.",
+          "error"
+        );
+
+        currentBarcode="";
+        barcodeBox().value="";
+        barcodeBox().focus();
+
+        return;
+
+      }
+
+      document.getElementById("itemName").textContent=data.name;
+
+      document.getElementById("itemId").textContent=barcode;
+
+      document.getElementById("itemBox").style.display="block";
+
+      barcodeBox().value="";
+
+      setStatus(
+        "ITEM LOADED — ENTER QUANTITY",
+        "success"
+      );
+
+      setTimeout(()=>{
+        quantityBox().focus();
+        quantityBox().select();
+      },75);
+
+    },
+
+    ()=>{
+
+      if(attempt<3){
+
+        const delay=
+          attempt===1
+          ?300
+          :800;
+
+        setStatus(
+          "Connection delayed — retrying..."
+        );
+
+        setTimeout(()=>{
+          lookupWithRetry(
+            barcode,
+            attempt+1
+          );
+        },delay);
+
+        return;
+
+      }
+
+      scanLocked=false;
+      currentBarcode="";
+
+      setStatus(
+        "Unable to reach inventory service. Scan again.",
+        "error"
+      );
+
+      barcodeBox().value="";
+      barcodeBox().focus();
+
+    }
+
+  );
+
+}
+
+function qtyKey(event){
+
+  if(event.key!=="Enter") return;
+
+  event.preventDefault();
+
+  if(!document.getElementById("saveBtn").disabled){
+    saveRemove();
+  }
+
+}
+
+function saveRemove(){
+
+  const qtyText=quantityBox().value;
+
+  if(!currentBarcode){
 
     setStatus(
-      "Inventory connection is not configured.",
+      "Scan an item first.",
       "error"
     );
+
+    resetForNextItem();
 
     return;
 
   }
 
+  if(
+    qtyText==="" ||
+    Number(qtyText)<=0 ||
+    !Number.isFinite(Number(qtyText))
+  ){
 
+    setStatus(
+      "Enter a valid quantity.",
+      "error"
+    );
 
-  document.getElementById(
-    "startBtn"
-  ).style.display =
-    "none";
+    quantityBox().focus();
 
+    return;
 
+  }
+
+  const button=
+    document.getElementById("saveBtn");
+
+  button.disabled=true;
+
+  setStatus(
+    "Removing inventory..."
+  );
+
+  postTransaction(
+    currentBarcode,
+    "Remove",
+    Number(qtyText)
+  );
+
+  setTimeout(()=>{
+
+    button.disabled=false;
+
+    setStatus(
+      "✓ REMOVED — SCAN NEXT ITEM",
+      "success"
+    );
+
+    resetForNextItem(false);
+
+  },700);
+
+}
+
+function postTransaction(
+  barcode,
+  action,
+  qty
+){
+
+  const form=
+    document.createElement("form");
+
+  form.method="POST";
+  form.action=API_URL;
+  form.target="saveFrame";
+  form.style.display="none";
+
+  const fields={
+    mode:"save",
+    item:barcode,
+    action:action,
+    qty:String(qty)
+  };
+
+  Object.entries(fields).forEach(
+    ([key,value])=>{
+
+      const input=
+        document.createElement("input");
+
+      input.type="hidden";
+      input.name=key;
+      input.value=value;
+
+      form.appendChild(input);
+
+    }
+  );
+
+  document.body.appendChild(form);
+
+  form.submit();
+
+  setTimeout(()=>{
+    form.remove();
+  },1500);
+
+}
+
+function resetForNextItem(changeStatus=true){
+
+  currentBarcode="";
+  scanLocked=false;
+
+  document.getElementById("itemName").textContent="";
+  document.getElementById("itemId").textContent="";
+  document.getElementById("itemBox").style.display="none";
+
+  quantityBox().value="";
+  barcodeBox().value="";
+
+  if(changeStatus){
+    setStatus("READY TO SCAN");
+  }
+
+  setTimeout(()=>{
+    barcodeBox().focus();
+  },75);
+
+}
+
+function startCamera(){
+
+  const button=
+    document.getElementById("cameraBtn");
+
+  button.disabled=true;
 
   setStatus(
     "Requesting camera permission..."
   );
 
-
-
-  scanner =
-    new Html5Qrcode(
-      "reader"
-    );
-
-
+  scanner=
+    new Html5Qrcode("reader");
 
   scanner.start(
 
-    {
-
-      facingMode:
-        "environment"
-
-    },
-
+    {facingMode:"environment"},
 
     {
-
-      fps:
-        12,
-
-
-      aspectRatio:
-        1.777778,
-
-
-      qrbox:
-        (width, height) => ({
-
-          width:
-            Math.floor(
-              width * .9
-            ),
-
-          height:
-            Math.min(
-              180,
-              Math.floor(
-                height * .35
-              )
-            )
-
-        }),
-
-
-      formatsToSupport: [
-
-        Html5QrcodeSupportedFormats.QR_CODE,
-
-        Html5QrcodeSupportedFormats.CODE_128,
-
-        Html5QrcodeSupportedFormats.CODE_39,
-
-        Html5QrcodeSupportedFormats.UPC_A,
-
-        Html5QrcodeSupportedFormats.UPC_E,
-
-        Html5QrcodeSupportedFormats.EAN_13,
-
-        Html5QrcodeSupportedFormats.EAN_8
-
-      ]
-
+      fps:12,
+      qrbox:(width,height)=>({
+        width:Math.floor(width*.9),
+        height:Math.min(
+          180,
+          Math.floor(height*.35)
+        )
+      })
     },
 
+    decodedText=>{
 
-    decodedText => {
+      if(scanLocked) return;
 
-
-      if (scanLocked) {
-        return;
-      }
-
-
-      scanLocked = true;
-
+      scanLocked=true;
 
       lookupItem(
-        String(
-          decodedText
-        ).trim()
+        String(decodedText).trim()
       );
 
     },
 
-
-    () => {}
-
+    ()=>{}
 
   )
 
-
-  .then(
-    () => {
-
-      setStatus(
-        "Point camera at an item barcode"
-      );
-
-    }
-  )
-
-
-  .catch(
-    error => {
-
-      document.getElementById(
-        "startBtn"
-      ).style.display =
-        "block";
-
-
-      setStatus(
-        "Camera error: " +
-        error,
-        "error"
-      );
-
-    }
-  );
-
-}
-
-
-
-// =====================================================
-// FOCUS BARCODE BOX
-// =====================================================
-
-
-function focusHardware() {
-
-
-  const barcodeBox =
-    document.getElementById(
-      "hardwareBarcode"
+  .then(()=>{
+    setStatus(
+      "Point camera at item barcode"
     );
+  })
 
+  .catch(error=>{
 
-  barcodeBox.focus();
-
-
-  setStatus(
-    "Type or scan barcode, then press Enter"
-  );
-
-}
-
-
-
-// =====================================================
-// BARCODE ENTRY
-// Works with:
-// 1. Typed barcode + Enter
-// 2. Wireless scanner + Enter
-// 3. USB scanner + Enter
-// =====================================================
-
-
-function hardwareKey(event) {
-
-
-  if (
-    event.key !== "Enter"
-  ) {
-
-    return;
-
-  }
-
-
-  event.preventDefault();
-
-
-
-  const barcode =
-    document.getElementById(
-      "hardwareBarcode"
-    )
-    .value
-    .trim();
-
-
-
-  if (!barcode) {
+    button.disabled=false;
 
     setStatus(
-      "Enter or scan a barcode first.",
+      "Camera error: "+error,
       "error"
     );
 
-    return;
-
-  }
-
-
-
-  if (scanLocked) {
-    return;
-  }
-
-
-
-  scanLocked =
-    true;
-
-
-
-  lookupItem(
-    barcode
-  );
+  });
 
 }
 
+function jsonpRequest(
+  params,
+  success,
+  failure
+){
 
+  const callbackName=
+    "__inv_"+Date.now()+"_"+
+    Math.floor(Math.random()*100000);
 
-// =====================================================
-// LOOK UP ITEM
-// =====================================================
+  const script=
+    document.createElement("script");
 
+  let finished=false;
 
-function lookupItem(barcode) {
+  const cleanup=()=>{
 
+    if(finished) return;
 
-  currentBarcode =
-    barcode;
+    finished=true;
 
+    clearTimeout(timeout);
 
-  setStatus(
-    "Looking up item..."
-  );
+    try{
+      delete window[callbackName];
+    }catch(e){}
 
-
-
-  jsonp(
-
-    {
-
-      mode:
-        "item",
-
-      item:
-        barcode
-
-    },
-
-
-    data => {
-
-
-      if (
-        !data ||
-        !data.success
-      ) {
-
-
-        setStatus(
-
-          (
-            data &&
-            data.message
-          ) ||
-
-          "Item not found.",
-
-          "error"
-
-        );
-
-
-
-        clearItem();
-
-
-
-        setTimeout(
-          () => {
-
-            scanLocked =
-              false;
-
-            focusHardware();
-
-          },
-
-          900
-        );
-
-
-        return;
-
-      }
-
-
-
-      document.getElementById(
-        "itemName"
-      ).textContent =
-        data.name;
-
-
-
-      document.getElementById(
-        "itemId"
-      ).textContent =
-        barcode;
-
-
-
-      document.getElementById(
-        "hardwareBarcode"
-      ).value =
-        "";
-
-
-
-      document.getElementById(
-        "itemBox"
-      ).style.display =
-        "block";
-
-
-
-      setStatus(
-        "Item loaded",
-        "success"
-      );
-
-
-
-      document.getElementById(
-        "qty"
-      ).focus();
-
-
-    }
-
-  );
-
-}
-
-
-
-// =====================================================
-// PRESS ENTER AFTER QUANTITY
-// AUTOMATICALLY REMOVES INVENTORY
-// =====================================================
-
-
-function qtyEnter(event) {
-
-
-  if (
-    event.key !== "Enter"
-  ) {
-
-    return;
-
-  }
-
-
-  event.preventDefault();
-
-
-
-  const button =
-    document.getElementById(
-      "submitBtn"
-    );
-
-
-
-  if (
-    !button.disabled
-  ) {
-
-    submitTransaction();
-
-  }
-
-}
-
-
-
-// =====================================================
-// REMOVE INVENTORY
-// =====================================================
-
-
-function submitTransaction() {
-
-
-  const qtyText =
-    document.getElementById(
-      "qty"
-    ).value;
-
-
-
-  if (
-    !currentBarcode
-  ) {
-
-    setStatus(
-      "Scan or enter an item first.",
-      "error"
-    );
-
-    return;
-
-  }
-
-
-
-  if (
-    qtyText === "" ||
-    Number(qtyText) <= 0
-  ) {
-
-    setStatus(
-      "Enter the quantity removed.",
-      "error"
-    );
-
-    return;
-
-  }
-
-
-
-  const button =
-    document.getElementById(
-      "submitBtn"
-    );
-
-
-
-  button.disabled =
-    true;
-
-
-
-  setStatus(
-    "Saving transaction..."
-  );
-
-
-
-  const form =
-    document.createElement(
-      "form"
-    );
-
-
-
-  form.method =
-    "POST";
-
-
-  form.action =
-    API_URL;
-
-
-  form.target =
-    "saveFrame";
-
-
-  form.style.display =
-    "none";
-
-
-
-  const fields = {
-
-
-    mode:
-      "save",
-
-
-    item:
-      currentBarcode,
-
-
-    action:
-      "Remove",
-
-
-    qty:
-      String(
-        Number(
-          qtyText
-        )
-      )
-
+    script.remove();
 
   };
 
+  window[callbackName]=data=>{
 
+    cleanup();
 
-  Object.entries(
-    fields
-  ).forEach(
+    success(data);
 
-    ([key, value]) => {
+  };
 
-
-      const input =
-        document.createElement(
-          "input"
-        );
-
-
-      input.type =
-        "hidden";
-
-
-      input.name =
-        key;
-
-
-      input.value =
-        value;
-
-
-      form.appendChild(
-        input
-      );
-
-
-    }
-
-  );
-
-
-
-  document.body.appendChild(
-    form
-  );
-
-
-
-  form.submit();
-
-
-
-  form.remove();
-
-
-
-  setTimeout(
-    () => {
-
-
-      button.disabled =
-        false;
-
-
-
-      setStatus(
-        "✓ REMOVED",
-        "success"
-      );
-
-
-
-      setTimeout(
-        resetForNextScan,
-        650
-      );
-
-
-    },
-
-    700
-
-  );
-
-}
-
-
-
-// =====================================================
-// RESET FOR NEXT ITEM
-// =====================================================
-
-
-function resetForNextScan() {
-
-
-  clearItem();
-
-
-
-  scanLocked =
-    false;
-
-
-
-  setStatus(
-    "READY FOR NEXT ITEM"
-  );
-
-
-
-  focusHardware();
-
-}
-
-
-
-// =====================================================
-// CLEAR CURRENT ITEM
-// =====================================================
-
-
-function clearItem() {
-
-
-  currentBarcode =
-    "";
-
-
-
-  document.getElementById(
-    "itemName"
-  ).textContent =
-    "";
-
-
-
-  document.getElementById(
-    "itemId"
-  ).textContent =
-    "";
-
-
-
-  document.getElementById(
-    "qty"
-  ).value =
-    "";
-
-
-
-  document.getElementById(
-    "hardwareBarcode"
-  ).value =
-    "";
-
-
-
-  document.getElementById(
-    "itemBox"
-  ).style.display =
-    "none";
-
-}
-
-
-
-// =====================================================
-// JSONP LOOKUP
-// =====================================================
-
-
-function jsonp(
-  params,
-  callback
-) {
-
-
-  const callbackName =
-
-    "__inv_" +
-
-    Date.now() +
-
-    "_" +
-
-    Math.floor(
-      Math.random() *
-      100000
-    );
-
-
-
-  const script =
-    document.createElement(
-      "script"
-    );
-
-
-
-  window[
-    callbackName
-  ] =
-
-    data => {
-
-
-      try {
-
-        callback(
-          data
-        );
-
-      }
-
-      finally {
-
-
-        delete window[
-          callbackName
-        ];
-
-
-        script.remove();
-
-      }
-
-    };
-
-
-
-  const query =
-    new URLSearchParams(
-      params
-    );
-
-
+  const query=
+    new URLSearchParams(params);
 
   query.set(
     "prefix",
     callbackName
   );
 
+  script.src=
+    API_URL+"?"+query.toString();
 
+  script.onerror=()=>{
 
-  script.src =
+    cleanup();
 
-    API_URL +
+    failure();
 
-    "?" +
+  };
 
-    query.toString();
+  const timeout=
+    setTimeout(()=>{
 
+      cleanup();
 
+      failure();
 
-  script.onerror =
-    () => {
+    },5000);
 
-
-      delete window[
-        callbackName
-      ];
-
-
-
-      script.remove();
-
-
-
-      scanLocked =
-        false;
-
-
-
-      setStatus(
-        "Unable to reach inventory service.",
-        "error"
-      );
-
-
-      document.getElementById(
-        "hardwareBarcode"
-      ).focus();
-
-    };
-
-
-
-  document.body.appendChild(
-    script
-  );
+  document.body.appendChild(script);
 
 }
 
-
-
-// =====================================================
-// AUTOMATIC DESKTOP READY MODE
-// =====================================================
-//
-// When the page opens, automatically put the cursor
-// in the barcode box. This means a computer user can:
-//
-// TYPE BARCODE → ENTER → QTY → ENTER
-//
-// A wireless/USB scanner can also begin scanning
-// immediately without clicking the input box.
-// =====================================================
-
-
 window.addEventListener(
   "load",
-  () => {
-
-
-    const barcodeBox =
-      document.getElementById(
-        "hardwareBarcode"
-      );
-
-
-    barcodeBox.focus();
-
-
+  ()=>{
+    barcodeBox().focus();
   }
 );
 
-
 </script>
 
-
 </body>
-
 </html>
