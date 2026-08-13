@@ -1,326 +1,753 @@
 <!doctype html>
 <html lang="en">
+
 <head>
-<meta charset="utf-8">
 
-<meta
-  name="viewport"
-  content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"
->
+  <meta charset="utf-8">
 
-<title>Cameron EMS Supply Removal</title>
+  <meta
+    name="viewport"
+    content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"
+  >
 
-<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+  <title>Cameron EMS Supply Removal</title>
 
-<style>
+  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 
-:root{
-  --bg:#1f2328;
-  --panel:#2b3036;
-  --panel2:#343a40;
-  --border:#4b535c;
-  --text:#f3f4f6;
-  --muted:#b7bdc5;
-  --orange:#f97316;
-  --orange-light:#fb923c;
-  --orange-dark:#c2410c;
-  --success:#14532d;
-  --danger:#7f1d1d;
-}
 
-*{box-sizing:border-box}
+  <style>
 
-body{
-  margin:0;
-  background:linear-gradient(180deg,#171a1e 0%,var(--bg) 100%);
-  color:var(--text);
-  font-family:Arial,Helvetica,sans-serif;
-  min-height:100vh;
-}
+    :root {
+      --bg: #1f2328;
+      --panel: #2b3036;
+      --panel2: #343a40;
+      --border: #4b535c;
 
-.wrap{
-  max-width:640px;
-  margin:0 auto;
-  padding:18px;
-}
+      --text: #f3f4f6;
+      --muted: #b7bdc5;
 
-.card{
-  background:var(--panel);
-  border:1px solid var(--border);
-  border-radius:18px;
-  padding:20px;
-  box-shadow:0 8px 28px rgba(0,0,0,.28);
-}
+      --orange: #f97316;
+      --orange-light: #fb923c;
+      --orange-dark: #c2410c;
 
-.header{
-  text-align:center;
-  margin-bottom:18px;
-}
+      --success: #14532d;
+      --success-border: #22c55e;
 
-.header h1{
-  margin:0;
-  font-size:27px;
-}
+      --danger: #7f1d1d;
+      --danger-border: #ef4444;
+    }
 
-.accent{color:var(--orange-light)}
 
-.sub{
-  margin-top:7px;
-  color:var(--muted);
-  font-size:14px;
-}
+    * {
+      box-sizing: border-box;
+    }
 
-.status{
-  margin-top:14px;
-  padding:14px;
-  border-radius:10px;
-  background:#20252a;
-  border:1px solid var(--border);
-  text-align:center;
-  font-weight:700;
-}
 
-.status.success{
-  background:var(--success);
-  border-color:#166534;
-}
+    body {
+      margin: 0;
 
-.status.error{
-  background:var(--danger);
-  border-color:#991b1b;
-}
+      background:
+        linear-gradient(
+          180deg,
+          #171a1e 0%,
+          var(--bg) 100%
+        );
 
-label{
-  display:block;
-  margin-bottom:7px;
-  font-weight:700;
-}
+      color: var(--text);
 
-input{
-  width:100%;
-  padding:16px;
-  border:1px solid var(--border);
-  border-radius:10px;
-  background:#171a1e;
-  color:white;
-  font-size:20px;
-  outline:none;
-}
+      font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
 
-input:focus{
-  border-color:var(--orange);
-  box-shadow:0 0 0 3px rgba(249,115,22,.20);
-}
+      min-height: 100vh;
+    }
 
-input::placeholder{color:#7f8790}
 
-.barcode-section{margin-top:18px}
+    .wrap {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 18px;
+    }
 
-.item{
-  display:none;
-  margin-top:18px;
-  padding:18px;
-  background:var(--panel2);
-  border:1px solid var(--border);
-  border-left:5px solid var(--orange);
-  border-radius:12px;
-}
 
-.item-name{
-  font-size:25px;
-  font-weight:800;
-  margin-bottom:7px;
-}
+    .card {
+      background: var(--panel);
 
-.barcode-display{
-  color:var(--muted);
-  font-size:14px;
-  margin-bottom:20px;
-}
+      border:
+        1px solid
+        var(--border);
 
-.qty-label{
-  color:var(--orange-light);
-  font-size:15px;
-  text-transform:uppercase;
-  letter-spacing:.5px;
-}
+      border-radius: 18px;
 
-button,.home-button{
-  width:100%;
-  padding:15px;
-  border:0;
-  border-radius:11px;
-  font-size:17px;
-  font-weight:700;
-  cursor:pointer;
-  text-align:center;
-}
+      padding: 20px;
 
-.save-btn{
-  margin-top:15px;
-  min-height:60px;
-  background:linear-gradient(180deg,var(--orange-light),var(--orange-dark));
-  color:white;
-  font-size:20px;
-}
+      box-shadow:
+        0 8px 28px
+        rgba(0,0,0,.28);
+    }
 
-.save-btn:disabled{
-  opacity:.55;
-  cursor:default;
-}
 
-.wrong-btn{
-  margin-top:10px;
-  background:transparent;
-  color:#ffd7c2;
-  border:1px solid var(--orange-dark);
-}
+    /* HEADER */
 
-.camera-btn{
-  margin-top:20px;
-  background:var(--panel2);
-  color:var(--text);
-  border:1px solid var(--border);
-}
+    .header {
+      text-align: center;
+      margin-bottom: 18px;
+    }
 
-.home-button{
-  display:block;
-  margin-top:15px;
-  background:#171a1e;
-  color:#d1d5db;
-  border:1px solid var(--border);
-  text-decoration:none;
-}
 
-#reader{
-  width:100%;
-  overflow:hidden;
-  border-radius:12px;
-  background:#111;
-  margin-top:12px;
-}
+    .header h1 {
+      margin: 0;
+      font-size: 27px;
+    }
 
-.workflow{
-  margin-top:16px;
-  padding:12px;
-  background:#20252a;
-  border-radius:10px;
-  color:var(--muted);
-  font-size:13px;
-  text-align:center;
-  line-height:1.5;
-}
 
-.workflow strong{color:var(--orange-light)}
+    .accent {
+      color: var(--orange-light);
+    }
 
-@media(max-width:520px){
-  .wrap{padding:12px}
-  .card{padding:16px}
-  .header h1{font-size:24px}
-}
 
-</style>
+    .sub {
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+
+    /* STATUS */
+
+    .status {
+      margin-top: 14px;
+
+      padding: 14px;
+
+      border-radius: 10px;
+
+      background: #20252a;
+
+      border:
+        1px solid
+        var(--border);
+
+      text-align: center;
+
+      font-weight: 700;
+    }
+
+
+    .status.success {
+      background: var(--success);
+
+      border-color:
+        var(--success-border);
+    }
+
+
+    .status.error {
+      background: var(--danger);
+
+      border-color:
+        var(--danger-border);
+    }
+
+
+    /* INPUTS */
+
+    label {
+      display: block;
+
+      margin-bottom: 7px;
+
+      font-weight: 700;
+    }
+
+
+    input {
+      width: 100%;
+
+      padding: 16px;
+
+      border:
+        1px solid
+        var(--border);
+
+      border-radius: 10px;
+
+      background: #171a1e;
+
+      color: white;
+
+      font-size: 20px;
+
+      outline: none;
+    }
+
+
+    input:focus {
+      border-color: var(--orange);
+
+      box-shadow:
+        0 0 0 3px
+        rgba(249,115,22,.20);
+    }
+
+
+    input::placeholder {
+      color: #7f8790;
+    }
+
+
+    .barcode-section {
+      margin-top: 18px;
+    }
+
+
+    /* ITEM */
+
+    .item {
+      display: none;
+
+      margin-top: 18px;
+
+      padding: 18px;
+
+      background: var(--panel2);
+
+      border:
+        1px solid
+        var(--border);
+
+      border-left:
+        5px solid
+        var(--orange);
+
+      border-radius: 12px;
+    }
+
+
+    .item-name {
+      font-size: 25px;
+
+      font-weight: 800;
+
+      margin-bottom: 7px;
+    }
+
+
+    .barcode-display {
+      color: var(--muted);
+
+      font-size: 14px;
+
+      margin-bottom: 14px;
+    }
+
+
+    .current-qty {
+      margin-bottom: 20px;
+
+      padding: 12px;
+
+      border-radius: 9px;
+
+      background: #20252a;
+
+      text-align: center;
+
+      font-size: 18px;
+
+      font-weight: 800;
+    }
+
+
+    .current-qty span {
+      color: var(--orange-light);
+
+      font-size: 24px;
+    }
+
+
+    .qty-label {
+      color: var(--orange-light);
+
+      font-size: 15px;
+
+      text-transform: uppercase;
+
+      letter-spacing: .5px;
+    }
+
+
+    /* CONFIRMATION */
+
+    .result-box {
+      display: none;
+
+      margin-top: 16px;
+
+      padding: 16px;
+
+      border-radius: 12px;
+
+      text-align: center;
+    }
+
+
+    .result-box.success {
+      display: block;
+
+      background: var(--success);
+
+      border:
+        2px solid
+        var(--success-border);
+    }
+
+
+    .result-box.error {
+      display: block;
+
+      background: var(--danger);
+
+      border:
+        2px solid
+        var(--danger-border);
+    }
+
+
+    .result-title {
+      font-size: 21px;
+
+      font-weight: 900;
+
+      margin-bottom: 12px;
+    }
+
+
+    .result-grid {
+      display: grid;
+
+      grid-template-columns:
+        repeat(3, 1fr);
+
+      gap: 8px;
+    }
+
+
+    .result-value {
+      padding: 8px;
+
+      background:
+        rgba(0,0,0,.18);
+
+      border-radius: 8px;
+    }
+
+
+    .result-value small {
+      display: block;
+
+      margin-bottom: 4px;
+
+      font-size: 11px;
+
+      text-transform: uppercase;
+    }
+
+
+    .result-value strong {
+      font-size: 21px;
+    }
+
+
+    /* BUTTONS */
+
+    button,
+    .home-button {
+      width: 100%;
+
+      padding: 15px;
+
+      border: 0;
+
+      border-radius: 11px;
+
+      font-size: 17px;
+
+      font-weight: 700;
+
+      cursor: pointer;
+
+      text-align: center;
+    }
+
+
+    .save-btn {
+      margin-top: 15px;
+
+      min-height: 60px;
+
+      background:
+        linear-gradient(
+          180deg,
+          var(--orange-light),
+          var(--orange-dark)
+        );
+
+      color: white;
+
+      font-size: 20px;
+    }
+
+
+    .save-btn:disabled {
+      opacity: .55;
+
+      cursor: default;
+    }
+
+
+    .wrong-btn {
+      margin-top: 10px;
+
+      background: transparent;
+
+      color: #ffd7c2;
+
+      border:
+        1px solid
+        var(--orange-dark);
+    }
+
+
+    .retry-btn {
+      display: none;
+
+      margin-top: 12px;
+
+      background: #ef4444;
+
+      color: white;
+    }
+
+
+    .camera-btn {
+      margin-top: 20px;
+
+      background: var(--panel2);
+
+      color: var(--text);
+
+      border:
+        1px solid
+        var(--border);
+    }
+
+
+    .home-button {
+      display: block;
+
+      margin-top: 15px;
+
+      background: #171a1e;
+
+      color: #d1d5db;
+
+      border:
+        1px solid
+        var(--border);
+
+      text-decoration: none;
+    }
+
+
+    #reader {
+      width: 100%;
+
+      overflow: hidden;
+
+      border-radius: 12px;
+
+      background: #111;
+
+      margin-top: 12px;
+    }
+
+
+    .workflow {
+      margin-top: 16px;
+
+      padding: 12px;
+
+      background: #20252a;
+
+      border-radius: 10px;
+
+      color: var(--muted);
+
+      font-size: 13px;
+
+      text-align: center;
+
+      line-height: 1.5;
+    }
+
+
+    .workflow strong {
+      color: var(--orange-light);
+    }
+
+
+    @media(max-width:520px) {
+
+      .wrap {
+        padding: 12px;
+      }
+
+      .card {
+        padding: 16px;
+      }
+
+      .header h1 {
+        font-size: 24px;
+      }
+
+      .result-grid {
+        grid-template-columns: 1fr;
+      }
+
+    }
+
+  </style>
+
 </head>
+
 
 <body>
 
+
 <div class="wrap">
-<div class="card">
 
-<div class="header">
-  <h1>
-    Cameron EMS
-    <span class="accent">Supply Removal</span>
-  </h1>
+  <div class="card">
 
-  <div class="sub">
-    Scan barcode • Enter quantity • Press Enter
+
+    <div class="header">
+
+      <h1>
+        Cameron EMS
+        <span class="accent">
+          Supply Removal
+        </span>
+      </h1>
+
+      <div class="sub">
+        Scan barcode • Enter quantity • Press Enter
+      </div>
+
+    </div>
+
+
+    <div
+      id="status"
+      class="status"
+    >
+      READY TO SCAN
+    </div>
+
+
+    <div class="barcode-section">
+
+      <label for="barcodeInput">
+        Barcode Scanner / Entry
+      </label>
+
+      <input
+        id="barcodeInput"
+        type="text"
+        autocomplete="off"
+        spellcheck="false"
+        placeholder="Scan or type barcode"
+        onkeydown="barcodeKey(event)"
+      >
+
+    </div>
+
+
+    <div
+      id="itemBox"
+      class="item"
+    >
+
+
+      <div
+        id="itemName"
+        class="item-name"
+      ></div>
+
+
+      <div class="barcode-display">
+        Barcode:
+        <strong id="itemId"></strong>
+      </div>
+
+
+      <div class="current-qty">
+
+        Current Qty On Hand:
+
+        <span id="currentQtyDisplay">
+          0
+        </span>
+
+      </div>
+
+
+      <label
+        class="qty-label"
+        for="qty"
+      >
+        Quantity Removed
+      </label>
+
+
+      <input
+        id="qty"
+        type="number"
+        min="1"
+        step="1"
+        inputmode="numeric"
+        autocomplete="off"
+        placeholder="Enter quantity removed"
+        onkeydown="qtyKey(event)"
+      >
+
+
+      <button
+        id="saveBtn"
+        class="save-btn"
+        onclick="saveRemove()"
+      >
+        REMOVE INVENTORY
+      </button>
+
+
+      <button
+        class="wrong-btn"
+        onclick="resetForNextItem()"
+      >
+        ← Wrong Item — Scan Again
+      </button>
+
+
+    </div>
+
+
+    <!-- RESULT / VERIFICATION -->
+
+    <div
+      id="resultBox"
+      class="result-box"
+    >
+
+      <div
+        id="resultTitle"
+        class="result-title"
+      ></div>
+
+
+      <div class="result-grid">
+
+
+        <div class="result-value">
+
+          <small>
+            Previous
+          </small>
+
+          <strong id="resultOld">
+            -
+          </strong>
+
+        </div>
+
+
+        <div class="result-value">
+
+          <small>
+            Removed
+          </small>
+
+          <strong id="resultRemoved">
+            -
+          </strong>
+
+        </div>
+
+
+        <div class="result-value">
+
+          <small>
+            New Qty
+          </small>
+
+          <strong id="resultNew">
+            -
+          </strong>
+
+        </div>
+
+
+      </div>
+
+    </div>
+
+
+    <button
+      id="retryBtn"
+      class="retry-btn"
+      onclick="retryRemoval()"
+    >
+      RETRY REMOVAL
+    </button>
+
+
+    <div class="workflow">
+
+      <strong>
+        Verified Workflow
+      </strong>
+
+      <br>
+
+      Scan → Enter quantity → System verifies new quantity → Next scan
+
+    </div>
+
+
+    <button
+      id="cameraBtn"
+      class="camera-btn"
+      onclick="startCamera()"
+    >
+      Use Camera Scanner
+    </button>
+
+
+    <div id="reader"></div>
+
+
+    <a
+      href="index.html"
+      class="home-button"
+    >
+      ← Return to Employee Dashboard
+    </a>
+
+
   </div>
-</div>
-
-<div id="status" class="status">
-  READY TO SCAN
-</div>
-
-<div class="barcode-section">
-
-<label for="barcodeInput">
-  Barcode Scanner / Entry
-</label>
-
-<input
-  id="barcodeInput"
-  type="text"
-  autocomplete="off"
-  spellcheck="false"
-  placeholder="Scan or type barcode"
-  onkeydown="barcodeKey(event)"
->
 
 </div>
 
-<div id="itemBox" class="item">
-
-<div id="itemName" class="item-name"></div>
-
-<div class="barcode-display">
-  Barcode:
-  <strong id="itemId"></strong>
-</div>
-
-<label class="qty-label" for="qty">
-  Quantity Removed
-</label>
-
-<input
-  id="qty"
-  type="number"
-  min="1"
-  step="1"
-  inputmode="numeric"
-  autocomplete="off"
-  placeholder="Enter quantity removed"
-  onkeydown="qtyKey(event)"
->
-
-<button
-  id="saveBtn"
-  class="save-btn"
-  onclick="saveRemove()"
->
-  REMOVE INVENTORY
-</button>
-
-<button
-  class="wrong-btn"
-  onclick="resetForNextItem()"
->
-  ← Wrong Item — Scan Again
-</button>
-
-</div>
-
-<div class="workflow">
-  <strong>Fast Workflow</strong><br>
-  Scan → Quantity → Enter → Next Scan
-</div>
-
-<button
-  id="cameraBtn"
-  class="camera-btn"
-  onclick="startCamera()"
->
-  Use Camera Scanner
-</button>
-
-<div id="reader"></div>
-
-<a href="index.html" class="home-button">
-  ← Return to Employee Dashboard
-</a>
-
-</div>
-</div>
 
 <iframe
   name="saveFrame"
@@ -328,146 +755,317 @@ button,.home-button{
   style="display:none"
 ></iframe>
 
+
 <script>
 
+
+// =====================================================
+// IMPORTANT
+// Replace this with the NEW Apps Script /exec URL
+// currently being used by your working system.
+// =====================================================
+
 const API_URL =
-"https://script.google.com/macros/s/AKfycbxOSkgybcG2mTC-0m26GXX1M6ZQgnjq2V7lqQ4R9Y8aJE-stqALUkVmZL6cZR8pRvLv5w/exec";
+  "https://script.google.com/macros/s/AKfycbxOSkgybcG2mTC-0m26GXX1M6ZQgnjq2V7lqQ4R9Y8aJE-stqALUkVmZL6cZR8pRvLv5w/exec";
 
-let currentBarcode="";
-let scanLocked=false;
-let scanner=null;
 
-function barcodeBox(){
-  return document.getElementById("barcodeInput");
+
+// =====================================================
+// STATE
+// =====================================================
+
+let currentBarcode = "";
+
+let currentItemName = "";
+
+let startingQty = 0;
+
+let requestedRemoval = 0;
+
+let expectedQty = 0;
+
+let scanLocked = false;
+
+let scanner = null;
+
+let transactionInProgress = false;
+
+
+
+// =====================================================
+// ELEMENT HELPERS
+// =====================================================
+
+function barcodeBox() {
+  return document.getElementById(
+    "barcodeInput"
+  );
 }
 
-function quantityBox(){
-  return document.getElementById("qty");
+
+function quantityBox() {
+  return document.getElementById(
+    "qty"
+  );
 }
 
-function setStatus(message,type=""){
-  const box=document.getElementById("status");
-  box.className="status"+(type?" "+type:"");
-  box.textContent=message;
+
+
+// =====================================================
+// STATUS
+// =====================================================
+
+function setStatus(
+  message,
+  type = ""
+) {
+
+  const box =
+    document.getElementById(
+      "status"
+    );
+
+  box.className =
+    "status" +
+    (
+      type
+        ? " " + type
+        : ""
+    );
+
+  box.textContent =
+    message;
+
 }
 
-function barcodeKey(event){
 
-  if(event.key!=="Enter") return;
 
-  event.preventDefault();
+// =====================================================
+// BARCODE ENTER
+// =====================================================
 
-  const barcode=barcodeBox().value.trim();
+function barcodeKey(event) {
 
-  if(!barcode){
-    setStatus("Scan or enter a barcode.","error");
-    barcodeBox().focus();
+  if (
+    event.key !== "Enter"
+  ) {
     return;
   }
 
-  if(scanLocked) return;
 
-  scanLocked=true;
+  event.preventDefault();
 
-  lookupItem(barcode);
 
-}
+  const barcode =
+    barcodeBox()
+      .value
+      .trim();
 
-function lookupItem(barcode){
 
-  currentBarcode=barcode;
+  if (!barcode) {
 
-  setStatus("Looking up item...");
+    setStatus(
+      "Scan or enter a barcode.",
+      "error"
+    );
 
-  lookupWithRetry(
+    barcodeBox().focus();
+
+    return;
+  }
+
+
+  if (
+    scanLocked ||
+    transactionInProgress
+  ) {
+    return;
+  }
+
+
+  scanLocked = true;
+
+
+  lookupItemAndQty(
     barcode,
     1
   );
 
 }
 
-function lookupWithRetry(barcode,attempt){
+
+
+// =====================================================
+// INITIAL ITEM + QUANTITY LOOKUP
+// =====================================================
+//
+// Uses mode=qty because the backend returns:
+// item name + current quantity
+//
+// This avoids doing two separate requests.
+// =====================================================
+
+function lookupItemAndQty(
+  barcode,
+  attempt
+) {
+
+
+  setStatus(
+    attempt === 1
+      ? "Looking up item..."
+      : "Connection delayed — retrying..."
+  );
+
 
   jsonpRequest(
 
     {
-      mode:"item",
-      item:barcode,
-      t:Date.now()
+      mode: "qty",
+      item: barcode,
+      t: Date.now()
     },
 
-    data=>{
 
-      if(!data || !data.success){
+    data => {
 
-        scanLocked=false;
+
+      if (
+        !data ||
+        !data.success
+      ) {
+
+        scanLocked = false;
+
+        currentBarcode = "";
 
         setStatus(
-          (data && data.message) || "Item not found.",
+          (
+            data &&
+            data.message
+          ) ||
+          "Item not found.",
           "error"
         );
 
-        currentBarcode="";
-        barcodeBox().value="";
+        barcodeBox().value = "";
+
         barcodeBox().focus();
 
         return;
 
       }
 
-      document.getElementById("itemName").textContent=data.name;
 
-      document.getElementById("itemId").textContent=barcode;
+      currentBarcode =
+        barcode;
 
-      document.getElementById("itemBox").style.display="block";
 
-      barcodeBox().value="";
+      currentItemName =
+        data.name;
+
+
+      startingQty =
+        Number(
+          data.currentQty || 0
+        );
+
+
+      document.getElementById(
+        "itemName"
+      ).textContent =
+        currentItemName;
+
+
+      document.getElementById(
+        "itemId"
+      ).textContent =
+        currentBarcode;
+
+
+      document.getElementById(
+        "currentQtyDisplay"
+      ).textContent =
+        startingQty;
+
+
+      document.getElementById(
+        "itemBox"
+      ).style.display =
+        "block";
+
+
+      barcodeBox().value =
+        "";
+
+
+      hideResult();
+
 
       setStatus(
         "ITEM LOADED — ENTER QUANTITY",
         "success"
       );
 
-      setTimeout(()=>{
-        quantityBox().focus();
-        quantityBox().select();
-      },75);
+
+      setTimeout(
+        () => {
+
+          quantityBox().focus();
+
+          quantityBox().select();
+
+        },
+        75
+      );
 
     },
 
-    ()=>{
 
-      if(attempt<3){
+    () => {
 
-        const delay=
-          attempt===1
-          ?300
-          :800;
 
-        setStatus(
-          "Connection delayed — retrying..."
+      if (
+        attempt < 3
+      ) {
+
+        const delay =
+          attempt === 1
+            ? 300
+            : 800;
+
+
+        setTimeout(
+          () => {
+
+            lookupItemAndQty(
+              barcode,
+              attempt + 1
+            );
+
+          },
+          delay
         );
 
-        setTimeout(()=>{
-          lookupWithRetry(
-            barcode,
-            attempt+1
-          );
-        },delay);
 
         return;
 
       }
 
-      scanLocked=false;
-      currentBarcode="";
+
+      scanLocked = false;
+
+      currentBarcode = "";
+
 
       setStatus(
         "Unable to reach inventory service. Scan again.",
         "error"
       );
 
-      barcodeBox().value="";
+
+      barcodeBox().value = "";
+
       barcodeBox().focus();
 
     }
@@ -476,40 +1074,77 @@ function lookupWithRetry(barcode,attempt){
 
 }
 
-function qtyKey(event){
 
-  if(event.key!=="Enter") return;
+
+// =====================================================
+// QUANTITY ENTER
+// =====================================================
+
+function qtyKey(event) {
+
+  if (
+    event.key !== "Enter"
+  ) {
+    return;
+  }
+
 
   event.preventDefault();
 
-  if(!document.getElementById("saveBtn").disabled){
+
+  if (
+    !document.getElementById(
+      "saveBtn"
+    ).disabled
+  ) {
+
     saveRemove();
+
   }
 
 }
 
-function saveRemove(){
 
-  const qtyText=quantityBox().value;
 
-  if(!currentBarcode){
+// =====================================================
+// SAVE REMOVE
+// =====================================================
+
+function saveRemove() {
+
+
+  if (
+    transactionInProgress
+  ) {
+    return;
+  }
+
+
+  const qtyText =
+    quantityBox().value;
+
+
+  if (
+    !currentBarcode
+  ) {
 
     setStatus(
       "Scan an item first.",
       "error"
     );
 
-    resetForNextItem();
-
     return;
 
   }
 
-  if(
-    qtyText==="" ||
-    Number(qtyText)<=0 ||
-    !Number.isFinite(Number(qtyText))
-  ){
+
+  if (
+    qtyText === "" ||
+    Number(qtyText) <= 0 ||
+    !Number.isFinite(
+      Number(qtyText)
+    )
+  ) {
 
     setStatus(
       "Enter a valid quantity.",
@@ -522,247 +1157,1088 @@ function saveRemove(){
 
   }
 
-  const button=
-    document.getElementById("saveBtn");
 
-  button.disabled=true;
+  requestedRemoval =
+    Number(
+      qtyText
+    );
+
+
+  if (
+    requestedRemoval >
+    startingQty
+  ) {
+
+    setStatus(
+      "Cannot remove " +
+      requestedRemoval +
+      ". Only " +
+      startingQty +
+      " currently on hand.",
+      "error"
+    );
+
+    quantityBox().focus();
+
+    quantityBox().select();
+
+    return;
+
+  }
+
+
+  expectedQty =
+    startingQty -
+    requestedRemoval;
+
+
+  transactionInProgress =
+    true;
+
+
+  const button =
+    document.getElementById(
+      "saveBtn"
+    );
+
+
+  button.disabled =
+    true;
+
+
+  document.getElementById(
+    "retryBtn"
+  ).style.display =
+    "none";
+
+
+  hideResult();
+
 
   setStatus(
     "Removing inventory..."
   );
 
-  postTransaction(
+
+  submitPost(
     currentBarcode,
     "Remove",
-    Number(qtyText)
+    requestedRemoval
   );
 
-  setTimeout(()=>{
 
-    button.disabled=false;
+  /*
+    Give Apps Script enough time
+    to write Column G before checking.
+  */
 
-    setStatus(
-      "✓ REMOVED — SCAN NEXT ITEM",
-      "success"
-    );
+  setTimeout(
+    () => {
 
-    resetForNextItem(false);
+      verifyRemoval(
+        1
+      );
 
-  },700);
+    },
+    700
+  );
 
 }
 
-function postTransaction(
+
+
+// =====================================================
+// VERIFY REMOVAL
+// =====================================================
+
+function verifyRemoval(
+  attempt
+) {
+
+
+  setStatus(
+    attempt === 1
+      ? "Verifying inventory..."
+      : "Verifying again..."
+  );
+
+
+  jsonpRequest(
+
+    {
+      mode: "qty",
+      item: currentBarcode,
+      t: Date.now()
+    },
+
+
+    data => {
+
+
+      if (
+        !data ||
+        !data.success
+      ) {
+
+        verificationRetry(
+          attempt
+        );
+
+        return;
+
+      }
+
+
+      const actualQty =
+        Number(
+          data.currentQty
+        );
+
+
+      /*
+        EXACT MATCH
+      */
+
+      if (
+        actualQty ===
+        expectedQty
+      ) {
+
+        removalConfirmed(
+          actualQty
+        );
+
+        return;
+
+      }
+
+
+      /*
+        If the sheet still has the old
+        quantity, give Apps Script more
+        time before declaring failure.
+      */
+
+      if (
+        actualQty ===
+        startingQty &&
+        attempt < 4
+      ) {
+
+        setTimeout(
+          () => {
+
+            verifyRemoval(
+              attempt + 1
+            );
+
+          },
+          attempt * 500
+        );
+
+        return;
+
+      }
+
+
+      /*
+        Quantity changed, but not to
+        what this transaction expected.
+      */
+
+      removalFailed(
+        actualQty
+      );
+
+    },
+
+
+    () => {
+
+      verificationRetry(
+        attempt
+      );
+
+    }
+
+  );
+
+}
+
+
+
+// =====================================================
+// VERIFICATION RETRY
+// =====================================================
+
+function verificationRetry(
+  attempt
+) {
+
+
+  if (
+    attempt < 4
+  ) {
+
+    setTimeout(
+      () => {
+
+        verifyRemoval(
+          attempt + 1
+        );
+
+      },
+      attempt * 500
+    );
+
+    return;
+
+  }
+
+
+  removalCommunicationFailure();
+
+}
+
+
+
+// =====================================================
+// CONFIRMED
+// =====================================================
+
+function removalConfirmed(
+  actualQty
+) {
+
+
+  transactionInProgress =
+    false;
+
+
+  document.getElementById(
+    "saveBtn"
+  ).disabled =
+    false;
+
+
+  setStatus(
+    "✓ REMOVAL CONFIRMED",
+    "success"
+  );
+
+
+  showResult(
+    "success",
+    "✓ REMOVAL CONFIRMED",
+    startingQty,
+    requestedRemoval,
+    actualQty
+  );
+
+
+  /*
+    Keep confirmation visible briefly.
+    Then prepare for next barcode.
+  */
+
+  setTimeout(
+    () => {
+
+      resetForNextItem();
+
+    },
+    1400
+  );
+
+}
+
+
+
+// =====================================================
+// FAILED — QUANTITY DID NOT MATCH
+// =====================================================
+
+function removalFailed(
+  actualQty
+) {
+
+
+  transactionInProgress =
+    false;
+
+
+  document.getElementById(
+    "saveBtn"
+  ).disabled =
+    false;
+
+
+  setStatus(
+    "REMOVAL FAILED — INVENTORY DID NOT MATCH",
+    "error"
+  );
+
+
+  showResult(
+    "error",
+    "REMOVAL NOT VERIFIED",
+    startingQty,
+    requestedRemoval,
+    actualQty
+  );
+
+
+  document.getElementById(
+    "retryBtn"
+  ).style.display =
+    "block";
+
+
+  /*
+    Do NOT reset.
+    Keep item on screen.
+  */
+
+}
+
+
+
+// =====================================================
+// COMMUNICATION FAILURE
+// =====================================================
+
+function removalCommunicationFailure() {
+
+
+  transactionInProgress =
+    false;
+
+
+  document.getElementById(
+    "saveBtn"
+  ).disabled =
+    false;
+
+
+  setStatus(
+    "Unable to verify inventory. Do not rescan yet.",
+    "error"
+  );
+
+
+  showResult(
+    "error",
+    "UPDATE COULD NOT BE VERIFIED",
+    startingQty,
+    requestedRemoval,
+    "?"
+  );
+
+
+  document.getElementById(
+    "retryBtn"
+  ).style.display =
+    "block";
+
+}
+
+
+
+// =====================================================
+// RETRY BUTTON
+// =====================================================
+//
+// IMPORTANT:
+// We first reread the current quantity.
+// We do NOT blindly submit the removal again,
+// because the original removal may have actually
+// succeeded even though verification failed.
+// =====================================================
+
+function retryRemoval() {
+
+
+  if (
+    transactionInProgress
+  ) {
+    return;
+  }
+
+
+  transactionInProgress =
+    true;
+
+
+  document.getElementById(
+    "retryBtn"
+  ).style.display =
+    "none";
+
+
+  setStatus(
+    "Checking inventory before retry..."
+  );
+
+
+  jsonpRequest(
+
+    {
+      mode: "qty",
+      item: currentBarcode,
+      t: Date.now()
+    },
+
+
+    data => {
+
+
+      if (
+        !data ||
+        !data.success
+      ) {
+
+        transactionInProgress =
+          false;
+
+
+        setStatus(
+          "Unable to check inventory. Try again.",
+          "error"
+        );
+
+
+        document.getElementById(
+          "retryBtn"
+        ).style.display =
+          "block";
+
+
+        return;
+
+      }
+
+
+      const actualQty =
+        Number(
+          data.currentQty
+        );
+
+
+      /*
+        The original transaction DID succeed.
+      */
+
+      if (
+        actualQty ===
+        expectedQty
+      ) {
+
+        removalConfirmed(
+          actualQty
+        );
+
+        return;
+
+      }
+
+
+      /*
+        Nothing changed. Safe to resend.
+      */
+
+      if (
+        actualQty ===
+        startingQty
+      ) {
+
+        transactionInProgress =
+          false;
+
+        saveRemove();
+
+        return;
+
+      }
+
+
+      /*
+        Quantity is different from both.
+        Something else changed inventory.
+        Don't automatically remove again.
+      */
+
+      transactionInProgress =
+        false;
+
+
+      setStatus(
+        "Inventory quantity changed. Rescan item before removing.",
+        "error"
+      );
+
+
+      showResult(
+        "error",
+        "QUANTITY CHANGED",
+        startingQty,
+        requestedRemoval,
+        actualQty
+      );
+
+
+      document.getElementById(
+        "retryBtn"
+      ).style.display =
+        "none";
+
+
+      quantityBox().disabled =
+        true;
+
+    },
+
+
+    () => {
+
+
+      transactionInProgress =
+        false;
+
+
+      setStatus(
+        "Unable to reach inventory service.",
+        "error"
+      );
+
+
+      document.getElementById(
+        "retryBtn"
+      ).style.display =
+        "block";
+
+    }
+
+  );
+
+}
+
+
+
+// =====================================================
+// RESULT DISPLAY
+// =====================================================
+
+function showResult(
+  type,
+  title,
+  oldQty,
+  removedQty,
+  newQty
+) {
+
+
+  const box =
+    document.getElementById(
+      "resultBox"
+    );
+
+
+  box.className =
+    "result-box " +
+    type;
+
+
+  document.getElementById(
+    "resultTitle"
+  ).textContent =
+    title;
+
+
+  document.getElementById(
+    "resultOld"
+  ).textContent =
+    oldQty;
+
+
+  document.getElementById(
+    "resultRemoved"
+  ).textContent =
+    removedQty;
+
+
+  document.getElementById(
+    "resultNew"
+  ).textContent =
+    newQty;
+
+}
+
+
+
+function hideResult() {
+
+
+  const box =
+    document.getElementById(
+      "resultBox"
+    );
+
+
+  box.className =
+    "result-box";
+
+}
+
+
+
+// =====================================================
+// POST TRANSACTION
+// =====================================================
+
+function submitPost(
   barcode,
   action,
   qty
-){
+) {
 
-  const form=
-    document.createElement("form");
 
-  form.method="POST";
-  form.action=API_URL;
-  form.target="saveFrame";
-  form.style.display="none";
+  const form =
+    document.createElement(
+      "form"
+    );
 
-  const fields={
-    mode:"save",
-    item:barcode,
-    action:action,
-    qty:String(qty)
+
+  form.method =
+    "POST";
+
+
+  form.action =
+    API_URL;
+
+
+  form.target =
+    "saveFrame";
+
+
+  form.style.display =
+    "none";
+
+
+  const fields = {
+
+    mode: "save",
+
+    item: barcode,
+
+    action: action,
+
+    qty: String(qty)
+
   };
 
-  Object.entries(fields).forEach(
-    ([key,value])=>{
 
-      const input=
-        document.createElement("input");
+  Object.entries(
+    fields
+  ).forEach(
+    ([key,value]) => {
 
-      input.type="hidden";
-      input.name=key;
-      input.value=value;
 
-      form.appendChild(input);
+      const input =
+        document.createElement(
+          "input"
+        );
+
+
+      input.type =
+        "hidden";
+
+
+      input.name =
+        key;
+
+
+      input.value =
+        value;
+
+
+      form.appendChild(
+        input
+      );
 
     }
   );
 
-  document.body.appendChild(form);
+
+  document.body.appendChild(
+    form
+  );
+
 
   form.submit();
 
-  setTimeout(()=>{
-    form.remove();
-  },1500);
+
+  setTimeout(
+    () => {
+
+      form.remove();
+
+    },
+    2000
+  );
 
 }
 
-function resetForNextItem(changeStatus=true){
 
-  currentBarcode="";
-  scanLocked=false;
 
-  document.getElementById("itemName").textContent="";
-  document.getElementById("itemId").textContent="";
-  document.getElementById("itemBox").style.display="none";
+// =====================================================
+// RESET
+// =====================================================
 
-  quantityBox().value="";
-  barcodeBox().value="";
+function resetForNextItem() {
 
-  if(changeStatus){
-    setStatus("READY TO SCAN");
-  }
 
-  setTimeout(()=>{
-    barcodeBox().focus();
-  },75);
+  currentBarcode = "";
+
+  currentItemName = "";
+
+  startingQty = 0;
+
+  requestedRemoval = 0;
+
+  expectedQty = 0;
+
+  scanLocked = false;
+
+  transactionInProgress = false;
+
+
+  document.getElementById(
+    "itemName"
+  ).textContent =
+    "";
+
+
+  document.getElementById(
+    "itemId"
+  ).textContent =
+    "";
+
+
+  document.getElementById(
+    "currentQtyDisplay"
+  ).textContent =
+    "0";
+
+
+  document.getElementById(
+    "itemBox"
+  ).style.display =
+    "none";
+
+
+  quantityBox().value =
+    "";
+
+
+  quantityBox().disabled =
+    false;
+
+
+  barcodeBox().value =
+    "";
+
+
+  document.getElementById(
+    "retryBtn"
+  ).style.display =
+    "none";
+
+
+  hideResult();
+
+
+  setStatus(
+    "READY TO SCAN"
+  );
+
+
+  setTimeout(
+    () => {
+
+      barcodeBox().focus();
+
+    },
+    75
+  );
 
 }
 
-function startCamera(){
 
-  const button=
-    document.getElementById("cameraBtn");
 
-  button.disabled=true;
+// =====================================================
+// CAMERA
+// =====================================================
+
+function startCamera() {
+
+
+  const button =
+    document.getElementById(
+      "cameraBtn"
+    );
+
+
+  button.disabled =
+    true;
+
 
   setStatus(
     "Requesting camera permission..."
   );
 
-  scanner=
-    new Html5Qrcode("reader");
+
+  scanner =
+    new Html5Qrcode(
+      "reader"
+    );
+
 
   scanner.start(
 
-    {facingMode:"environment"},
-
     {
-      fps:12,
-      qrbox:(width,height)=>({
-        width:Math.floor(width*.9),
-        height:Math.min(
-          180,
-          Math.floor(height*.35)
-        )
-      })
+      facingMode:
+        "environment"
     },
 
-    decodedText=>{
+    {
+      fps: 12
+    },
 
-      if(scanLocked) return;
 
-      scanLocked=true;
+    decodedText => {
 
-      lookupItem(
-        String(decodedText).trim()
+
+      if (
+        scanLocked ||
+        transactionInProgress
+      ) {
+        return;
+      }
+
+
+      scanLocked =
+        true;
+
+
+      lookupItemAndQty(
+        String(
+          decodedText
+        ).trim(),
+        1
       );
 
     },
 
-    ()=>{}
+
+    () => {}
+
 
   )
 
-  .then(()=>{
-    setStatus(
-      "Point camera at item barcode"
-    );
-  })
 
-  .catch(error=>{
+  .then(
+    () => {
 
-    button.disabled=false;
+      setStatus(
+        "Point camera at item barcode"
+      );
 
-    setStatus(
-      "Camera error: "+error,
-      "error"
-    );
+    }
+  )
 
-  });
+
+  .catch(
+    error => {
+
+
+      button.disabled =
+        false;
+
+
+      setStatus(
+        "Camera error: " +
+        error,
+        "error"
+      );
+
+    }
+  );
 
 }
+
+
+
+// =====================================================
+// JSONP REQUEST WITH TIMEOUT
+// =====================================================
 
 function jsonpRequest(
   params,
   success,
   failure
-){
+) {
 
-  const callbackName=
-    "__inv_"+Date.now()+"_"+
-    Math.floor(Math.random()*100000);
 
-  const script=
-    document.createElement("script");
+  const callbackName =
 
-  let finished=false;
+    "__remove_" +
 
-  const cleanup=()=>{
+    Date.now() +
 
-    if(finished) return;
+    "_" +
 
-    finished=true;
+    Math.floor(
+      Math.random() *
+      100000
+    );
 
-    clearTimeout(timeout);
 
-    try{
-      delete window[callbackName];
-    }catch(e){}
+  const script =
+    document.createElement(
+      "script"
+    );
+
+
+  let finished =
+    false;
+
+
+  let timeout;
+
+
+  function cleanup() {
+
+
+    if (finished) {
+      return;
+    }
+
+
+    finished =
+      true;
+
+
+    clearTimeout(
+      timeout
+    );
+
+
+    try {
+
+      delete window[
+        callbackName
+      ];
+
+    }
+
+    catch(e) {}
+
 
     script.remove();
 
-  };
+  }
 
-  window[callbackName]=data=>{
 
-    cleanup();
+  window[
+    callbackName
+  ] =
+    data => {
 
-    success(data);
 
-  };
+      cleanup();
 
-  const query=
-    new URLSearchParams(params);
+
+      success(
+        data
+      );
+
+    };
+
+
+  const query =
+    new URLSearchParams(
+      params
+    );
+
 
   query.set(
     "prefix",
     callbackName
   );
 
-  script.src=
-    API_URL+"?"+query.toString();
 
-  script.onerror=()=>{
+  script.src =
 
-    cleanup();
+    API_URL +
 
-    failure();
+    "?" +
 
-  };
+    query.toString();
 
-  const timeout=
-    setTimeout(()=>{
+
+  script.onerror =
+    () => {
+
 
       cleanup();
 
+
       failure();
 
-    },5000);
+    };
 
-  document.body.appendChild(script);
+
+  timeout =
+    setTimeout(
+      () => {
+
+
+        cleanup();
+
+
+        failure();
+
+      },
+      5000
+    );
+
+
+  document.body.appendChild(
+    script
+  );
 
 }
 
+
+
+// =====================================================
+// DEFAULT USB SCANNER FOCUS
+// =====================================================
+
 window.addEventListener(
   "load",
-  ()=>{
+  () => {
+
+
     barcodeBox().focus();
+
   }
 );
 
+
 </script>
 
+
 </body>
+
 </html>
