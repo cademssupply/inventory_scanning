@@ -1,0 +1,1841 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="utf-8">
+
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"
+>
+
+<title>Cameron EMS Expiration Dates</title>
+
+
+<style>
+
+:root{
+  --bg:#1f2328;
+  --panel:#2b3036;
+  --panel2:#343a40;
+  --border:#4b535c;
+
+  --text:#f3f4f6;
+  --muted:#b7bdc5;
+
+  --orange:#f97316;
+  --orange-light:#fb923c;
+  --orange-dark:#c2410c;
+
+  --success:#14532d;
+  --success-border:#22c55e;
+
+  --danger:#7f1d1d;
+  --danger-border:#ef4444;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+
+  background:
+    linear-gradient(
+      180deg,
+      #171a1e 0%,
+      var(--bg) 100%
+    );
+
+  color:var(--text);
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  min-height:100vh;
+}
+
+.wrap{
+  max-width:640px;
+  margin:0 auto;
+  padding:18px;
+}
+
+.card{
+  background:var(--panel);
+
+  border:
+    1px solid
+    var(--border);
+
+  border-radius:18px;
+
+  padding:20px;
+
+  box-shadow:
+    0 8px 28px
+    rgba(0,0,0,.28);
+}
+
+.header{
+  text-align:center;
+  margin-bottom:18px;
+}
+
+.header h1{
+  margin:0;
+  font-size:27px;
+}
+
+.accent{
+  color:var(--orange-light);
+}
+
+.sub{
+  margin-top:7px;
+  color:var(--muted);
+  font-size:14px;
+}
+
+.status{
+  margin-top:14px;
+  padding:14px;
+
+  border-radius:10px;
+
+  background:#20252a;
+
+  border:
+    1px solid
+    var(--border);
+
+  text-align:center;
+
+  font-weight:700;
+}
+
+.status.success{
+  background:var(--success);
+  border-color:var(--success-border);
+}
+
+.status.error{
+  background:var(--danger);
+  border-color:var(--danger-border);
+}
+
+label{
+  display:block;
+  margin-bottom:7px;
+  font-weight:700;
+}
+
+input{
+  width:100%;
+  padding:16px;
+
+  border:
+    1px solid
+    var(--border);
+
+  border-radius:10px;
+
+  background:#171a1e;
+
+  color:white;
+
+  font-size:20px;
+
+  outline:none;
+}
+
+input:focus{
+  border-color:var(--orange);
+
+  box-shadow:
+    0 0 0 3px
+    rgba(249,115,22,.20);
+}
+
+.barcode-section{
+  margin-top:18px;
+}
+
+.item{
+  display:none;
+
+  margin-top:18px;
+
+  padding:18px;
+
+  background:var(--panel2);
+
+  border:
+    1px solid
+    var(--border);
+
+  border-left:
+    5px solid
+    var(--orange);
+
+  border-radius:12px;
+}
+
+.item-name{
+  font-size:25px;
+  font-weight:800;
+  margin-bottom:7px;
+}
+
+.barcode-display{
+  color:var(--muted);
+  margin-bottom:14px;
+}
+
+.current-expiration{
+  padding:14px;
+
+  background:#20252a;
+
+  border-radius:10px;
+
+  text-align:center;
+
+  margin-bottom:20px;
+}
+
+.current-expiration small{
+  display:block;
+
+  color:var(--muted);
+
+  margin-bottom:5px;
+
+  text-transform:uppercase;
+}
+
+.current-expiration strong{
+  font-size:25px;
+  color:var(--orange-light);
+}
+
+.expiration-label{
+  color:var(--orange-light);
+  text-transform:uppercase;
+  font-size:14px;
+}
+
+.result-box{
+  display:none;
+
+  margin-top:16px;
+
+  padding:16px;
+
+  border-radius:12px;
+
+  text-align:center;
+}
+
+.result-box.success{
+  display:block;
+
+  background:var(--success);
+
+  border:
+    2px solid
+    var(--success-border);
+}
+
+.result-box.error{
+  display:block;
+
+  background:var(--danger);
+
+  border:
+    2px solid
+    var(--danger-border);
+}
+
+.result-title{
+  font-size:21px;
+  font-weight:900;
+  margin-bottom:12px;
+}
+
+.result-grid{
+  display:grid;
+
+  grid-template-columns:
+    repeat(2,1fr);
+
+  gap:8px;
+}
+
+.result-value{
+  padding:10px;
+
+  background:
+    rgba(0,0,0,.18);
+
+  border-radius:8px;
+}
+
+.result-value small{
+  display:block;
+
+  font-size:11px;
+
+  text-transform:uppercase;
+
+  margin-bottom:5px;
+}
+
+.result-value strong{
+  font-size:20px;
+}
+
+.result-reason{
+  margin-top:12px;
+  font-size:13px;
+}
+
+button,
+.home-button{
+  width:100%;
+
+  padding:15px;
+
+  border:0;
+
+  border-radius:11px;
+
+  font-size:17px;
+
+  font-weight:700;
+
+  cursor:pointer;
+
+  text-align:center;
+}
+
+.save-btn{
+  margin-top:15px;
+
+  background:
+    linear-gradient(
+      180deg,
+      var(--orange-light),
+      var(--orange-dark)
+    );
+
+  color:white;
+
+  font-size:20px;
+}
+
+.wrong-btn{
+  margin-top:10px;
+
+  background:transparent;
+
+  color:#ffd7c2;
+
+  border:
+    1px solid
+    var(--orange-dark);
+}
+
+.home-button{
+  display:block;
+
+  margin-top:20px;
+
+  background:#171a1e;
+
+  color:#d1d5db;
+
+  border:
+    1px solid
+    var(--border);
+
+  text-decoration:none;
+}
+
+.workflow{
+  margin-top:16px;
+
+  padding:12px;
+
+  background:#20252a;
+
+  border-radius:10px;
+
+  color:var(--muted);
+
+  text-align:center;
+
+  font-size:13px;
+
+  line-height:1.5;
+}
+
+@media(max-width:520px){
+
+  .wrap{
+    padding:12px;
+  }
+
+  .card{
+    padding:16px;
+  }
+
+  .result-grid{
+    grid-template-columns:1fr;
+  }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+<div class="wrap">
+
+<div class="card">
+
+
+<div class="header">
+
+  <h1>
+
+    Cameron EMS
+
+    <span class="accent">
+      Expiration Dates
+    </span>
+
+  </h1>
+
+  <div class="sub">
+    Scan item → Scan expiration QR code
+  </div>
+
+</div>
+
+
+<div
+  id="status"
+  class="status"
+>
+  READY TO SCAN ITEM
+</div>
+
+
+<div class="barcode-section">
+
+<label for="barcodeInput">
+  Item Barcode
+</label>
+
+<input
+  id="barcodeInput"
+  type="text"
+  autocomplete="off"
+  spellcheck="false"
+  placeholder="Scan or type item barcode"
+  onkeydown="barcodeKey(event)"
+>
+
+</div>
+
+
+<div
+  id="itemBox"
+  class="item"
+>
+
+
+<div
+  id="itemName"
+  class="item-name"
+></div>
+
+
+<div class="barcode-display">
+
+  Barcode:
+
+  <strong id="itemId"></strong>
+
+</div>
+
+
+<div class="current-expiration">
+
+  <small>
+    Current Soonest Expiration
+  </small>
+
+  <strong id="currentExpiration">
+    None
+  </strong>
+
+</div>
+
+
+<label
+  class="expiration-label"
+  for="expirationInput"
+>
+  Scan Expiration Date QR
+</label>
+
+
+<input
+  id="expirationInput"
+  type="text"
+  autocomplete="off"
+  spellcheck="false"
+  placeholder="MM/DD/YYYY"
+  onkeydown="expirationKey(event)"
+>
+
+
+<button
+  class="save-btn"
+  id="saveBtn"
+  onclick="processExpiration()"
+>
+  CHECK / SAVE EXPIRATION
+</button>
+
+
+<button
+  class="wrong-btn"
+  onclick="resetForNextItem()"
+>
+  ← Wrong Item — Scan Again
+</button>
+
+
+</div>
+
+
+<div
+  id="resultBox"
+  class="result-box"
+>
+
+
+<div
+  id="resultTitle"
+  class="result-title"
+></div>
+
+
+<div class="result-grid">
+
+
+<div class="result-value">
+
+  <small>
+    Previous
+  </small>
+
+  <strong id="resultOld">
+    -
+  </strong>
+
+</div>
+
+
+<div class="result-value">
+
+  <small>
+    Current
+  </small>
+
+  <strong id="resultNew">
+    -
+  </strong>
+
+</div>
+
+
+</div>
+
+
+<div
+  id="resultReason"
+  class="result-reason"
+></div>
+
+
+</div>
+
+
+<div class="workflow">
+
+  Scan item barcode → scan date QR code formatted
+  <strong>MM/DD/YYYY</strong>
+
+  <br><br>
+
+  The system keeps the soonest future expiration,
+  but allows an expired date to be replaced.
+
+</div>
+
+
+<a
+  href="index.html"
+  class="home-button"
+>
+  ← Return to Employee Dashboard
+</a>
+
+
+</div>
+
+</div>
+
+
+<iframe
+  name="saveFrame"
+  style="display:none"
+></iframe>
+
+
+<script>
+
+
+// =====================================================
+// USE SAME /exec URL AS ADD/REMOVE/COUNT
+// =====================================================
+
+const API_URL =
+  "https://script.google.com/macros/s/AKfycbxOSkgybcG2mTC-0m26GXX1M6ZQgnjq2V7lqQ4R9Y8aJE-stqALUkVmZL6cZR8pRvLv5w/exec";
+
+
+let currentBarcode = "";
+
+let currentName = "";
+
+let previousExpiration = "";
+
+let transactionInProgress = false;
+
+
+
+function barcodeBox(){
+
+  return document.getElementById(
+    "barcodeInput"
+  );
+
+}
+
+
+function expirationBox(){
+
+  return document.getElementById(
+    "expirationInput"
+  );
+
+}
+
+
+function setStatus(
+  message,
+  type=""
+){
+
+  const box =
+    document.getElementById(
+      "status"
+    );
+
+  box.className =
+    "status" +
+    (
+      type
+        ? " " + type
+        : ""
+    );
+
+  box.textContent =
+    message;
+
+}
+
+
+
+// =====================================================
+// ITEM BARCODE
+// =====================================================
+
+function barcodeKey(event){
+
+  if(
+    event.key !== "Enter"
+  ){
+    return;
+  }
+
+  event.preventDefault();
+
+  const barcode =
+    barcodeBox()
+      .value
+      .trim();
+
+  if(!barcode){
+    return;
+  }
+
+  lookupExpiration(
+    barcode,
+    1
+  );
+
+}
+
+
+
+// =====================================================
+// LOOKUP EXISTING EXPIRATION
+// =====================================================
+
+function lookupExpiration(
+  barcode,
+  attempt
+){
+
+  setStatus(
+    "Looking up item..."
+  );
+
+
+  jsonpRequest(
+
+    {
+      mode:"expiration",
+      item:barcode,
+      t:Date.now()
+    },
+
+
+    data=>{
+
+
+      if(
+        !data ||
+        !data.success
+      ){
+
+        currentBarcode = "";
+
+        setStatus(
+          (
+            data &&
+            data.message
+          ) ||
+          "Item not found.",
+          "error"
+        );
+
+        barcodeBox().value = "";
+
+        barcodeBox().focus();
+
+        return;
+
+      }
+
+
+      currentBarcode =
+        barcode;
+
+
+      currentName =
+        data.name;
+
+
+      previousExpiration =
+        data.expiration || "";
+
+
+      document.getElementById(
+        "itemName"
+      ).textContent =
+        currentName;
+
+
+      document.getElementById(
+        "itemId"
+      ).textContent =
+        currentBarcode;
+
+
+      document.getElementById(
+        "currentExpiration"
+      ).textContent =
+        previousExpiration ||
+        "None Listed";
+
+
+      document.getElementById(
+        "itemBox"
+      ).style.display =
+        "block";
+
+
+      barcodeBox().value = "";
+
+
+      hideResult();
+
+
+      setStatus(
+        "ITEM LOADED — SCAN EXPIRATION DATE",
+        "success"
+      );
+
+
+      setTimeout(
+        ()=>{
+
+          expirationBox().focus();
+
+          expirationBox().select();
+
+        },
+        75
+      );
+
+    },
+
+
+    ()=>{
+
+
+      if(
+        attempt < 3
+      ){
+
+        setTimeout(
+          ()=>{
+
+            lookupExpiration(
+              barcode,
+              attempt + 1
+            );
+
+          },
+          attempt === 1
+            ? 300
+            : 800
+        );
+
+        return;
+
+      }
+
+
+      setStatus(
+        "Unable to reach inventory service.",
+        "error"
+      );
+
+
+      barcodeBox().focus();
+
+    }
+
+  );
+
+}
+
+
+
+// =====================================================
+// DATE QR ENTER
+// =====================================================
+
+function expirationKey(event){
+
+  if(
+    event.key !== "Enter"
+  ){
+    return;
+  }
+
+  event.preventDefault();
+
+  processExpiration();
+
+}
+
+
+
+// =====================================================
+// VALIDATE MM/DD/YYYY
+// =====================================================
+
+function validDateText(value){
+
+  const match =
+    String(value)
+      .trim()
+      .match(
+        /^(\d{2})\/(\d{2})\/(\d{4})$/
+      );
+
+
+  if(!match){
+    return false;
+  }
+
+
+  const month =
+    Number(match[1]);
+
+  const day =
+    Number(match[2]);
+
+  const year =
+    Number(match[3]);
+
+
+  const date =
+    new Date(
+      year,
+      month - 1,
+      day
+    );
+
+
+  return (
+    date.getFullYear() === year &&
+    date.getMonth() === month - 1 &&
+    date.getDate() === day
+  );
+
+}
+
+
+
+// =====================================================
+// PROCESS EXPIRATION
+// =====================================================
+
+function processExpiration(){
+
+
+  if(
+    transactionInProgress
+  ){
+    return;
+  }
+
+
+  if(!currentBarcode){
+
+    setStatus(
+      "Scan an item first.",
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  const expiration =
+    expirationBox()
+      .value
+      .trim();
+
+
+  if(
+    !validDateText(
+      expiration
+    )
+  ){
+
+    setStatus(
+      "Invalid date. Scan MM/DD/YYYY.",
+      "error"
+    );
+
+    expirationBox().focus();
+
+    expirationBox().select();
+
+    return;
+
+  }
+
+
+  transactionInProgress =
+    true;
+
+
+  document.getElementById(
+    "saveBtn"
+  ).disabled =
+    true;
+
+
+  setStatus(
+    "Checking expiration..."
+  );
+
+
+  submitExpiration(
+    currentBarcode,
+    expiration
+  );
+
+
+  /*
+    Wait for Apps Script, then reread Column I.
+  */
+
+  setTimeout(
+    ()=>{
+
+      verifyExpiration(
+        expiration,
+        1
+      );
+
+    },
+    700
+  );
+
+}
+
+
+
+// =====================================================
+// POST
+// =====================================================
+
+function submitExpiration(
+  barcode,
+  expiration
+){
+
+
+  const form =
+    document.createElement(
+      "form"
+    );
+
+
+  form.method =
+    "POST";
+
+
+  form.action =
+    API_URL;
+
+
+  form.target =
+    "saveFrame";
+
+
+  form.style.display =
+    "none";
+
+
+  const fields = {
+
+    mode:
+      "saveExpiration",
+
+    item:
+      barcode,
+
+    expiration:
+      expiration
+
+  };
+
+
+  Object.entries(
+    fields
+  ).forEach(
+    ([key,value])=>{
+
+
+      const input =
+        document.createElement(
+          "input"
+        );
+
+
+      input.type =
+        "hidden";
+
+
+      input.name =
+        key;
+
+
+      input.value =
+        value;
+
+
+      form.appendChild(
+        input
+      );
+
+    }
+  );
+
+
+  document.body.appendChild(
+    form
+  );
+
+
+  form.submit();
+
+
+  setTimeout(
+    ()=>{
+
+      form.remove();
+
+    },
+    2000
+  );
+
+}
+
+
+
+// =====================================================
+// VERIFY
+// =====================================================
+
+function verifyExpiration(
+  scannedDate,
+  attempt
+){
+
+
+  setStatus(
+    "Verifying expiration..."
+  );
+
+
+  jsonpRequest(
+
+    {
+      mode:
+        "expiration",
+
+      item:
+        currentBarcode,
+
+      t:
+        Date.now()
+    },
+
+
+    data=>{
+
+
+      if(
+        !data ||
+        !data.success
+      ){
+
+        verificationRetry(
+          scannedDate,
+          attempt
+        );
+
+        return;
+
+      }
+
+
+      const actual =
+        data.expiration || "";
+
+
+      /*
+        Determine whether scanned date
+        SHOULD have replaced old date.
+      */
+
+
+      const shouldReplace =
+        expirationShouldReplace(
+          previousExpiration,
+          scannedDate
+        );
+
+
+      if(
+        shouldReplace
+      ){
+
+
+        if(
+          actual === scannedDate
+        ){
+
+          showResult(
+            "success",
+            "✓ EXPIRATION UPDATED",
+            previousExpiration || "None",
+            actual,
+            previousExpiration
+              ? expirationReason(
+                  previousExpiration,
+                  scannedDate
+                )
+              : "Expiration date added."
+          );
+
+
+          finishSuccess();
+
+          return;
+
+        }
+
+
+        if(
+          attempt < 4
+        ){
+
+          setTimeout(
+            ()=>{
+
+              verifyExpiration(
+                scannedDate,
+                attempt + 1
+              );
+
+            },
+            attempt * 500
+          );
+
+          return;
+
+        }
+
+
+        verificationFailed(
+          actual
+        );
+
+
+        return;
+
+      }
+
+
+      /*
+        No change was supposed to occur.
+      */
+
+
+      if(
+        actual === previousExpiration
+      ){
+
+        showResult(
+          "success",
+          "✓ NO CHANGE NEEDED",
+          previousExpiration,
+          actual,
+          "Existing expiration date is sooner or the same."
+        );
+
+
+        finishSuccess();
+
+        return;
+
+      }
+
+
+      verificationFailed(
+        actual
+      );
+
+    },
+
+
+    ()=>{
+
+      verificationRetry(
+        scannedDate,
+        attempt
+      );
+
+    }
+
+  );
+
+}
+
+
+
+// =====================================================
+// EXPIRATION COMPARISON
+// =====================================================
+
+function expirationShouldReplace(
+  oldText,
+  newText
+){
+
+
+  if(!oldText){
+    return true;
+  }
+
+
+  const oldDate =
+    parseBrowserDate(
+      oldText
+    );
+
+
+  const newDate =
+    parseBrowserDate(
+      newText
+    );
+
+
+  const today =
+    new Date();
+
+
+  today.setHours(
+    0,
+    0,
+    0,
+    0
+  );
+
+
+  if(!oldDate){
+    return true;
+  }
+
+
+  if(
+    oldDate <
+    today
+  ){
+    return true;
+  }
+
+
+  if(
+    newDate <
+    oldDate
+  ){
+    return true;
+  }
+
+
+  return false;
+
+}
+
+
+
+// =====================================================
+// EXPLANATION
+// =====================================================
+
+function expirationReason(
+  oldText,
+  newText
+){
+
+
+  const oldDate =
+    parseBrowserDate(
+      oldText
+    );
+
+
+  const newDate =
+    parseBrowserDate(
+      newText
+    );
+
+
+  const today =
+    new Date();
+
+
+  today.setHours(
+    0,
+    0,
+    0,
+    0
+  );
+
+
+  if(
+    oldDate <
+    today
+  ){
+
+    return "Previous expiration date had already passed.";
+
+  }
+
+
+  if(
+    newDate <
+    oldDate
+  ){
+
+    return "Scanned expiration date is sooner.";
+
+  }
+
+
+  return "Expiration date updated.";
+
+}
+
+
+
+// =====================================================
+// PARSE DATE
+// =====================================================
+
+function parseBrowserDate(text){
+
+
+  const parts =
+    String(text)
+      .split("/");
+
+
+  return new Date(
+
+    Number(parts[2]),
+
+    Number(parts[0]) - 1,
+
+    Number(parts[1]),
+
+    12,
+    0,
+    0
+
+  );
+
+}
+
+
+
+// =====================================================
+// RETRY VERIFICATION
+// =====================================================
+
+function verificationRetry(
+  scannedDate,
+  attempt
+){
+
+
+  if(
+    attempt < 4
+  ){
+
+    setTimeout(
+      ()=>{
+
+        verifyExpiration(
+          scannedDate,
+          attempt + 1
+        );
+
+      },
+      attempt * 500
+    );
+
+    return;
+
+  }
+
+
+  verificationFailed(
+    "?"
+  );
+
+}
+
+
+
+// =====================================================
+// SUCCESS
+// =====================================================
+
+function finishSuccess(){
+
+
+  transactionInProgress =
+    false;
+
+
+  document.getElementById(
+    "saveBtn"
+  ).disabled =
+    false;
+
+
+  setStatus(
+    "EXPIRATION VERIFIED",
+    "success"
+  );
+
+
+  /*
+    Keep confirmation visible 4 seconds.
+  */
+
+  setTimeout(
+    ()=>{
+
+      resetForNextItem();
+
+    },
+    4000
+  );
+
+}
+
+
+
+// =====================================================
+// FAILURE
+// =====================================================
+
+function verificationFailed(
+  actual
+){
+
+
+  transactionInProgress =
+    false;
+
+
+  document.getElementById(
+    "saveBtn"
+  ).disabled =
+    false;
+
+
+  setStatus(
+    "EXPIRATION UPDATE COULD NOT BE VERIFIED",
+    "error"
+  );
+
+
+  showResult(
+    "error",
+    "UPDATE NOT VERIFIED",
+    previousExpiration || "None",
+    actual || "?",
+    "Check Item Master before scanning again."
+  );
+
+}
+
+
+
+// =====================================================
+// RESULT DISPLAY
+// =====================================================
+
+function showResult(
+  type,
+  title,
+  oldValue,
+  newValue,
+  reason
+){
+
+
+  const box =
+    document.getElementById(
+      "resultBox"
+    );
+
+
+  box.className =
+    "result-box " +
+    type;
+
+
+  document.getElementById(
+    "resultTitle"
+  ).textContent =
+    title;
+
+
+  document.getElementById(
+    "resultOld"
+  ).textContent =
+    oldValue;
+
+
+  document.getElementById(
+    "resultNew"
+  ).textContent =
+    newValue;
+
+
+  document.getElementById(
+    "resultReason"
+  ).textContent =
+    reason;
+
+}
+
+
+
+function hideResult(){
+
+
+  document.getElementById(
+    "resultBox"
+  ).className =
+    "result-box";
+
+}
+
+
+
+// =====================================================
+// RESET
+// =====================================================
+
+function resetForNextItem(){
+
+
+  currentBarcode = "";
+
+  currentName = "";
+
+  previousExpiration = "";
+
+  transactionInProgress =
+    false;
+
+
+  barcodeBox().value = "";
+
+  expirationBox().value = "";
+
+
+  document.getElementById(
+    "itemBox"
+  ).style.display =
+    "none";
+
+
+  hideResult();
+
+
+  setStatus(
+    "READY TO SCAN ITEM"
+  );
+
+
+  setTimeout(
+    ()=>{
+
+      barcodeBox().focus();
+
+    },
+    75
+  );
+
+}
+
+
+
+// =====================================================
+// JSONP
+// =====================================================
+
+function jsonpRequest(
+  params,
+  success,
+  failure
+){
+
+
+  const callbackName =
+
+    "__expiration_" +
+
+    Date.now() +
+
+    "_" +
+
+    Math.floor(
+      Math.random() *
+      100000
+    );
+
+
+  const script =
+    document.createElement(
+      "script"
+    );
+
+
+  let finished =
+    false;
+
+
+  let timeout;
+
+
+  function cleanup(){
+
+
+    if(finished){
+      return;
+    }
+
+
+    finished =
+      true;
+
+
+    clearTimeout(
+      timeout
+    );
+
+
+    try{
+
+      delete window[
+        callbackName
+      ];
+
+    }
+
+    catch(e){}
+
+
+    script.remove();
+
+  }
+
+
+  window[
+    callbackName
+  ] =
+    data=>{
+
+
+      cleanup();
+
+      success(
+        data
+      );
+
+    };
+
+
+  const query =
+    new URLSearchParams(
+      params
+    );
+
+
+  query.set(
+    "prefix",
+    callbackName
+  );
+
+
+  script.src =
+    API_URL +
+    "?" +
+    query.toString();
+
+
+  script.onerror =
+    ()=>{
+
+
+      cleanup();
+
+      failure();
+
+    };
+
+
+  timeout =
+    setTimeout(
+      ()=>{
+
+
+        cleanup();
+
+        failure();
+
+      },
+      5000
+    );
+
+
+  document.body.appendChild(
+    script
+  );
+
+}
+
+
+
+// =====================================================
+// USB SCANNER DEFAULT
+// =====================================================
+
+window.addEventListener(
+  "load",
+  ()=>{
+
+    barcodeBox().focus();
+
+  }
+);
+
+
+</script>
+
+
+</body>
+
+</html>
