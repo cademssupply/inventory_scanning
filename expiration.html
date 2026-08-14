@@ -12,6 +12,7 @@
 
 <title>Cameron EMS Expiration Dates</title>
 
+
 <style>
 
 :root {
@@ -30,17 +31,19 @@
   --success:#14532d;
   --success-border:#22c55e;
 
-  --nochange:#78350f;
-  --nochange-border:#f59e0b;
-  --nochange-text:#fff7ed;
+  --nochange:#92400e;
+  --nochange-border:#fbbf24;
+  --nochange-text:#ffffff;
 
   --danger:#7f1d1d;
   --danger-border:#ef4444;
 }
 
+
 * {
   box-sizing:border-box;
 }
+
 
 body {
   margin:0;
@@ -62,11 +65,13 @@ body {
   min-height:100vh;
 }
 
+
 .wrap {
   max-width:640px;
   margin:0 auto;
   padding:18px;
 }
+
 
 .card {
   background:var(--panel);
@@ -84,19 +89,27 @@ body {
     rgba(0,0,0,.28);
 }
 
+
+/* =========================================
+   HEADER
+========================================= */
+
 .header {
   text-align:center;
   margin-bottom:18px;
 }
+
 
 .header h1 {
   margin:0;
   font-size:27px;
 }
 
+
 .accent {
   color:var(--orange-light);
 }
+
 
 .sub {
   margin-top:7px;
@@ -123,23 +136,28 @@ body {
 
   text-align:center;
 
-  font-weight:700;
+  font-weight:800;
 }
+
 
 .status.success {
-  background:var(--success);
-  border-color:var(--success-border);
+  background:var(--success) !important;
+  border:2px solid var(--success-border) !important;
+  color:white !important;
 }
+
 
 .status.nochange {
-  background:var(--nochange);
-  border-color:var(--nochange-border);
-  color:var(--nochange-text);
+  background:var(--nochange) !important;
+  border:2px solid var(--nochange-border) !important;
+  color:var(--nochange-text) !important;
 }
 
+
 .status.error {
-  background:var(--danger);
-  border-color:var(--danger-border);
+  background:var(--danger) !important;
+  border:2px solid var(--danger-border) !important;
+  color:white !important;
 }
 
 
@@ -152,6 +170,7 @@ label {
   margin-bottom:7px;
   font-weight:700;
 }
+
 
 input {
   width:100%;
@@ -173,6 +192,7 @@ input {
   outline:none;
 }
 
+
 input:focus {
   border-color:var(--orange);
 
@@ -181,9 +201,11 @@ input:focus {
     rgba(249,115,22,.20);
 }
 
+
 input::placeholder {
   color:#7f8790;
 }
+
 
 .barcode-section {
   margin-top:18px;
@@ -191,7 +213,7 @@ input::placeholder {
 
 
 /* =========================================
-   ITEM
+   ITEM INFORMATION
 ========================================= */
 
 .item {
@@ -214,16 +236,19 @@ input::placeholder {
   border-radius:12px;
 }
 
+
 .item-name {
   font-size:25px;
   font-weight:800;
   margin-bottom:7px;
 }
 
+
 .barcode-display {
   color:var(--muted);
   margin-bottom:14px;
 }
+
 
 .current-expiration {
   padding:14px;
@@ -237,6 +262,7 @@ input::placeholder {
   margin-bottom:20px;
 }
 
+
 .current-expiration small {
   display:block;
 
@@ -245,12 +271,16 @@ input::placeholder {
   margin-bottom:5px;
 
   text-transform:uppercase;
+
+  font-size:11px;
 }
+
 
 .current-expiration strong {
   font-size:25px;
   color:var(--orange-light);
 }
+
 
 .expiration-label {
   color:var(--orange-light);
@@ -276,51 +306,57 @@ input::placeholder {
 }
 
 
-/* GREEN = DATE CHANGED */
+/* GREEN = DATE ACTUALLY UPDATED */
 
 .result-box.success {
-  display:block;
+  display:block !important;
 
-  background:var(--success);
+  background:var(--success) !important;
 
   border:
     2px solid
-    var(--success-border);
+    var(--success-border) !important;
+
+  color:white !important;
 }
 
 
-/* ORANGE = NO CHANGE */
+/* AMBER = VALID SCAN, NO CHANGE REQUIRED */
 
 .result-box.nochange {
-  display:block;
+  display:block !important;
 
-  background:var(--nochange);
+  background:var(--nochange) !important;
 
   border:
     2px solid
-    var(--nochange-border);
+    var(--nochange-border) !important;
 
-  color:var(--nochange-text);
+  color:var(--nochange-text) !important;
 }
 
 
-/* RED = ERROR */
+/* RED = FAILURE */
 
 .result-box.error {
-  display:block;
+  display:block !important;
 
-  background:var(--danger);
+  background:var(--danger) !important;
 
   border:
     2px solid
-    var(--danger-border);
+    var(--danger-border) !important;
+
+  color:white !important;
 }
+
 
 .result-title {
   font-size:21px;
   font-weight:900;
   margin-bottom:12px;
 }
+
 
 .result-grid {
   display:grid;
@@ -331,14 +367,16 @@ input::placeholder {
   gap:8px;
 }
 
+
 .result-value {
   padding:10px;
 
   background:
-    rgba(0,0,0,.18);
+    rgba(0,0,0,.20);
 
   border-radius:8px;
 }
+
 
 .result-value small {
   display:block;
@@ -350,9 +388,11 @@ input::placeholder {
   margin-bottom:5px;
 }
 
+
 .result-value strong {
   font-size:20px;
 }
+
 
 .result-reason {
   margin-top:12px;
@@ -384,6 +424,7 @@ button,
   text-align:center;
 }
 
+
 .save-btn {
   margin-top:15px;
 
@@ -399,10 +440,12 @@ button,
   font-size:20px;
 }
 
+
 .save-btn:disabled {
   opacity:.55;
   cursor:default;
 }
+
 
 .wrong-btn {
   margin-top:10px;
@@ -415,6 +458,7 @@ button,
     1px solid
     var(--orange-dark);
 }
+
 
 .home-button {
   display:block;
@@ -434,7 +478,7 @@ button,
 
 
 /* =========================================
-   WORKFLOW INFO
+   WORKFLOW
 ========================================= */
 
 .workflow {
@@ -454,6 +498,7 @@ button,
 
   line-height:1.5;
 }
+
 
 .workflow strong {
   color:var(--orange-light);
@@ -491,14 +536,13 @@ button,
 
 <body>
 
+
 <div class="wrap">
 
 <div class="card">
 
 
-<!-- =======================================
-     HEADER
-======================================= -->
+<!-- HEADER -->
 
 <div class="header">
 
@@ -513,15 +557,13 @@ button,
   </h1>
 
   <div class="sub">
-    Scan item → Scan expiration QR code
+    Scan item barcode → Scan expiration date QR
   </div>
 
 </div>
 
 
-<!-- =======================================
-     STATUS
-======================================= -->
+<!-- STATUS -->
 
 <div
   id="status"
@@ -531,9 +573,7 @@ button,
 </div>
 
 
-<!-- =======================================
-     BARCODE
-======================================= -->
+<!-- ITEM BARCODE -->
 
 <div class="barcode-section">
 
@@ -553,9 +593,7 @@ button,
 </div>
 
 
-<!-- =======================================
-     ITEM INFORMATION
-======================================= -->
+<!-- ITEM INFORMATION -->
 
 <div
   id="itemBox"
@@ -629,9 +667,7 @@ button,
 </div>
 
 
-<!-- =======================================
-     RESULT
-======================================= -->
+<!-- VERIFICATION RESULT -->
 
 <div
   id="resultBox"
@@ -686,13 +722,11 @@ button,
 </div>
 
 
-<!-- =======================================
-     WORKFLOW
-======================================= -->
+<!-- WORKFLOW -->
 
 <div class="workflow">
 
-  Scan item barcode → scan date QR code formatted
+  Scan item barcode → scan expiration QR formatted
 
   <strong>
     MM/DD/YYYY
@@ -700,8 +734,12 @@ button,
 
   <br><br>
 
-  The system keeps the soonest future expiration,
-  but allows an expired date to be replaced.
+  The system keeps the soonest future expiration date.
+
+  <br>
+
+  If the stored expiration has already passed,
+  the newly scanned valid date may replace it.
 
 </div>
 
@@ -719,9 +757,7 @@ button,
 </div>
 
 
-<!-- =======================================
-     HIDDEN POST FRAME
-======================================= -->
+<!-- HIDDEN POST TARGET -->
 
 <iframe
   name="saveFrame"
@@ -734,11 +770,7 @@ button,
 
 
 // =====================================================
-// API URL
-//
-// IMPORTANT:
-// Paste the SAME current working Apps Script /exec URL
-// used by Add, Remove, and Count.
+// CURRENT APPS SCRIPT API
 // =====================================================
 
 const API_URL =
@@ -794,13 +826,16 @@ function setStatus(
     );
 
 
+  /*
+    Completely replace the status class.
+    This prevents old "success" styling
+    from remaining when NO CHANGE occurs.
+  */
+
   box.className =
-    "status" +
-    (
-      type
-        ? " " + type
-        : ""
-    );
+    type
+      ? "status " + type
+      : "status";
 
 
   box.textContent =
@@ -811,7 +846,7 @@ function setStatus(
 
 
 // =====================================================
-// ITEM BARCODE ENTER
+// BARCODE ENTER
 // =====================================================
 
 function barcodeKey(event) {
@@ -864,7 +899,7 @@ function barcodeKey(event) {
 
 
 // =====================================================
-// LOOK UP ITEM + EXISTING EXPIRATION
+// LOOKUP ITEM + CURRENT EXPIRATION
 // =====================================================
 
 function lookupExpiration(
@@ -898,7 +933,8 @@ function lookupExpiration(
       ) {
 
 
-        currentBarcode = "";
+        currentBarcode =
+          "";
 
 
         setStatus(
@@ -977,11 +1013,6 @@ function lookupExpiration(
       );
 
 
-      /*
-        Automatically move cursor to the
-        expiration QR input.
-      */
-
       setTimeout(
         () => {
 
@@ -1028,7 +1059,8 @@ function lookupExpiration(
       }
 
 
-      currentBarcode = "";
+      currentBarcode =
+        "";
 
 
       setStatus(
@@ -1082,14 +1114,18 @@ function validDateText(value) {
 
 
   const match =
-    String(value)
+    String(
+      value || ""
+    )
       .trim()
       .match(
         /^(\d{2})\/(\d{2})\/(\d{4})$/
       );
 
 
-  if (!match) {
+  if (
+    !match
+  ) {
     return false;
   }
 
@@ -1220,8 +1256,7 @@ function processExpiration() {
 
 
   /*
-    Give Apps Script time to process
-    before verification begins.
+    Wait briefly before checking Column I.
   */
 
   setTimeout(
@@ -1241,7 +1276,7 @@ function processExpiration() {
 
 
 // =====================================================
-// SUBMIT EXPIRATION
+// POST EXPIRATION
 // =====================================================
 
 function submitExpiration(
@@ -1402,7 +1437,7 @@ function verifyExpiration(
 
 
       // ===============================================
-      // DATE SHOULD HAVE BEEN REPLACED
+      // DATE SHOULD BE UPDATED
       // ===============================================
 
       if (
@@ -1438,10 +1473,6 @@ function verifyExpiration(
         }
 
 
-        /*
-          Apps Script may still be finishing.
-        */
-
         if (
           attempt < 4
         ) {
@@ -1476,7 +1507,7 @@ function verifyExpiration(
 
 
       // ===============================================
-      // NO CHANGE SHOULD HAVE OCCURRED
+      // NO CHANGE SHOULD OCCUR
       // ===============================================
 
       if (
@@ -1486,6 +1517,12 @@ function verifyExpiration(
         )
       ) {
 
+
+        /*
+          IMPORTANT:
+          This explicitly uses "nochange",
+          NOT "success".
+        */
 
         showResult(
           "nochange",
@@ -1528,7 +1565,7 @@ function verifyExpiration(
 
 
 // =====================================================
-// COMPARE DATE TEXT SAFELY
+// COMPARE DATE VALUES
 // =====================================================
 
 function sameDateText(
@@ -1597,7 +1634,7 @@ function sameDateText(
 
 
 // =====================================================
-// SHOULD NEW DATE REPLACE CURRENT DATE?
+// SHOULD DATE REPLACE CURRENT DATE?
 // =====================================================
 
 function expirationShouldReplace(
@@ -1605,11 +1642,6 @@ function expirationShouldReplace(
   newText
 ) {
 
-
-  /*
-    No existing expiration:
-    new date should be saved.
-  */
 
   if (
     !oldText
@@ -1629,11 +1661,6 @@ function expirationShouldReplace(
       newText
     );
 
-
-  /*
-    Existing date isn't readable:
-    allow new valid date.
-  */
 
   if (
     !oldDate
@@ -1662,8 +1689,7 @@ function expirationShouldReplace(
 
 
   /*
-    Existing expiration has passed.
-    Allow replacement.
+    Stored expiration already passed.
   */
 
   if (
@@ -1675,8 +1701,7 @@ function expirationShouldReplace(
 
 
   /*
-    Existing expiration is still valid.
-    Replace only if scanned date is sooner.
+    New expiration is sooner.
   */
 
   if (
@@ -1687,6 +1712,10 @@ function expirationShouldReplace(
   }
 
 
+  /*
+    Existing date is sooner or same.
+  */
+
   return false;
 
 }
@@ -1694,7 +1723,7 @@ function expirationShouldReplace(
 
 
 // =====================================================
-// RESULT EXPLANATION
+// UPDATE REASON
 // =====================================================
 
 function expirationReason(
@@ -1773,7 +1802,7 @@ function expirationReason(
 
 
 // =====================================================
-// PARSE DATE
+// DATE PARSER
 // =====================================================
 
 function parseBrowserDate(text) {
@@ -1870,10 +1899,6 @@ function finishSuccess() {
   );
 
 
-  /*
-    Keep result visible for 4 seconds.
-  */
-
   setTimeout(
     () => {
 
@@ -1888,7 +1913,7 @@ function finishSuccess() {
 
 
 // =====================================================
-// ORANGE — NO CHANGE
+// AMBER — NO CHANGE NEEDED
 // =====================================================
 
 function finishNoChange() {
@@ -1904,15 +1929,17 @@ function finishNoChange() {
     false;
 
 
+  /*
+    IMPORTANT:
+    Explicitly use the "nochange"
+    class instead of "success".
+  */
+
   setStatus(
     "✓ NO CHANGE NEEDED",
     "nochange"
   );
 
-
-  /*
-    Keep result visible for 4 seconds.
-  */
 
   setTimeout(
     () => {
@@ -2024,6 +2051,11 @@ function showResult(
     );
 
 
+  /*
+    Completely replace the class name so
+    success styling cannot carry over.
+  */
+
   box.className =
     "result-box " +
     type;
@@ -2069,17 +2101,23 @@ function hideResult() {
 
 
 // =====================================================
-// RESET FOR NEXT ITEM
+// RESET
 // =====================================================
 
 function resetForNextItem() {
 
 
-  currentBarcode = "";
+  currentBarcode =
+    "";
 
-  currentName = "";
 
-  previousExpiration = "";
+  currentName =
+    "";
+
+
+  previousExpiration =
+    "";
+
 
   transactionInProgress =
     false;
