@@ -1,5 +1,4 @@
 <!doctype html>
-
 <html lang="en">
 
 <head>
@@ -13,10 +12,9 @@
 
 <title>Cameron EMS Expiration Dates</title>
 
-
 <style>
 
-:root{
+:root {
   --bg:#1f2328;
   --panel:#2b3036;
   --panel2:#343a40;
@@ -32,15 +30,19 @@
   --success:#14532d;
   --success-border:#22c55e;
 
+  --nochange:#78350f;
+  --nochange-border:#f59e0b;
+  --nochange-text:#fff7ed;
+
   --danger:#7f1d1d;
   --danger-border:#ef4444;
 }
 
-*{
+* {
   box-sizing:border-box;
 }
 
-body{
+body {
   margin:0;
 
   background:
@@ -60,13 +62,13 @@ body{
   min-height:100vh;
 }
 
-.wrap{
+.wrap {
   max-width:640px;
   margin:0 auto;
   padding:18px;
 }
 
-.card{
+.card {
   background:var(--panel);
 
   border:
@@ -82,27 +84,32 @@ body{
     rgba(0,0,0,.28);
 }
 
-.header{
+.header {
   text-align:center;
   margin-bottom:18px;
 }
 
-.header h1{
+.header h1 {
   margin:0;
   font-size:27px;
 }
 
-.accent{
+.accent {
   color:var(--orange-light);
 }
 
-.sub{
+.sub {
   margin-top:7px;
   color:var(--muted);
   font-size:14px;
 }
 
-.status{
+
+/* =========================================
+   STATUS
+========================================= */
+
+.status {
   margin-top:14px;
   padding:14px;
 
@@ -119,24 +126,36 @@ body{
   font-weight:700;
 }
 
-.status.success{
+.status.success {
   background:var(--success);
   border-color:var(--success-border);
 }
 
-.status.error{
+.status.nochange {
+  background:var(--nochange);
+  border-color:var(--nochange-border);
+  color:var(--nochange-text);
+}
+
+.status.error {
   background:var(--danger);
   border-color:var(--danger-border);
 }
 
-label{
+
+/* =========================================
+   INPUTS
+========================================= */
+
+label {
   display:block;
   margin-bottom:7px;
   font-weight:700;
 }
 
-input{
+input {
   width:100%;
+
   padding:16px;
 
   border:
@@ -154,7 +173,7 @@ input{
   outline:none;
 }
 
-input:focus{
+input:focus {
   border-color:var(--orange);
 
   box-shadow:
@@ -162,11 +181,20 @@ input:focus{
     rgba(249,115,22,.20);
 }
 
-.barcode-section{
+input::placeholder {
+  color:#7f8790;
+}
+
+.barcode-section {
   margin-top:18px;
 }
 
-.item{
+
+/* =========================================
+   ITEM
+========================================= */
+
+.item {
   display:none;
 
   margin-top:18px;
@@ -186,18 +214,18 @@ input:focus{
   border-radius:12px;
 }
 
-.item-name{
+.item-name {
   font-size:25px;
   font-weight:800;
   margin-bottom:7px;
 }
 
-.barcode-display{
+.barcode-display {
   color:var(--muted);
   margin-bottom:14px;
 }
 
-.current-expiration{
+.current-expiration {
   padding:14px;
 
   background:#20252a;
@@ -209,7 +237,7 @@ input:focus{
   margin-bottom:20px;
 }
 
-.current-expiration small{
+.current-expiration small {
   display:block;
 
   color:var(--muted);
@@ -219,18 +247,23 @@ input:focus{
   text-transform:uppercase;
 }
 
-.current-expiration strong{
+.current-expiration strong {
   font-size:25px;
   color:var(--orange-light);
 }
 
-.expiration-label{
+.expiration-label {
   color:var(--orange-light);
   text-transform:uppercase;
   font-size:14px;
 }
 
-.result-box{
+
+/* =========================================
+   RESULTS
+========================================= */
+
+.result-box {
   display:none;
 
   margin-top:16px;
@@ -242,7 +275,10 @@ input:focus{
   text-align:center;
 }
 
-.result-box.success{
+
+/* GREEN = DATE CHANGED */
+
+.result-box.success {
   display:block;
 
   background:var(--success);
@@ -252,7 +288,25 @@ input:focus{
     var(--success-border);
 }
 
-.result-box.error{
+
+/* ORANGE = NO CHANGE */
+
+.result-box.nochange {
+  display:block;
+
+  background:var(--nochange);
+
+  border:
+    2px solid
+    var(--nochange-border);
+
+  color:var(--nochange-text);
+}
+
+
+/* RED = ERROR */
+
+.result-box.error {
   display:block;
 
   background:var(--danger);
@@ -262,13 +316,13 @@ input:focus{
     var(--danger-border);
 }
 
-.result-title{
+.result-title {
   font-size:21px;
   font-weight:900;
   margin-bottom:12px;
 }
 
-.result-grid{
+.result-grid {
   display:grid;
 
   grid-template-columns:
@@ -277,7 +331,7 @@ input:focus{
   gap:8px;
 }
 
-.result-value{
+.result-value {
   padding:10px;
 
   background:
@@ -286,7 +340,7 @@ input:focus{
   border-radius:8px;
 }
 
-.result-value small{
+.result-value small {
   display:block;
 
   font-size:11px;
@@ -296,17 +350,23 @@ input:focus{
   margin-bottom:5px;
 }
 
-.result-value strong{
+.result-value strong {
   font-size:20px;
 }
 
-.result-reason{
+.result-reason {
   margin-top:12px;
   font-size:13px;
+  line-height:1.4;
 }
 
+
+/* =========================================
+   BUTTONS
+========================================= */
+
 button,
-.home-button{
+.home-button {
   width:100%;
 
   padding:15px;
@@ -324,7 +384,7 @@ button,
   text-align:center;
 }
 
-.save-btn{
+.save-btn {
   margin-top:15px;
 
   background:
@@ -339,7 +399,12 @@ button,
   font-size:20px;
 }
 
-.wrong-btn{
+.save-btn:disabled {
+  opacity:.55;
+  cursor:default;
+}
+
+.wrong-btn {
   margin-top:10px;
 
   background:transparent;
@@ -351,7 +416,7 @@ button,
     var(--orange-dark);
 }
 
-.home-button{
+.home-button {
   display:block;
 
   margin-top:20px;
@@ -367,7 +432,12 @@ button,
   text-decoration:none;
 }
 
-.workflow{
+
+/* =========================================
+   WORKFLOW INFO
+========================================= */
+
+.workflow {
   margin-top:16px;
 
   padding:12px;
@@ -385,17 +455,30 @@ button,
   line-height:1.5;
 }
 
-@media(max-width:520px){
+.workflow strong {
+  color:var(--orange-light);
+}
 
-  .wrap{
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media(max-width:520px) {
+
+  .wrap {
     padding:12px;
   }
 
-  .card{
+  .card {
     padding:16px;
   }
 
-  .result-grid{
+  .header h1 {
+    font-size:24px;
+  }
+
+  .result-grid {
     grid-template-columns:1fr;
   }
 
@@ -412,6 +495,10 @@ button,
 
 <div class="card">
 
+
+<!-- =======================================
+     HEADER
+======================================= -->
 
 <div class="header">
 
@@ -432,6 +519,10 @@ button,
 </div>
 
 
+<!-- =======================================
+     STATUS
+======================================= -->
+
 <div
   id="status"
   class="status"
@@ -440,23 +531,31 @@ button,
 </div>
 
 
+<!-- =======================================
+     BARCODE
+======================================= -->
+
 <div class="barcode-section">
 
-<label for="barcodeInput">
-  Item Barcode
-</label>
+  <label for="barcodeInput">
+    Item Barcode
+  </label>
 
-<input
-  id="barcodeInput"
-  type="text"
-  autocomplete="off"
-  spellcheck="false"
-  placeholder="Scan or type item barcode"
-  onkeydown="barcodeKey(event)"
->
+  <input
+    id="barcodeInput"
+    type="text"
+    autocomplete="off"
+    spellcheck="false"
+    placeholder="Scan or type item barcode"
+    onkeydown="barcodeKey(event)"
+  >
 
 </div>
 
+
+<!-- =======================================
+     ITEM INFORMATION
+======================================= -->
 
 <div
   id="itemBox"
@@ -464,71 +563,75 @@ button,
 >
 
 
-<div
-  id="itemName"
-  class="item-name"
-></div>
+  <div
+    id="itemName"
+    class="item-name"
+  ></div>
 
 
-<div class="barcode-display">
+  <div class="barcode-display">
 
-  Barcode:
+    Barcode:
 
-  <strong id="itemId"></strong>
+    <strong id="itemId"></strong>
+
+  </div>
+
+
+  <div class="current-expiration">
+
+    <small>
+      Current Soonest Expiration
+    </small>
+
+    <strong id="currentExpiration">
+      None
+    </strong>
+
+  </div>
+
+
+  <label
+    class="expiration-label"
+    for="expirationInput"
+  >
+    Scan Expiration Date QR
+  </label>
+
+
+  <input
+    id="expirationInput"
+    type="text"
+    autocomplete="off"
+    spellcheck="false"
+    placeholder="MM/DD/YYYY"
+    onkeydown="expirationKey(event)"
+  >
+
+
+  <button
+    class="save-btn"
+    id="saveBtn"
+    onclick="processExpiration()"
+  >
+    CHECK / SAVE EXPIRATION
+  </button>
+
+
+  <button
+    class="wrong-btn"
+    onclick="resetForNextItem()"
+  >
+    ← Wrong Item — Scan Again
+  </button>
+
 
 </div>
 
 
-<div class="current-expiration">
-
-  <small>
-    Current Soonest Expiration
-  </small>
-
-  <strong id="currentExpiration">
-    None
-  </strong>
-
-</div>
-
-
-<label
-  class="expiration-label"
-  for="expirationInput"
->
-  Scan Expiration Date QR
-</label>
-
-
-<input
-  id="expirationInput"
-  type="text"
-  autocomplete="off"
-  spellcheck="false"
-  placeholder="MM/DD/YYYY"
-  onkeydown="expirationKey(event)"
->
-
-
-<button
-  class="save-btn"
-  id="saveBtn"
-  onclick="processExpiration()"
->
-  CHECK / SAVE EXPIRATION
-</button>
-
-
-<button
-  class="wrong-btn"
-  onclick="resetForNextItem()"
->
-  ← Wrong Item — Scan Again
-</button>
-
-
-</div>
-
+<!-- =======================================
+     RESULT
+======================================= -->
 
 <div
   id="resultBox"
@@ -536,57 +639,64 @@ button,
 >
 
 
-<div
-  id="resultTitle"
-  class="result-title"
-></div>
+  <div
+    id="resultTitle"
+    class="result-title"
+  ></div>
 
 
-<div class="result-grid">
+  <div class="result-grid">
 
 
-<div class="result-value">
+    <div class="result-value">
 
-  <small>
-    Previous
-  </small>
+      <small>
+        Previous
+      </small>
 
-  <strong id="resultOld">
-    -
-  </strong>
+      <strong id="resultOld">
+        -
+      </strong>
+
+    </div>
+
+
+    <div class="result-value">
+
+      <small>
+        Current
+      </small>
+
+      <strong id="resultNew">
+        -
+      </strong>
+
+    </div>
+
+
+  </div>
+
+
+  <div
+    id="resultReason"
+    class="result-reason"
+  ></div>
+
 
 </div>
 
 
-<div class="result-value">
-
-  <small>
-    Current
-  </small>
-
-  <strong id="resultNew">
-    -
-  </strong>
-
-</div>
-
-
-</div>
-
-
-<div
-  id="resultReason"
-  class="result-reason"
-></div>
-
-
-</div>
-
+<!-- =======================================
+     WORKFLOW
+======================================= -->
 
 <div class="workflow">
 
   Scan item barcode → scan date QR code formatted
-  <strong>MM/DD/YYYY</strong>
+
+  <strong>
+    MM/DD/YYYY
+  </strong>
 
   <br><br>
 
@@ -609,8 +719,13 @@ button,
 </div>
 
 
+<!-- =======================================
+     HIDDEN POST FRAME
+======================================= -->
+
 <iframe
   name="saveFrame"
+  id="saveFrame"
   style="display:none"
 ></iframe>
 
@@ -619,12 +734,21 @@ button,
 
 
 // =====================================================
-// USE SAME /exec URL AS ADD/REMOVE/COUNT
+// API URL
+//
+// IMPORTANT:
+// Paste the SAME current working Apps Script /exec URL
+// used by Add, Remove, and Count.
 // =====================================================
 
 const API_URL =
   "https://script.google.com/macros/s/AKfycbxOSkgybcG2mTC-0m26GXX1M6ZQgnjq2V7lqQ4R9Y8aJE-stqALUkVmZL6cZR8pRvLv5w/exec";
 
+
+
+// =====================================================
+// STATE
+// =====================================================
 
 let currentBarcode = "";
 
@@ -636,7 +760,7 @@ let transactionInProgress = false;
 
 
 
-function barcodeBox(){
+function barcodeBox() {
 
   return document.getElementById(
     "barcodeInput"
@@ -645,7 +769,7 @@ function barcodeBox(){
 }
 
 
-function expirationBox(){
+function expirationBox() {
 
   return document.getElementById(
     "expirationInput"
@@ -654,15 +778,21 @@ function expirationBox(){
 }
 
 
+
+// =====================================================
+// STATUS
+// =====================================================
+
 function setStatus(
   message,
-  type=""
-){
+  type = ""
+) {
 
   const box =
     document.getElementById(
       "status"
     );
+
 
   box.className =
     "status" +
@@ -672,6 +802,7 @@ function setStatus(
         : ""
     );
 
+
   box.textContent =
     message;
 
@@ -680,27 +811,48 @@ function setStatus(
 
 
 // =====================================================
-// ITEM BARCODE
+// ITEM BARCODE ENTER
 // =====================================================
 
-function barcodeKey(event){
+function barcodeKey(event) {
 
-  if(
+
+  if (
     event.key !== "Enter"
-  ){
+  ) {
     return;
   }
 
+
   event.preventDefault();
+
+
+  if (
+    transactionInProgress
+  ) {
+    return;
+  }
+
 
   const barcode =
     barcodeBox()
       .value
       .trim();
 
-  if(!barcode){
+
+  if (!barcode) {
+
+    setStatus(
+      "Scan or enter an item barcode.",
+      "error"
+    );
+
+    barcodeBox().focus();
+
     return;
+
   }
+
 
   lookupExpiration(
     barcode,
@@ -712,37 +864,42 @@ function barcodeKey(event){
 
 
 // =====================================================
-// LOOKUP EXISTING EXPIRATION
+// LOOK UP ITEM + EXISTING EXPIRATION
 // =====================================================
 
 function lookupExpiration(
   barcode,
   attempt
-){
+) {
+
 
   setStatus(
-    "Looking up item..."
+    attempt === 1
+      ? "Looking up item..."
+      : "Connection delayed — retrying..."
   );
 
 
   jsonpRequest(
 
     {
-      mode:"expiration",
-      item:barcode,
-      t:Date.now()
+      mode: "expiration",
+      item: barcode,
+      t: Date.now()
     },
 
 
-    data=>{
+    data => {
 
 
-      if(
+      if (
         !data ||
         !data.success
-      ){
+      ) {
+
 
         currentBarcode = "";
+
 
         setStatus(
           (
@@ -753,9 +910,13 @@ function lookupExpiration(
           "error"
         );
 
-        barcodeBox().value = "";
+
+        barcodeBox().value =
+          "";
+
 
         barcodeBox().focus();
+
 
         return;
 
@@ -799,7 +960,12 @@ function lookupExpiration(
         "block";
 
 
-      barcodeBox().value = "";
+      barcodeBox().value =
+        "";
+
+
+      expirationBox().value =
+        "";
 
 
       hideResult();
@@ -811,8 +977,13 @@ function lookupExpiration(
       );
 
 
+      /*
+        Automatically move cursor to the
+        expiration QR input.
+      */
+
       setTimeout(
-        ()=>{
+        () => {
 
           expirationBox().focus();
 
@@ -825,15 +996,22 @@ function lookupExpiration(
     },
 
 
-    ()=>{
+    () => {
 
 
-      if(
+      if (
         attempt < 3
-      ){
+      ) {
+
+
+        const delay =
+          attempt === 1
+            ? 300
+            : 800;
+
 
         setTimeout(
-          ()=>{
+          () => {
 
             lookupExpiration(
               barcode,
@@ -841,20 +1019,26 @@ function lookupExpiration(
             );
 
           },
-          attempt === 1
-            ? 300
-            : 800
+          delay
         );
+
 
         return;
 
       }
 
 
+      currentBarcode = "";
+
+
       setStatus(
         "Unable to reach inventory service.",
         "error"
       );
+
+
+      barcodeBox().value =
+        "";
 
 
       barcodeBox().focus();
@@ -868,18 +1052,21 @@ function lookupExpiration(
 
 
 // =====================================================
-// DATE QR ENTER
+// EXPIRATION QR ENTER
 // =====================================================
 
-function expirationKey(event){
+function expirationKey(event) {
 
-  if(
+
+  if (
     event.key !== "Enter"
-  ){
+  ) {
     return;
   }
 
+
   event.preventDefault();
+
 
   processExpiration();
 
@@ -891,7 +1078,8 @@ function expirationKey(event){
 // VALIDATE MM/DD/YYYY
 // =====================================================
 
-function validDateText(value){
+function validDateText(value) {
+
 
   const match =
     String(value)
@@ -901,33 +1089,49 @@ function validDateText(value){
       );
 
 
-  if(!match){
+  if (!match) {
     return false;
   }
 
 
   const month =
-    Number(match[1]);
+    Number(
+      match[1]
+    );
+
 
   const day =
-    Number(match[2]);
+    Number(
+      match[2]
+    );
+
 
   const year =
-    Number(match[3]);
+    Number(
+      match[3]
+    );
 
 
   const date =
     new Date(
       year,
       month - 1,
-      day
+      day,
+      12,
+      0,
+      0
     );
 
 
   return (
+
     date.getFullYear() === year &&
-    date.getMonth() === month - 1 &&
+
+    date.getMonth() ===
+      month - 1 &&
+
     date.getDate() === day
+
   );
 
 }
@@ -938,17 +1142,19 @@ function validDateText(value){
 // PROCESS EXPIRATION
 // =====================================================
 
-function processExpiration(){
+function processExpiration() {
 
 
-  if(
+  if (
     transactionInProgress
-  ){
+  ) {
     return;
   }
 
 
-  if(!currentBarcode){
+  if (
+    !currentBarcode
+  ) {
 
     setStatus(
       "Scan an item first.",
@@ -966,20 +1172,23 @@ function processExpiration(){
       .trim();
 
 
-  if(
+  if (
     !validDateText(
       expiration
     )
-  ){
+  ) {
+
 
     setStatus(
       "Invalid date. Scan MM/DD/YYYY.",
       "error"
     );
 
+
     expirationBox().focus();
 
     expirationBox().select();
+
 
     return;
 
@@ -996,6 +1205,9 @@ function processExpiration(){
     true;
 
 
+  hideResult();
+
+
   setStatus(
     "Checking expiration..."
   );
@@ -1008,11 +1220,12 @@ function processExpiration(){
 
 
   /*
-    Wait for Apps Script, then reread Column I.
+    Give Apps Script time to process
+    before verification begins.
   */
 
   setTimeout(
-    ()=>{
+    () => {
 
       verifyExpiration(
         expiration,
@@ -1028,13 +1241,13 @@ function processExpiration(){
 
 
 // =====================================================
-// POST
+// SUBMIT EXPIRATION
 // =====================================================
 
 function submitExpiration(
   barcode,
   expiration
-){
+) {
 
 
   const form =
@@ -1076,7 +1289,7 @@ function submitExpiration(
   Object.entries(
     fields
   ).forEach(
-    ([key,value])=>{
+    ([key,value]) => {
 
 
       const input =
@@ -1114,7 +1327,7 @@ function submitExpiration(
 
 
   setTimeout(
-    ()=>{
+    () => {
 
       form.remove();
 
@@ -1127,17 +1340,19 @@ function submitExpiration(
 
 
 // =====================================================
-// VERIFY
+// VERIFY EXPIRATION
 // =====================================================
 
 function verifyExpiration(
   scannedDate,
   attempt
-){
+) {
 
 
   setStatus(
-    "Verifying expiration..."
+    attempt === 1
+      ? "Verifying expiration..."
+      : "Verifying again..."
   );
 
 
@@ -1155,18 +1370,20 @@ function verifyExpiration(
     },
 
 
-    data=>{
+    data => {
 
 
-      if(
+      if (
         !data ||
         !data.success
-      ){
+      ) {
+
 
         verificationRetry(
           scannedDate,
           attempt
         );
+
 
         return;
 
@@ -1177,12 +1394,6 @@ function verifyExpiration(
         data.expiration || "";
 
 
-      /*
-        Determine whether scanned date
-        SHOULD have replaced old date.
-      */
-
-
       const shouldReplace =
         expirationShouldReplace(
           previousExpiration,
@@ -1190,42 +1401,54 @@ function verifyExpiration(
         );
 
 
-      if(
+      // ===============================================
+      // DATE SHOULD HAVE BEEN REPLACED
+      // ===============================================
+
+      if (
         shouldReplace
-      ){
+      ) {
 
 
-        if(
-          actual === scannedDate
-        ){
+        if (
+          sameDateText(
+            actual,
+            scannedDate
+          )
+        ) {
+
 
           showResult(
             "success",
             "✓ EXPIRATION UPDATED",
             previousExpiration || "None",
             actual,
-            previousExpiration
-              ? expirationReason(
-                  previousExpiration,
-                  scannedDate
-                )
-              : "Expiration date added."
+            expirationReason(
+              previousExpiration,
+              scannedDate
+            )
           );
 
 
           finishSuccess();
+
 
           return;
 
         }
 
 
-        if(
+        /*
+          Apps Script may still be finishing.
+        */
+
+        if (
           attempt < 4
-        ){
+        ) {
+
 
           setTimeout(
-            ()=>{
+            () => {
 
               verifyExpiration(
                 scannedDate,
@@ -1235,6 +1458,7 @@ function verifyExpiration(
             },
             attempt * 500
           );
+
 
           return;
 
@@ -1251,25 +1475,29 @@ function verifyExpiration(
       }
 
 
-      /*
-        No change was supposed to occur.
-      */
+      // ===============================================
+      // NO CHANGE SHOULD HAVE OCCURRED
+      // ===============================================
 
+      if (
+        sameDateText(
+          actual,
+          previousExpiration
+        )
+      ) {
 
-      if(
-        actual === previousExpiration
-      ){
 
         showResult(
-          "success",
+          "nochange",
           "✓ NO CHANGE NEEDED",
-          previousExpiration,
-          actual,
+          previousExpiration || "None",
+          actual || "None",
           "Existing expiration date is sooner or the same."
         );
 
 
-        finishSuccess();
+        finishNoChange();
+
 
         return;
 
@@ -1283,7 +1511,8 @@ function verifyExpiration(
     },
 
 
-    ()=>{
+    () => {
+
 
       verificationRetry(
         scannedDate,
@@ -1299,16 +1528,92 @@ function verifyExpiration(
 
 
 // =====================================================
-// EXPIRATION COMPARISON
+// COMPARE DATE TEXT SAFELY
+// =====================================================
+
+function sameDateText(
+  first,
+  second
+) {
+
+
+  if (
+    !first &&
+    !second
+  ) {
+    return true;
+  }
+
+
+  if (
+    !first ||
+    !second
+  ) {
+    return false;
+  }
+
+
+  const firstDate =
+    parseBrowserDate(
+      first
+    );
+
+
+  const secondDate =
+    parseBrowserDate(
+      second
+    );
+
+
+  if (
+    !firstDate ||
+    !secondDate
+  ) {
+
+
+    return (
+      String(first).trim() ===
+      String(second).trim()
+    );
+
+  }
+
+
+  return (
+
+    firstDate.getFullYear() ===
+      secondDate.getFullYear() &&
+
+    firstDate.getMonth() ===
+      secondDate.getMonth() &&
+
+    firstDate.getDate() ===
+      secondDate.getDate()
+
+  );
+
+}
+
+
+
+// =====================================================
+// SHOULD NEW DATE REPLACE CURRENT DATE?
 // =====================================================
 
 function expirationShouldReplace(
   oldText,
   newText
-){
+) {
 
 
-  if(!oldText){
+  /*
+    No existing expiration:
+    new date should be saved.
+  */
+
+  if (
+    !oldText
+  ) {
     return true;
   }
 
@@ -1325,6 +1630,25 @@ function expirationShouldReplace(
     );
 
 
+  /*
+    Existing date isn't readable:
+    allow new valid date.
+  */
+
+  if (
+    !oldDate
+  ) {
+    return true;
+  }
+
+
+  if (
+    !newDate
+  ) {
+    return false;
+  }
+
+
   const today =
     new Date();
 
@@ -1337,23 +1661,28 @@ function expirationShouldReplace(
   );
 
 
-  if(!oldDate){
-    return true;
-  }
+  /*
+    Existing expiration has passed.
+    Allow replacement.
+  */
 
-
-  if(
+  if (
     oldDate <
     today
-  ){
+  ) {
     return true;
   }
 
 
-  if(
+  /*
+    Existing expiration is still valid.
+    Replace only if scanned date is sooner.
+  */
+
+  if (
     newDate <
     oldDate
-  ){
+  ) {
     return true;
   }
 
@@ -1365,13 +1694,22 @@ function expirationShouldReplace(
 
 
 // =====================================================
-// EXPLANATION
+// RESULT EXPLANATION
 // =====================================================
 
 function expirationReason(
   oldText,
   newText
-){
+) {
+
+
+  if (
+    !oldText
+  ) {
+
+    return "Expiration date added.";
+
+  }
 
 
   const oldDate =
@@ -1398,20 +1736,30 @@ function expirationReason(
   );
 
 
-  if(
+  if (
+    !oldDate
+  ) {
+
+    return "Previous expiration was blank or invalid.";
+
+  }
+
+
+  if (
     oldDate <
     today
-  ){
+  ) {
 
     return "Previous expiration date had already passed.";
 
   }
 
 
-  if(
+  if (
+    newDate &&
     newDate <
     oldDate
-  ){
+  ) {
 
     return "Scanned expiration date is sooner.";
 
@@ -1428,26 +1776,111 @@ function expirationReason(
 // PARSE DATE
 // =====================================================
 
-function parseBrowserDate(text){
+function parseBrowserDate(text) {
 
 
-  const parts =
-    String(text)
-      .split("/");
+  const match =
+    String(
+      text || ""
+    )
+      .trim()
+      .match(
+        /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/
+      );
 
 
-  return new Date(
+  if (
+    !match
+  ) {
+    return null;
+  }
 
-    Number(parts[2]),
 
-    Number(parts[0]) - 1,
+  const month =
+    Number(
+      match[1]
+    );
 
-    Number(parts[1]),
 
-    12,
-    0,
-    0
+  const day =
+    Number(
+      match[2]
+    );
 
+
+  const year =
+    Number(
+      match[3]
+    );
+
+
+  const date =
+    new Date(
+      year,
+      month - 1,
+      day,
+      12,
+      0,
+      0
+    );
+
+
+  if (
+
+    date.getFullYear() !== year ||
+
+    date.getMonth() !==
+      month - 1 ||
+
+    date.getDate() !== day
+
+  ) {
+
+    return null;
+
+  }
+
+
+  return date;
+
+}
+
+
+
+// =====================================================
+// GREEN SUCCESS
+// =====================================================
+
+function finishSuccess() {
+
+
+  transactionInProgress =
+    false;
+
+
+  document.getElementById(
+    "saveBtn"
+  ).disabled =
+    false;
+
+
+  setStatus(
+    "✓ EXPIRATION UPDATED",
+    "success"
+  );
+
+
+  /*
+    Keep result visible for 4 seconds.
+  */
+
+  setTimeout(
+    () => {
+
+      resetForNextItem();
+
+    },
+    4000
   );
 
 }
@@ -1455,21 +1888,62 @@ function parseBrowserDate(text){
 
 
 // =====================================================
-// RETRY VERIFICATION
+// ORANGE — NO CHANGE
+// =====================================================
+
+function finishNoChange() {
+
+
+  transactionInProgress =
+    false;
+
+
+  document.getElementById(
+    "saveBtn"
+  ).disabled =
+    false;
+
+
+  setStatus(
+    "✓ NO CHANGE NEEDED",
+    "nochange"
+  );
+
+
+  /*
+    Keep result visible for 4 seconds.
+  */
+
+  setTimeout(
+    () => {
+
+      resetForNextItem();
+
+    },
+    4000
+  );
+
+}
+
+
+
+// =====================================================
+// VERIFICATION RETRY
 // =====================================================
 
 function verificationRetry(
   scannedDate,
   attempt
-){
+) {
 
 
-  if(
+  if (
     attempt < 4
-  ){
+  ) {
+
 
     setTimeout(
-      ()=>{
+      () => {
 
         verifyExpiration(
           scannedDate,
@@ -1479,6 +1953,7 @@ function verificationRetry(
       },
       attempt * 500
     );
+
 
     return;
 
@@ -1494,52 +1969,12 @@ function verificationRetry(
 
 
 // =====================================================
-// SUCCESS
-// =====================================================
-
-function finishSuccess(){
-
-
-  transactionInProgress =
-    false;
-
-
-  document.getElementById(
-    "saveBtn"
-  ).disabled =
-    false;
-
-
-  setStatus(
-    "EXPIRATION VERIFIED",
-    "success"
-  );
-
-
-  /*
-    Keep confirmation visible 4 seconds.
-  */
-
-  setTimeout(
-    ()=>{
-
-      resetForNextItem();
-
-    },
-    4000
-  );
-
-}
-
-
-
-// =====================================================
-// FAILURE
+// RED FAILURE
 // =====================================================
 
 function verificationFailed(
   actual
-){
+) {
 
 
   transactionInProgress =
@@ -1580,7 +2015,7 @@ function showResult(
   oldValue,
   newValue,
   reason
-){
+) {
 
 
   const box =
@@ -1621,7 +2056,7 @@ function showResult(
 
 
 
-function hideResult(){
+function hideResult() {
 
 
   document.getElementById(
@@ -1634,10 +2069,10 @@ function hideResult(){
 
 
 // =====================================================
-// RESET
+// RESET FOR NEXT ITEM
 // =====================================================
 
-function resetForNextItem(){
+function resetForNextItem() {
 
 
   currentBarcode = "";
@@ -1650,9 +2085,30 @@ function resetForNextItem(){
     false;
 
 
-  barcodeBox().value = "";
+  barcodeBox().value =
+    "";
 
-  expirationBox().value = "";
+
+  expirationBox().value =
+    "";
+
+
+  document.getElementById(
+    "itemName"
+  ).textContent =
+    "";
+
+
+  document.getElementById(
+    "itemId"
+  ).textContent =
+    "";
+
+
+  document.getElementById(
+    "currentExpiration"
+  ).textContent =
+    "None";
 
 
   document.getElementById(
@@ -1670,7 +2126,7 @@ function resetForNextItem(){
 
 
   setTimeout(
-    ()=>{
+    () => {
 
       barcodeBox().focus();
 
@@ -1690,7 +2146,7 @@ function jsonpRequest(
   params,
   success,
   failure
-){
+) {
 
 
   const callbackName =
@@ -1720,10 +2176,12 @@ function jsonpRequest(
   let timeout;
 
 
-  function cleanup(){
+  function cleanup() {
 
 
-    if(finished){
+    if (
+      finished
+    ) {
       return;
     }
 
@@ -1737,7 +2195,7 @@ function jsonpRequest(
     );
 
 
-    try{
+    try {
 
       delete window[
         callbackName
@@ -1745,7 +2203,7 @@ function jsonpRequest(
 
     }
 
-    catch(e){}
+    catch(e) {}
 
 
     script.remove();
@@ -1756,10 +2214,11 @@ function jsonpRequest(
   window[
     callbackName
   ] =
-    data=>{
+    data => {
 
 
       cleanup();
+
 
       success(
         data
@@ -1781,16 +2240,20 @@ function jsonpRequest(
 
 
   script.src =
+
     API_URL +
+
     "?" +
+
     query.toString();
 
 
   script.onerror =
-    ()=>{
+    () => {
 
 
       cleanup();
+
 
       failure();
 
@@ -1799,10 +2262,11 @@ function jsonpRequest(
 
   timeout =
     setTimeout(
-      ()=>{
+      () => {
 
 
         cleanup();
+
 
         failure();
 
@@ -1825,7 +2289,7 @@ function jsonpRequest(
 
 window.addEventListener(
   "load",
-  ()=>{
+  () => {
 
     barcodeBox().focus();
 
@@ -1834,7 +2298,6 @@ window.addEventListener(
 
 
 </script>
-
 
 </body>
 
