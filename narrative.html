@@ -1,0 +1,1931 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cameron EMS Narrative Builder</title>
+  <style>
+    :root{
+      --bg:#16181b;
+      --panel:#22262b;
+      --panel-2:#2b3036;
+      --text:#f4f4f4;
+      --muted:#b7bcc3;
+      --accent:#f28c28;
+      --accent-dark:#c96f12;
+      --border:#3b424a;
+      --success:#2f9e44;
+      --danger:#c0392b;
+    }
+
+    *{box-sizing:border-box}
+
+    body{
+      margin:0;
+      font-family:Arial, Helvetica, sans-serif;
+      background:var(--bg);
+      color:var(--text);
+    }
+
+    .page{
+      max-width:1100px;
+      margin:0 auto;
+      padding:24px;
+    }
+
+    header{
+      background:linear-gradient(135deg,#262a2f,#17191c);
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:22px;
+      margin-bottom:20px;
+    }
+
+    h1{
+      margin:0 0 6px 0;
+      color:var(--accent);
+      font-size:30px;
+    }
+
+    .subtitle{
+      color:var(--muted);
+      margin:0;
+      font-size:14px;
+    }
+
+    .section{
+      background:var(--panel);
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:18px;
+      margin-bottom:16px;
+    }
+
+    .section h2{
+      margin:0 0 14px 0;
+      font-size:18px;
+      color:var(--accent);
+      border-bottom:1px solid var(--border);
+      padding-bottom:10px;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:14px;
+    }
+
+    .grid-3{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:14px;
+    }
+
+    .full{grid-column:1 / -1}
+
+    label{
+      display:block;
+      font-size:13px;
+      color:var(--muted);
+      margin-bottom:6px;
+      font-weight:700;
+    }
+
+    input, select, textarea{
+      width:100%;
+      background:var(--panel-2);
+      color:var(--text);
+      border:1px solid var(--border);
+      border-radius:9px;
+      padding:11px 12px;
+      font-size:15px;
+      outline:none;
+    }
+
+    input:focus, select:focus, textarea:focus{
+      border-color:var(--accent);
+    }
+
+    textarea{
+      min-height:120px;
+      resize:vertical;
+    }
+
+    .check-grid{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:10px;
+    }
+
+    .check{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      background:var(--panel-2);
+      border:1px solid var(--border);
+      border-radius:9px;
+      padding:10px;
+      color:var(--text);
+      font-size:14px;
+    }
+
+    .check input{
+      width:auto;
+      margin:0;
+    }
+
+    .actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin:22px 0;
+    }
+
+    button{
+      border:none;
+      border-radius:10px;
+      padding:13px 18px;
+      font-size:15px;
+      font-weight:700;
+      cursor:pointer;
+    }
+
+    .primary{
+      background:var(--accent);
+      color:#111;
+    }
+
+    .primary:hover{background:#ff9b38}
+
+    .secondary{
+      background:#444b53;
+      color:white;
+    }
+
+    .success{
+      background:var(--success);
+      color:white;
+    }
+
+    .danger{
+      background:var(--danger);
+      color:white;
+      margin-left:auto;
+    }
+
+    .output{
+      white-space:pre-wrap;
+      background:#0f1113;
+      border:1px solid var(--border);
+      border-radius:12px;
+      padding:18px;
+      min-height:280px;
+      font-family:Consolas, "Courier New", monospace;
+      line-height:1.5;
+      font-size:14px;
+    }
+
+    .status{
+      min-height:22px;
+      color:#8fe39f;
+      font-weight:700;
+      margin-top:8px;
+    }
+
+    .hint{
+      color:var(--muted);
+      font-size:12px;
+      margin-top:5px;
+    }
+
+    @media (max-width:760px){
+      .grid,.grid-3,.check-grid{
+        grid-template-columns:1fr;
+      }
+      .danger{
+        margin-left:0;
+      }
+      .page{
+        padding:12px;
+      }
+    }
+
+    /* WIZARD LAYOUT */
+    body{
+      background:#111417;
+      padding-bottom:20px;
+    }
+
+    .page{
+      max-width:980px;
+    }
+
+    .wizard-progress{
+      background:#1d2125;
+      border:1px solid var(--border);
+      border-radius:10px;
+      padding:14px 16px;
+      margin-bottom:16px;
+    }
+
+    .wizard-progress-top{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:9px;
+      color:var(--muted);
+      font-size:12px;
+      font-weight:700;
+    }
+
+    .wizard-progress-track{
+      height:8px;
+      background:#30353a;
+      border-radius:20px;
+      overflow:hidden;
+    }
+
+    .wizard-progress-fill{
+      width:0%;
+      height:100%;
+      background:var(--accent);
+      transition:width .2s ease;
+    }
+
+    .wizard-step{
+      display:none !important;
+    }
+
+    .wizard-step.wizard-active{
+      display:block !important;
+    }
+
+    #ongoingAssessmentWrap.wizard-step{
+      display:none !important;
+    }
+
+    #ongoingAssessmentWrap.wizard-step.wizard-active{
+      display:block !important;
+    }
+
+    .wizard-controls{
+      display:flex;
+      gap:10px;
+      margin:16px 0;
+      align-items:center;
+    }
+
+    .wizard-controls .next-button{
+      margin-left:auto;
+      background:var(--accent);
+      color:#111;
+    }
+
+    .wizard-controls .back-button{
+      background:#444b53;
+      color:white;
+    }
+
+    .live-preview-panel{
+      background:#171a1d;
+      border:1px solid #3a4047;
+      border-radius:10px;
+      padding:16px;
+      margin-top:18px;
+    }
+
+    .live-preview-panel h3{
+      margin:0 0 10px;
+      font-size:14px;
+      color:var(--accent);
+      text-transform:uppercase;
+      letter-spacing:.4px;
+    }
+
+    #livePreview{
+      white-space:pre-wrap;
+      font-family:Consolas,"Courier New",monospace;
+      line-height:1.45;
+      font-size:13px;
+      min-height:120px;
+      color:#e5e7e9;
+    }
+
+    #wizardMessage{
+      color:#ffb66f;
+      min-height:20px;
+      font-weight:700;
+      font-size:13px;
+      margin-top:8px;
+    }
+
+    #reviewPage{
+      display:none;
+    }
+
+    #reviewPage.wizard-active{
+      display:block;
+    }
+
+    .review-actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:16px;
+    }
+
+    .finish-button{
+      background:var(--danger);
+      color:white;
+      margin-left:auto;
+    }
+
+    .review-note{
+      color:var(--muted);
+      font-size:12px;
+      margin-top:8px;
+    }
+
+    /* Hide original global action row and completed narrative section.
+       They remain in DOM because V39's existing JS writes to #output. */
+    .page > .actions{
+      display:none !important;
+    }
+
+    #originalCompletedNarrative{
+      display:none !important;
+    }
+
+    @media(max-width:760px){
+      .wizard-controls{
+        flex-wrap:wrap;
+      }
+      .wizard-controls .next-button,
+      .finish-button{
+        margin-left:0;
+      }
+    }
+
+
+    .beta-badge{
+      display:inline-block;
+      margin-left:8px;
+      padding:3px 8px;
+      border-radius:999px;
+      background:#4a2e18;
+      border:1px solid #8b572a;
+      color:#ffb56a;
+      font-size:11px;
+      font-weight:800;
+      letter-spacing:.4px;
+      vertical-align:middle;
+    }
+
+
+    /* Cross-device browser support */
+    button, input, select, textarea{
+      font-size:16px;
+    }
+
+    button{
+      touch-action:manipulation;
+      min-height:44px;
+    }
+
+    input, select{
+      min-height:44px;
+    }
+
+    @media (max-width: 900px){
+      .page{
+        max-width:100%;
+        padding:12px;
+      }
+
+      .grid, .grid-3, .check-grid{
+        grid-template-columns:1fr;
+      }
+
+      .wizard-controls,
+      .review-actions{
+        gap:8px;
+      }
+
+      .wizard-controls button,
+      .review-actions button{
+        flex:1 1 160px;
+      }
+
+      .output{
+        font-size:13px;
+        overflow-wrap:anywhere;
+      }
+    }
+
+    @supports (-webkit-touch-callout: none){
+      input, select, textarea{
+        font-size:16px;
+      }
+    }
+
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <h1>CAD EMS Narrative Builder <span class="beta-badge">BETA TEST</span></h1>
+      <p class="subtitle">Non-AI narrative builder — information is processed only in this browser and is not saved.</p>
+    </header>
+
+    <div class="wizard-progress">
+      <div class="wizard-progress-top">
+        <span id="wizardStepLabel">Step 1</span>
+        <span id="wizardStepTitle">Scene & Unit Response</span>
+      </div>
+      <div class="wizard-progress-track">
+        <div id="wizardProgressFill" class="wizard-progress-fill"></div>
+      </div>
+    </div>
+
+    <section class="section wizard-step" data-step="scene">
+      <h2>Scene & Unit Response</h2>
+      <div class="grid">
+        <div>
+          <label for="scene">Scene</label>
+          <select id="scene" onchange="toggleLocationDetailsRequirement()">
+            <option value="">Select scene</option>
+            <option>PT RESIDENCE</option>
+            <option>NURSING HOME</option>
+            <option>ASSISTED LIVING</option>
+            <option>PUBLIC LOCATION</option>
+            <option>ROADWAY</option>
+            <option>BUSINESS</option>
+            <option>OTHER</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="sceneOther" id="sceneOtherLabel">Location Details</label>
+          <input id="sceneOther" type="text" placeholder="Ex. I-35 SB @ 35mm or Scene Address" />
+        </div>
+
+        <div>
+          <label for="unit">Responding Unit</label>
+          <select id="unit">
+            <option value="">Select unit</option>
+            <option>181</option>
+            <option>182</option>
+            <option>183</option>
+            <option>184</option>
+            <option>180</option>
+            <option>MCI1</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="delayYN">Were There Any Response Delays?</label>
+          <select id="delayYN" onchange="toggleDelayField()">
+            <option value="">Select Yes or No</option>
+            <option value="YES">Yes</option>
+            <option value="NO">No</option>
+          </select>
+        </div>
+
+        <div id="delayDetailWrap" style="display:none;">
+          <label for="responseDelay">Delay Due To</label>
+          <input id="responseDelay" type="text" placeholder="Example: high call volume or distance to the scene" />
+        </div>
+
+      </div>
+    </section>
+
+    <section class="section wizard-step" data-step="nature">
+      <h2>Nature of Call</h2>
+      <label for="chiefComplaint">Nature of Call</label>
+      <input id="chiefComplaint" type="text" placeholder="Example: Fall with facial injury" />
+    </section>
+
+    <section class="section wizard-step" data-step="hpi">
+      <h2>History of Presenting Illness / Injury</h2>
+      <label for="hpi">HPI / Injury Narrative</label>
+      <textarea id="hpi" placeholder="Clear, chronological story of a patient’s current medical problem. Use details like when the pain started, what it feels like, and what makes it better or worse. Include information obtained from family and witnesses or what the PT tells you."></textarea>
+      <div class="hint">This section remains free text because it varies significantly from call to call.</div>
+    </section>
+
+    <section class="section wizard-step" data-step="initial">
+      <h2>Initial Assessment</h2>
+      <div class="grid-3">
+        <div>
+          <label for="age">Age</label>
+          <input id="age" type="number" min="0" max="120" placeholder="71" />
+        </div>
+
+        <div>
+          <label for="sex">Sex</label>
+          <select id="sex">
+            <option value="">Select</option>
+            <option value="MALE">Male</option>
+            <option value="FEMALE">Female</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="foundPosition">Found Position</label>
+          <select id="foundPosition">
+            <option value="">Select</option>
+            <option>LYING SUPINE</option>
+            <option>LYING PRONE</option>
+            <option>LYING ON LATERAL LEFT SIDE</option>
+            <option>LYING ON LATERAL RIGHT SIDE</option>
+            <option>SITTING UP</option>
+            <option>SEATED</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="foundLocation">Found Location</label>
+          <input id="foundLocation" type="text" placeholder="Example: bedroom" />
+        </div>
+
+
+        <div>
+          <label for="movement">Movement to Stretcher</label>
+          <select id="movement">
+            <option value="">Select</option>
+            <option>PT ASSISTED TO THE STRETCHER BY EMS.</option>
+            <option>PT MOVED TO THE STRETCHER USING A DRAW SHEET.</option>
+            <option>PT MOVED TO THE STRETCHER USING A SCOOP STRETCHER.</option>
+            <option>PT MOVED TO THE STRETCHER USING A STAIR CHAIR.</option>
+            <option value="CARRIED BY EMS">CARRIED BY EMS</option>
+          </select>
+        </div>
+
+
+      </div>
+
+      <div class="grid">
+        <div class="full">
+          <label for="movementOther">Movement Description (Optional Override)</label>
+          <textarea id="movementOther" rows="4" placeholder="Describe movement if no dropdown option is appropriate"></textarea>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="full">
+          <label>Responsiveness / Mental Status</label>
+          <div class="check-grid">
+            <label class="check"><input type="checkbox" id="mentalAlert" onchange="selectMentalStatus('mentalAlert')" /> Alert</label>
+            <label class="check"><input type="checkbox" id="mentalVerbal" onchange="selectMentalStatus('mentalVerbal')" /> Verbal response</label>
+            <label class="check"><input type="checkbox" id="mentalPainful" onchange="selectMentalStatus('mentalPainful')" /> Painful response</label>
+            <label class="check"><input type="checkbox" id="mentalUnresponsive" onchange="selectMentalStatus('mentalUnresponsive')" /> Unresponsive</label>
+            <label class="check"><input type="checkbox" id="mentalOther" onchange="selectMentalStatus('mentalOther'); toggleMentalOther()" /> Other</label>
+          </div>
+        </div>
+
+        <div id="mentalOtherWrap" class="full" style="display:none;">
+          <label for="mentalOtherDetails">Other Responsiveness / Mental Status</label>
+          <textarea id="mentalOtherDetails" placeholder="Describe the patient's responsiveness or mental status."></textarea>
+        </div>
+
+        <div id="orientationWrap" class="full">
+          <label>Orientation</label>
+          <div class="check-grid">
+            <label class="check"><input type="checkbox" id="orientX4" onchange="selectOrientation('orientX4')" /> X4</label>
+            <label class="check"><input type="checkbox" id="orientX3" onchange="selectOrientation('orientX3')" /> X3</label>
+            <label class="check"><input type="checkbox" id="orientX2" onchange="selectOrientation('orientX2')" /> X2</label>
+            <label class="check"><input type="checkbox" id="orientX1" onchange="selectOrientation('orientX1')" /> X1</label>
+            <label class="check"><input type="checkbox" id="orientX0" onchange="selectOrientation('orientX0')" /> X0</label>
+          </div>
+        </div>
+
+        <div class="full">
+          <label for="assessmentComplaint">Patient Complaint / Assessment Details</label>
+          <textarea id="assessmentComplaint" style="min-height:190px;" placeholder="LUNG SOUNDS CLEAR BILATERALLY, ABDOMEN SOFT AND NON-TENDER, AND NO CHANGE IN CONDITION."></textarea>
+          <div class="hint">This section remains free text because it varies significantly from call to call.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section wizard-step" data-step="secondary">
+      <h2>Secondary Assessment</h2>
+      <label>Would you like to document a Secondary Assessment?</label>
+      <div class="check-grid">
+        <label class="check">
+          <input type="checkbox" id="secondaryAssessmentYes" onchange="selectSecondaryAssessment('YES')" />
+          Yes
+        </label>
+        <label class="check">
+          <input type="checkbox" id="secondaryAssessmentNo" onchange="selectSecondaryAssessment('NO')" />
+          No
+        </label>
+      </div>
+    </section>
+
+    <div id="ongoingAssessmentWrap" class="wizard-step" data-step="ongoing">
+    <section class="section">
+      <h2>Ongoing Assessment</h2>
+      <div class="grid">
+        <div class="full">
+          <label>Responsiveness / Mental Status</label>
+          <div class="check-grid">
+            <label class="check"><input type="checkbox" id="ongoingMentalAlert" onchange="selectOngoingMentalStatus('ongoingMentalAlert')" /> Alert</label>
+            <label class="check"><input type="checkbox" id="ongoingMentalVerbal" onchange="selectOngoingMentalStatus('ongoingMentalVerbal')" /> Verbal response</label>
+            <label class="check"><input type="checkbox" id="ongoingMentalPainful" onchange="selectOngoingMentalStatus('ongoingMentalPainful')" /> Painful response</label>
+            <label class="check"><input type="checkbox" id="ongoingMentalUnresponsive" onchange="selectOngoingMentalStatus('ongoingMentalUnresponsive')" /> Unresponsive</label>
+            <label class="check"><input type="checkbox" id="ongoingMentalOther" onchange="selectOngoingMentalStatus('ongoingMentalOther'); toggleOngoingMentalOther()" /> Other</label>
+          </div>
+        </div>
+
+        <div id="ongoingMentalOtherWrap" class="full" style="display:none;">
+          <label for="ongoingMentalOtherDetails">Other Responsiveness / Mental Status</label>
+          <textarea id="ongoingMentalOtherDetails" placeholder="Describe the patient's responsiveness or mental status."></textarea>
+        </div>
+
+        <div id="ongoingOrientationWrap" class="full">
+          <label>Orientation</label>
+          <div class="check-grid">
+            <label class="check"><input type="checkbox" id="ongoingOrientX4" onchange="selectOngoingOrientation('ongoingOrientX4')" /> X4</label>
+            <label class="check"><input type="checkbox" id="ongoingOrientX3" onchange="selectOngoingOrientation('ongoingOrientX3')" /> X3</label>
+            <label class="check"><input type="checkbox" id="ongoingOrientX2" onchange="selectOngoingOrientation('ongoingOrientX2')" /> X2</label>
+            <label class="check"><input type="checkbox" id="ongoingOrientX1" onchange="selectOngoingOrientation('ongoingOrientX1')" /> X1</label>
+            <label class="check"><input type="checkbox" id="ongoingOrientX0" onchange="selectOngoingOrientation('ongoingOrientX0')" /> X0</label>
+          </div>
+        </div>
+
+        <div class="full">
+          <label for="ongoingAssessmentComplaint">Patient Complaint / Assessment Details</label>
+          <textarea id="ongoingAssessmentComplaint" style="min-height:190px;" placeholder="LUNG SOUNDS CLEAR BILATERALLY, ABDOMEN SOFT AND NON-TENDER, AND NO CHANGE IN CONDITION."></textarea>
+        </div>
+      </div>
+    </section>
+    </div>
+
+
+    <section class="section wizard-step" data-step="refusal">
+      <h2>Refusal</h2>
+      <label>Was This a Refusal?</label>
+      <div class="check-grid">
+        <label class="check">
+          <input type="checkbox" id="refusalYes" onchange="selectRefusal('YES')" />
+          Yes
+        </label>
+        <label class="check">
+          <input type="checkbox" id="refusalNo" onchange="selectRefusal('NO')" />
+          No
+        </label>
+      </div>
+    </section>
+
+    <section class="section wizard-step" id="transportSection" data-step="transport">
+      <h2>Transport</h2>
+      <div class="grid">
+        <div>
+          <label for="destination">Destination</label>
+          <select id="destination" onchange="toggleDestinationFields()">
+            <option value="">Select destination</option>
+            <option>CAMERON REGIONAL MEDICAL CENTER</option>
+            <option>MOSAIC LIFE CARE</option>
+            <option>LIBERTY HOSPITAL</option>
+            <option>SAINT LUKE'S NORTH</option>
+            <option>OTHER</option>
+          </select>
+        </div>
+
+        <div id="destinationOtherWrap" style="display:none;">
+          <label for="destinationOther">Other Destination</label>
+          <input id="destinationOther" type="text" placeholder="Enter destination" />
+        </div>
+
+        <div id="destinationReasonWrap" class="full" style="display:none;">
+          <label for="destinationReason">Specialty Service Required</label>
+          <input id="destinationReason" type="text" placeholder="Example: Cardiology, Neurology, Trauma, Orthopedics, ICU" />
+        </div>
+
+        <div id="providerJudgmentWrap" class="full" style="display:none;">
+          <label class="check">
+            <input type="checkbox" id="providerJudgment" />
+            EMS provider judgment (NOT TO BE USED FOR TRANSFERS)
+          </label>
+        </div>
+      </div>
+
+      <div class="check-grid" style="margin-top:14px;">
+        <label class="check"><input type="checkbox" id="shoulderStraps" checked onchange="if(this.checked){document.getElementById('pediatricRestraint').checked=false;}" /> 2 shoulder straps</label>
+        <label class="check"><input type="checkbox" id="bodyStraps" checked onchange="if(this.checked){document.getElementById('pediatricRestraint').checked=false;}" /> 3 body straps</label>
+        <label class="check"><input type="checkbox" id="pediatricRestraint" onchange="togglePediatricRestraint()" /> Secured with pediatric device</label>
+        <label class="check"><input type="checkbox" id="assessmentOngoing" checked /> Assessment ongoing enroute</label>
+        <label class="check"><input type="checkbox" id="monitoringOngoing" checked /> Monitoring ongoing enroute</label>
+      </div>
+
+      <div class="grid" style="margin-top:14px;">
+        <div>
+          <label for="abnYN">Was an ABN Form Obtained?</label>
+          <select id="abnYN">
+            <option value="">Select</option>
+            <option value="YES">Yes</option>
+            <option value="NO">No</option>
+          </select>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="section wizard-step" data-step="complications">
+      <h2>Complications</h2>
+      <label for="complications">Complications (Optional)</label>
+      <textarea id="complications" placeholder="Leave blank if there were no complications to document."></textarea>
+    </section>
+
+    <section class="section wizard-step" data-step="treatment">
+      <h2>Treatment</h2>
+      <div class="hint" style="margin-bottom:10px;">Select at least one treatment item.</div>
+
+      <div class="check-grid">
+        <label class="check"><input type="checkbox" id="vitals" /> Vital signs obtained</label>
+        <label class="check"><input type="checkbox" id="ekg" /> EKG obtained</label>
+        <label class="check"><input type="checkbox" id="iv" /> IV established</label>
+        <label class="check"><input type="checkbox" id="oxygen" /> Oxygen</label>
+        <label class="check"><input type="checkbox" id="bgl" /> BGL</label>
+        <label class="check"><input type="checkbox" id="woundCare" /> Wound care</label>
+        <label class="check"><input type="checkbox" id="splint" onchange="toggleProcedureDetail('splint','splintDetailsWrap')" /> Splinting</label>
+        <label class="check"><input type="checkbox" id="medication" onchange="toggleProcedureDetail('medication','medicationDetailsWrap')" /> Medication administered</label>
+        <label class="check"><input type="checkbox" id="advancedAirway" onchange="toggleProcedureDetail('advancedAirway','advancedAirwayWrap')" /> Advanced airway</label>
+        <label class="check"><input type="checkbox" id="cpr" onchange="toggleProcedureDetail('cpr','cprWrap')" /> CPR</label>
+        <label class="check"><input type="checkbox" id="basicAirway" onchange="toggleProcedureDetail('basicAirway','basicAirwayWrap')" /> Basic airway</label>
+        <label class="check"><input type="checkbox" id="otherProcedure" onchange="toggleProcedureDetail('otherProcedure','otherProcedureWrap')" /> Other procedure</label>
+        <label class="check"><input type="checkbox" id="allTreatmentRefused" /> All treatment was refused by PT</label>
+      </div>
+
+      <div class="grid" style="margin-top:14px;">
+        <div id="medicationDetailsWrap" style="display:none;">
+          <label for="medicationDetails">Medications Administered</label>
+          <input id="medicationDetails" type="text" placeholder="Example: Fentanyl 50 mcg IV" />
+        </div>
+
+        <div id="splintDetailsWrap" style="display:none;">
+          <label for="splintDetails">Splints That Were Applied</label>
+          <input id="splintDetails" type="text" placeholder="Example: Right wrist splinted" />
+        </div>
+
+        <div id="advancedAirwayWrap" class="full" style="display:none;">
+          <label for="advancedAirwayDetails">Advanced Airway Details</label>
+          <textarea id="advancedAirwayDetails" placeholder="Enter airway type, size, confirmation method, attempts, placement details, etc."></textarea>
+        </div>
+
+        <div id="cprWrap" class="full" style="display:none;">
+          <label for="cprDetails">CPR Details</label>
+          <textarea id="cprDetails" placeholder="Enter CPR details, duration, device use, ROSC information, etc."></textarea>
+        </div>
+
+        <div id="basicAirwayWrap" class="full" style="display:none;">
+          <label for="basicAirwayDetails">Basic Airway Details</label>
+          <textarea id="basicAirwayDetails" placeholder="Enter airway adjunct, BVM use, suction, positioning, or other details."></textarea>
+        </div>
+
+        <div id="otherProcedureWrap" class="full" style="display:none;">
+          <label for="otherProcedureDetails">Other Procedure Details</label>
+          <textarea id="otherProcedureDetails" placeholder="Describe the procedure and any relevant details."></textarea>
+        </div>
+
+        <div class="full">
+          <label for="treatmentExtra">Additional Treatment Details</label>
+          <textarea id="treatmentExtra" placeholder="Optional additional treatment narrative."></textarea>
+        </div>
+      </div>
+    </section>
+
+    <section class="section wizard-step" id="transferOfCareSection" data-step="transfer">
+      <h2>Transfer of Care</h2>
+
+
+      <div class="grid">
+        <div>
+          <label for="transferLocation">Receiving Bed / Room</label>
+          <input id="transferLocation" type="text" placeholder="Example: ER BED 1" />
+        </div>
+
+        <div>
+          <label for="transferMethod">Transfer Method</label>
+          <select id="transferMethod">
+            <option value="">Select transfer method</option>
+            <option value="SHEET SLIDE">Sheet Slide</option>
+            <option value="BOARD SLIDE">Board Slide</option>
+            <option value="STAND AND PIVOT">Stand and Pivot</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="check-grid" style="margin-top:14px;">
+        <label class="check"><input type="checkbox" id="reportGiven" checked /> Patient care report given</label>
+        <label class="check"><input type="checkbox" id="careTransferred" checked /> All care transferred</label>
+      </div>
+
+      
+    </section>
+
+    <section class="section wizard-step" data-step="signature">
+      <h2>Crew Signature</h2>
+      <div class="grid">
+        <div>
+          <label for="crewName">Name</label>
+          <input id="crewName" type="text" placeholder="Name: John Doe" />
+        </div>
+
+        <div>
+          <label for="crewCredential">Credential / License</label>
+          <input id="crewCredential" type="text" placeholder="P-10000" />
+        </div>
+      </div>
+    </section>
+
+
+    <div id="wizardNavigation">
+      <div class="wizard-controls">
+        <button id="wizardBack" class="back-button" type="button" onclick="wizardBack()">Back</button>
+        <button id="wizardNext" class="next-button" type="button" onclick="wizardNext()">Next</button>
+      </div>
+      <div id="wizardMessage"></div>
+
+      <div class="live-preview-panel">
+        <h3>Narrative Preview</h3>
+        <div id="livePreview">Complete the current section to begin building the narrative.</div>
+      </div>
+    </div>
+
+    <section id="reviewPage" class="section">
+      <h2>Review Complete Narrative</h2>
+      <div id="reviewOutput" class="output"></div>
+      <div class="review-note">Review the completed narrative before copying it into the reporting system.</div>
+<div class="review-actions">
+        <button class="secondary" type="button" onclick="reviewBack()">Back</button>
+        <button class="success" type="button" onclick="copyReviewNarrative()">Copy Narrative</button>
+        <button class="finish-button" type="button" onclick="finishAndReset()">Finish &amp; Reset</button>
+      </div>
+      <div id="reviewStatus" class="status"></div>
+    </section>
+
+    <div class="actions">
+      <button class="primary" onclick="generateNarrative()">Generate Narrative</button>
+      <button class="success" onclick="copyNarrative()">Copy Entire Narrative</button>
+      <button class="danger" onclick="clearReport()">Clear / New Report</button>
+    </div>
+
+    <section class="section" id="originalCompletedNarrative">
+      <h2>Completed Narrative</h2>
+      <div id="output" class="output">Complete the form and select Generate Narrative.</div>
+      <div id="status" class="status"></div>
+    </section>
+  </div>
+
+  <script>
+    const val = id => document.getElementById(id).value.trim();
+    const checked = id => document.getElementById(id).checked;
+
+    function upper(text){
+      return (text || "").trim().toUpperCase();
+    }
+
+    function toggleLocationDetailsRequirement(){
+      const scene = val("scene");
+      const locationInput = document.getElementById("sceneOther");
+      const locationLabel = document.getElementById("sceneOtherLabel");
+      const required = scene !== "" && scene !== "PT RESIDENCE";
+
+      if(locationInput) locationInput.required = required;
+      if(locationLabel) locationLabel.textContent = required ? "Location Details *" : "Location Details";
+    }
+
+    function sceneText(){
+      const scene = val("scene");
+
+      if(scene === "PT RESIDENCE"){
+        return upper(scene);
+      }
+
+      return upper(val("sceneOther"));
+    }
+
+    function destinationText(){
+      const destination = val("destination");
+      return destination === "OTHER" ? upper(val("destinationOther")) : upper(destination);
+    }
+
+    function movementText(){
+      const override = upper(val("movementOther"));
+      if(override){
+        return override.endsWith(".") ? override : override + ".";
+      }
+      return val("movement");
+    }
+
+    function buildAssessment(){
+      const parts = [];
+      const age = val("age");
+      const sex = val("sex");
+      const position = upper(val("foundPosition"));
+      const location = upper(val("foundLocation"));
+
+      if(age || sex || position || location){
+        let sentence = "PT IS";
+        if(age) sentence += ` A ${age} Y/O`;
+        if(sex) sentence += ` ${sex}`;
+        if(position) sentence += ` FOUND ${position}`;
+        if(location) sentence += ` IN THE ${location}`;
+        sentence += ".";
+        parts.push(sentence);
+      }
+
+      const movement = movementText();
+      if(movement === "CARRIED BY EMS"){
+        parts.push("PT WAS CARRIED TO THE STRETCHER.");
+      } else if(movement){
+        parts.push(movement);
+      }
+
+      return parts.join(" ");
+    }
+
+    function toggleDelayField(){
+      const hasDelay = val("delayYN") === "YES";
+      const wrap = document.getElementById("delayDetailWrap");
+      if(wrap) wrap.style.display = hasDelay ? "block" : "none";
+      if(!hasDelay && document.getElementById("responseDelay")){
+        document.getElementById("responseDelay").value = "";
+      }
+    }
+
+    function toggleDestinationFields(){
+      const destination = val("destination");
+      const needsSpecialty = destination !== "" && destination !== "CAMERON REGIONAL MEDICAL CENTER";
+      const isOther = destination === "OTHER";
+
+      const reasonWrap = document.getElementById("destinationReasonWrap");
+      const providerWrap = document.getElementById("providerJudgmentWrap");
+      const otherWrap = document.getElementById("destinationOtherWrap");
+
+      if(reasonWrap) reasonWrap.style.display = needsSpecialty ? "block" : "none";
+      if(providerWrap) providerWrap.style.display = needsSpecialty ? "block" : "none";
+      if(otherWrap) otherWrap.style.display = isOther ? "block" : "none";
+
+      if(!needsSpecialty){
+        if(document.getElementById("destinationReason")) document.getElementById("destinationReason").value = "";
+        if(document.getElementById("providerJudgment")) document.getElementById("providerJudgment").checked = false;
+      }
+
+      if(!isOther && document.getElementById("destinationOther")){
+        document.getElementById("destinationOther").value = "";
+      }
+    }
+
+    function selectMentalStatus(selectedId){
+      const ids = ["mentalAlert","mentalVerbal","mentalPainful","mentalUnresponsive","mentalOther"];
+      const selected = document.getElementById(selectedId);
+
+      if(selected && selected.checked){
+        ids.forEach(id => {
+          if(id !== selectedId) document.getElementById(id).checked = false;
+        });
+      }
+
+      toggleMentalOther();
+      const unresponsive = document.getElementById("mentalUnresponsive").checked;
+      const other = document.getElementById("mentalOther").checked;
+      const orientationWrap = document.getElementById("orientationWrap");
+      if(orientationWrap) orientationWrap.style.display = (unresponsive || other) ? "none" : "block";
+
+      if(unresponsive || other){
+        ["orientX4","orientX3","orientX2","orientX1","orientX0"].forEach(id => {
+          document.getElementById(id).checked = false;
+        });
+      }
+    }
+
+    function toggleMentalOther(){
+      const wrap = document.getElementById("mentalOtherWrap");
+      if(wrap) wrap.style.display = checked("mentalOther") ? "block" : "none";
+    }
+
+    function selectOrientation(selectedId){
+      const ids = ["orientX4","orientX3","orientX2","orientX1","orientX0"];
+      const selected = document.getElementById(selectedId);
+
+      if(selected && selected.checked){
+        ids.forEach(id => {
+          if(id !== selectedId) document.getElementById(id).checked = false;
+        });
+      }
+    }
+
+    function buildMentalStatus(){
+      let orientation = "";
+      if(checked("orientX4")) orientation = "X4";
+      else if(checked("orientX3")) orientation = "X3";
+      else if(checked("orientX2")) orientation = "X2";
+      else if(checked("orientX1")) orientation = "X1";
+      else if(checked("orientX0")) orientation = "X0";
+
+      if(checked("mentalUnresponsive")){
+        return "PT IS UNRESPONSIVE AT THIS TIME.";
+      }
+
+      if(checked("mentalOther")){
+        const other = upper(val("mentalOtherDetails"));
+        if(other) return other.endsWith(".") ? other : other + ".";
+        return "";
+      }
+
+      if(checked("mentalVerbal")){
+        return "PT RESPONDS TO VERBAL STIMULI" + (orientation ? ", ORIENTED TO " + orientation : "") + ".";
+      }
+
+      if(checked("mentalPainful")){
+        return "PT RESPONDS TO PAINFUL STIMULI" + (orientation ? ", ORIENTED TO " + orientation : "") + ".";
+      }
+
+      if(checked("mentalAlert")){
+        return "PT IS ALERT" + (orientation ? " AND ORIENTED " + orientation : "") + ".";
+      }
+
+      return "";
+    }
+
+    function selectSecondaryAssessment(choice){
+      const yes = document.getElementById("secondaryAssessmentYes");
+      const no = document.getElementById("secondaryAssessmentNo");
+      const wrap = document.getElementById("ongoingAssessmentWrap");
+
+      if(choice === "YES"){
+        yes.checked = true;
+        no.checked = false;
+        if(wrap) wrap.style.display = "block";
+      } else {
+        no.checked = true;
+        yes.checked = false;
+        if(wrap) wrap.style.display = "none";
+      }
+    }
+
+    function selectOngoingMentalStatus(selectedId){
+      const ids = ["ongoingMentalAlert","ongoingMentalVerbal","ongoingMentalPainful","ongoingMentalUnresponsive","ongoingMentalOther"];
+      const selected = document.getElementById(selectedId);
+
+      if(selected && selected.checked){
+        ids.forEach(id => {
+          if(id !== selectedId) document.getElementById(id).checked = false;
+        });
+      }
+
+      toggleOngoingMentalOther();
+      const unresponsive = document.getElementById("ongoingMentalUnresponsive").checked;
+      const other = document.getElementById("ongoingMentalOther").checked;
+      const orientationWrap = document.getElementById("ongoingOrientationWrap");
+      if(orientationWrap) orientationWrap.style.display = (unresponsive || other) ? "none" : "block";
+
+      if(unresponsive || other){
+        ["ongoingOrientX4","ongoingOrientX3","ongoingOrientX2","ongoingOrientX1","ongoingOrientX0"].forEach(id => {
+          document.getElementById(id).checked = false;
+        });
+      }
+    }
+
+    function toggleOngoingMentalOther(){
+      const wrap = document.getElementById("ongoingMentalOtherWrap");
+      if(wrap) wrap.style.display = checked("ongoingMentalOther") ? "block" : "none";
+    }
+
+    function selectOngoingOrientation(selectedId){
+      const ids = ["ongoingOrientX4","ongoingOrientX3","ongoingOrientX2","ongoingOrientX1","ongoingOrientX0"];
+      const selected = document.getElementById(selectedId);
+
+      if(selected && selected.checked){
+        ids.forEach(id => {
+          if(id !== selectedId) document.getElementById(id).checked = false;
+        });
+      }
+    }
+
+    function buildOngoingMentalStatus(){
+      let orientation = "";
+      if(checked("ongoingOrientX4")) orientation = "X4";
+      else if(checked("ongoingOrientX3")) orientation = "X3";
+      else if(checked("ongoingOrientX2")) orientation = "X2";
+      else if(checked("ongoingOrientX1")) orientation = "X1";
+      else if(checked("ongoingOrientX0")) orientation = "X0";
+
+      if(checked("ongoingMentalUnresponsive")){
+        return "PT IS UNRESPONSIVE AT THIS TIME.";
+      }
+
+      if(checked("ongoingMentalVerbal")){
+        return "PT RESPONDS TO VERBAL STIMULI" + (orientation ? ", ORIENTED TO " + orientation : "") + ".";
+      }
+
+      if(checked("ongoingMentalPainful")){
+        return "PT RESPONDS TO PAINFUL STIMULI" + (orientation ? ", ORIENTED TO " + orientation : "") + ".";
+      }
+
+      if(checked("ongoingMentalAlert")){
+        return "PT IS ALERT" + (orientation ? " AND ORIENTED " + orientation : "") + ".";
+      }
+
+      return "";
+    }
+
+    function buildOngoingAssessment(){
+      if(!checked("secondaryAssessmentYes")) return "";
+
+      let orientation = "";
+      if(checked("ongoingOrientX4")) orientation = "X4";
+      else if(checked("ongoingOrientX3")) orientation = "X3";
+      else if(checked("ongoingOrientX2")) orientation = "X2";
+      else if(checked("ongoingOrientX1")) orientation = "X1";
+      else if(checked("ongoingOrientX0")) orientation = "X0";
+
+      const detail = upper(val("ongoingAssessmentComplaint"));
+      const otherMental = upper(val("ongoingMentalOtherDetails"));
+
+      if(checked("ongoingMentalOther")){
+        let sentence = "DURING ONGOING ASSESSMENT PT FOUND TO BE";
+        if(otherMental){
+          sentence += " " + otherMental.replace(/\.$/, "");
+        }
+        if(detail){
+          sentence += " WITH " + detail.replace(/\.$/, "");
+        }
+        return sentence + ".";
+      }
+
+      if(checked("ongoingMentalUnresponsive")){
+        return "DURING ONGOING ASSESSMENT PT FOUND TO BE UNRESPONSIVE AT THIS TIME" +
+          (detail ? " WITH " + detail.replace(/\.$/, "") : "") + ".";
+      }
+
+      let status = "";
+      if(checked("ongoingMentalVerbal")){
+        status = "RESPONSIVE TO VERBAL STIMULI";
+      } else if(checked("ongoingMentalPainful")){
+        status = "RESPONSIVE TO PAINFUL STIMULI";
+      } else if(checked("ongoingMentalAlert")){
+        status = "ALERT";
+      }
+
+      let sentence = "DURING ONGOING ASSESSMENT PT FOUND TO BE";
+      if(status) sentence += " " + status;
+      if(orientation) sentence += (status ? ", " : " ") + "ORIENTED " + orientation;
+      if(detail) sentence += " WITH " + detail.replace(/\.$/, "");
+      sentence += ".";
+
+      return sentence;
+    }
+
+    function buildTransport(){
+      const parts = [];
+
+      if(checked("pediatricRestraint")){
+        parts.push("PT SECURED TO THE STRETCHER USING THE PEDIATRIC COT RESTRAINT SYSTEM.");
+      } else if(checked("shoulderStraps") && checked("bodyStraps")){
+        parts.push("PT IS SECURED USING 2 SHOULDER AND 3 BODY STRAPS.");
+      } else if(checked("shoulderStraps")){
+        parts.push("PT IS SECURED USING 2 SHOULDER STRAPS.");
+      } else if(checked("bodyStraps")){
+        parts.push("PT IS SECURED USING 3 BODY STRAPS.");
+      }
+
+      const destination = destinationText();
+      if(destination){
+        parts.push(`PT TRANSPORTED TO ${destination}.`);
+      }
+
+      const selectedDestination = val("destination");
+      if(selectedDestination && selectedDestination !== "CAMERON REGIONAL MEDICAL CENTER"){
+        const reason = upper(val("destinationReason"));
+        if(reason){
+          parts.push(`PT TRANSPORTED TO THE CLOSEST APPROPRIATE FACILITY FOR SPECIALTY ${reason} SERVICES NOT AVAILABLE CLOSER.`);
+        }
+        if(checked("providerJudgment")){
+          parts.push("EMS FEELS PT CAN BENEFIT FROM A HIGHER LEVEL OF CARE FOR THIS PT THAN IS AVAILABLE AT A CLOSER FACILITY.");
+        }
+      }
+
+      const assessment = checked("assessmentOngoing");
+      const monitoring = checked("monitoringOngoing");
+
+      if(assessment && monitoring){
+        parts.push("PT ASSESSMENT AND MONITORING WERE ONGOING ENROUTE.");
+      } else if(assessment){
+        parts.push("PT ASSESSMENT WAS ONGOING ENROUTE.");
+      } else if(monitoring){
+        parts.push("PT MONITORING WAS ONGOING ENROUTE.");
+      }
+
+      return parts.join(" ");
+    }
+
+    function toggleProcedureDetail(checkboxId, wrapId){
+      const box = document.getElementById(checkboxId);
+      const wrap = document.getElementById(wrapId);
+      if(wrap) wrap.style.display = box && box.checked ? "block" : "none";
+
+      if(box && !box.checked && wrap){
+        const detailField = wrap.querySelector("textarea, input[type='text']");
+        if(detailField) detailField.value = "";
+      }
+    }
+
+    function buildTreatment(){
+      const parts = [];
+
+      if(checked("allTreatmentRefused")){
+        parts.push("ALL TREATMENT WAS REFUSED BY PT.");
+      }
+
+      const hasVitals = checked("vitals");
+      const hasEkg = checked("ekg");
+
+      if(hasVitals && hasEkg){
+        parts.push("EKG AND VITALS WERE OBTAINED.");
+      } else if(hasEkg){
+        parts.push("EKG WAS OBTAINED.");
+      } else if(hasVitals){
+        parts.push("VITAL SIGNS WERE OBTAINED.");
+      }
+
+      if(checked("iv")) parts.push("IV ESTABLISHED.");
+      if(checked("oxygen")) parts.push("OXYGEN ADMINISTERED.");
+      if(checked("bgl")) parts.push("BGL OBTAINED.");
+      if(checked("woundCare")) parts.push("WOUND CARE PROVIDED.");
+
+      if(checked("advancedAirway")){
+        const detail = upper(val("advancedAirwayDetails"));
+        parts.push(detail ? (detail.endsWith(".") ? detail : detail + ".") : "ADVANCED AIRWAY PROCEDURE PERFORMED.");
+      }
+
+      if(checked("cpr")){
+        const detail = upper(val("cprDetails"));
+        parts.push(detail ? (detail.endsWith(".") ? detail : detail + ".") : "CPR PERFORMED.");
+      }
+
+      if(checked("basicAirway")){
+        const detail = upper(val("basicAirwayDetails"));
+        parts.push(detail ? (detail.endsWith(".") ? detail : detail + ".") : "BASIC AIRWAY INTERVENTION PERFORMED.");
+      }
+
+      if(checked("otherProcedure")){
+        const detail = upper(val("otherProcedureDetails"));
+        parts.push(detail ? (detail.endsWith(".") ? detail : detail + ".") : "OTHER PROCEDURE PERFORMED.");
+      }
+
+      if(checked("splint")){
+        const splintDetail = upper(val("splintDetails"));
+        parts.push(splintDetail ? (splintDetail.endsWith(".") ? splintDetail : splintDetail + ".") : "SPLINTING PERFORMED.");
+      }
+
+      if(checked("medication")){
+        const medicationDetail = upper(val("medicationDetails"));
+        parts.push(medicationDetail ? (medicationDetail.endsWith(".") ? medicationDetail : medicationDetail + ".") : "MEDICATION ADMINISTERED.");
+      }
+
+      const extra = upper(val("treatmentExtra"));
+      if(extra){
+        parts.push(extra.endsWith(".") ? extra : extra + ".");
+      }
+
+      return parts.join(" ");
+    }
+
+    function buildAdditionalTransportDocumentation(){
+      const parts = [];
+
+      if(val("abnYN") === "YES"){
+        parts.push("ABN FORM WAS OBTAINED FROM THIS PT, THE FORM WAS EXPLAINED AND THEY SIGNED AFTER ALL QUESTIONS WERE ANSWERED.");
+      }
+
+      return parts.join(" ");
+    }
+
+    function selectRefusal(choice){
+      const yes = document.getElementById("refusalYes");
+      const no = document.getElementById("refusalNo");
+      const transportSection = document.getElementById("transportSection");
+      const transferSection = document.getElementById("transferOfCareSection");
+
+      if(choice === "YES"){
+        yes.checked = true;
+        no.checked = false;
+        if(transportSection) transportSection.style.display = "none";
+        if(transferSection) transferSection.style.display = "none";
+      } else {
+        no.checked = true;
+        yes.checked = false;
+        if(transportSection) transportSection.style.display = "block";
+        if(transferSection) transferSection.style.display = "block";
+      }
+    }
+
+    function buildTransfer(){
+      if(checked("refusalYes")){
+        return "THE PT REFUSED TRANSPORT BY EMS, THE REFUSAL FORM WAS EXPLAINED TO THE PT AND SIGNED AFTER ALL QUESTIONS WERE ANSWERED.";
+      }
+
+      const parts = [];
+      const location = upper(val("transferLocation"));
+      const method = upper(val("transferMethod"));
+
+      if(location && method){
+        parts.push(`PT MOVED TO ${location} USING ${method} WITH THE ASSISTANCE OF EMS PERSONNEL.`);
+      } else if(location){
+        parts.push(`PT MOVED TO ${location} WITH THE ASSISTANCE OF EMS PERSONNEL.`);
+      }
+
+      const report = checked("reportGiven");
+      const transferred = checked("careTransferred");
+
+      if(report && transferred){
+        parts.push("PT CARE REPORT WAS GIVEN AND ALL CARE WAS TRANSFERRED AT THIS TIME.");
+      } else if(report){
+        parts.push("PT CARE REPORT WAS GIVEN.");
+      } else if(transferred){
+        parts.push("ALL CARE WAS TRANSFERRED AT THIS TIME.");
+      }
+
+      return parts.join(" ");
+    }
+
+    function generateNarrative(){
+      const sceneSelection = val("scene");
+      const scene = sceneText();
+      const unit = upper(val("unit"));
+
+      if(sceneSelection && sceneSelection !== "PT RESIDENCE" && !val("sceneOther")){
+        document.getElementById("status").textContent = "Location Details are required for the selected scene.";
+        document.getElementById("sceneOther").focus();
+        return;
+      }
+      const responseDelay = upper(val("responseDelay"));
+      const delayYN = val("delayYN");
+
+      const selectedDestination = val("destination");
+
+      if(selectedDestination && selectedDestination !== "CAMERON REGIONAL MEDICAL CENTER" && !val("destinationReason")){
+        document.getElementById("status").textContent = "Enter the specialty service for transport to this destination.";
+        document.getElementById("destinationReason").focus();
+        return;
+      }
+      const chiefComplaint = upper(val("chiefComplaint"));
+      const hpi = upper(val("hpi"));
+      const assessment = buildAssessment();
+      const mentalStatus = buildMentalStatus();
+      const ongoingAssessment = buildOngoingAssessment();
+      const transport = checked("refusalYes") ? "" : buildTransport();
+      const complications = upper(val("complications"));
+      const treatment = buildTreatment();
+      const additionalTransport = buildAdditionalTransportDocumentation();
+      const transfer = buildTransfer();
+      const crewName = upper(val("crewName"));
+      const credential = upper(val("crewCredential"));
+
+      const narrative = `SCENE -
+${scene}
+
+UNIT RESPONSE-
+${unit ? "CAD " + unit + " RESPONDED " + (delayYN === "YES" ? "WITH DELAYS DUE TO " + responseDelay + "." : "WITHOUT DELAY.") : ""}
+
+NATURE OF CALL
+${chiefComplaint}
+
+HISTORY OF PRESENTING ILLNESS/INJURY-
+${hpi}
+
+PT ASSESSMENT
+${[
+  assessment,
+  mentalStatus,
+  upper(val("assessmentComplaint")) ? (upper(val("assessmentComplaint")).endsWith(".") ? upper(val("assessmentComplaint")) : upper(val("assessmentComplaint")) + ".") : "",
+  ongoingAssessment
+].filter(Boolean).join(" ")}
+
+TRANSPORT –
+${[transport, additionalTransport].filter(Boolean).join(" ")}
+
+${complications ? "COMPLICATIONS-\n" + (complications.endsWith(".") ? complications : complications + ".") + "\n\n" : ""}TREATMENT-
+${treatment}
+
+TRANSFER OF CARE-
+${transfer}
+
+EMS RETURNED TO SERVICE
+${[crewName, credential].filter(Boolean).join(" ")}`;
+
+      document.getElementById("output").textContent = narrative;
+      document.getElementById("status").textContent = "Narrative generated.";
+    }
+
+    async function copyNarrative(){
+      const output = document.getElementById("output").textContent;
+
+      if(!output || output.startsWith("Complete the form")){
+        generateNarrative();
+      }
+
+      const text = document.getElementById("output").textContent;
+
+      try{
+        await navigator.clipboard.writeText(text);
+        document.getElementById("status").textContent = "Narrative copied to clipboard.";
+      } catch(err){
+        const range = document.createRange();
+        range.selectNodeContents(document.getElementById("output"));
+        const selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+        document.execCommand("copy");
+        selection.removeAllRanges();
+        document.getElementById("status").textContent = "Narrative copied to clipboard.";
+      }
+    }
+
+
+    // =========================================================
+    // STEP-BY-STEP WIZARD
+    // =========================================================
+    const wizardBaseSteps = [
+      { key:"scene", title:"Scene & Unit Response" },
+      { key:"nature", title:"Nature of Call" },
+      { key:"hpi", title:"History of Presenting Illness / Injury" },
+      { key:"initial", title:"Initial Assessment" },
+      { key:"secondary", title:"Secondary Assessment" },
+      { key:"ongoing", title:"Ongoing Assessment", conditional:"secondary" },
+      { key:"refusal", title:"Refusal" },
+      { key:"transport", title:"Transport", conditional:"transport" },
+      { key:"complications", title:"Complications" },
+      { key:"treatment", title:"Treatment" },
+      { key:"transfer", title:"Transfer of Care", conditional:"transport" },
+      { key:"signature", title:"Crew Signature" }
+    ];
+
+    let wizardCurrentKey = "scene";
+    let wizardCompleted = [];
+    let narrativeCopiedForReset = false;
+
+    function getWizardSteps(){
+      return wizardBaseSteps.filter(step => {
+        if(step.conditional === "secondary"){
+          return checked("secondaryAssessmentYes");
+        }
+        if(step.conditional === "transport"){
+          return !checked("refusalYes");
+        }
+        return true;
+      });
+    }
+
+    function wizardStepIndex(){
+      const steps = getWizardSteps();
+      return Math.max(0, steps.findIndex(s => s.key === wizardCurrentKey));
+    }
+
+    function wizardElement(key){
+      return document.querySelector('[data-step="' + key + '"]');
+    }
+
+    function showWizardStep(key){
+      const steps = getWizardSteps();
+      if(!steps.some(s => s.key === key)){
+        key = steps[0].key;
+      }
+
+      wizardCurrentKey = key;
+
+      document.querySelectorAll(".wizard-step").forEach(el => {
+        el.classList.remove("wizard-active");
+      });
+
+      const target = wizardElement(key);
+      if(target){
+        target.classList.add("wizard-active");
+      }
+
+      document.getElementById("reviewPage").classList.remove("wizard-active");
+      document.getElementById("wizardNavigation").style.display = "block";
+
+      const idx = wizardStepIndex();
+      const current = steps[idx];
+      const fill = ((idx + 1) / (steps.length + 1)) * 100;
+
+      document.getElementById("wizardStepLabel").textContent = "Step " + (idx + 1) + " of " + (steps.length + 1);
+      document.getElementById("wizardStepTitle").textContent = current ? current.title : "";
+      document.getElementById("wizardProgressFill").style.width = fill + "%";
+      document.getElementById("wizardBack").style.visibility = idx === 0 ? "hidden" : "visible";
+      document.getElementById("wizardNext").textContent = idx === steps.length - 1 ? "Review Narrative" : "Next";
+      document.getElementById("wizardMessage").textContent = "";
+
+      updateLivePreview();
+
+      if(target){
+        target.scrollIntoView({behavior:"smooth", block:"start"});
+      }
+    }
+
+    function firstChecked(ids){
+      return ids.some(id => checked(id));
+    }
+
+    function setWizardError(message, focusId){
+      document.getElementById("wizardMessage").textContent = message;
+      if(focusId){
+        const el = document.getElementById(focusId);
+        if(el) el.focus();
+      }
+      return false;
+    }
+
+    function validateWizardStep(key){
+      if(key === "scene"){
+        const scene = val("scene");
+        if(!scene) return setWizardError("Select the scene type.", "scene");
+        if(scene !== "PT RESIDENCE" && !val("sceneOther")){
+          return setWizardError("Enter Location Details for this scene.", "sceneOther");
+        }
+        if(!val("unit")) return setWizardError("Select the responding unit.", "unit");
+        if(!val("delayYN")) return setWizardError("Select Yes or No for response delays.", "delayYN");
+        if(val("delayYN") === "YES" && !val("responseDelay")){
+          return setWizardError("Enter the reason for the response delay.", "responseDelay");
+        }
+      }
+
+      if(key === "nature" && !val("chiefComplaint")){
+        return setWizardError("Enter the Nature of Call.", "chiefComplaint");
+      }
+
+      if(key === "hpi" && !val("hpi")){
+        return setWizardError("Complete the History of Presenting Illness / Injury.", "hpi");
+      }
+
+      if(key === "initial"){
+        if(!val("age")) return setWizardError("Enter the patient age.", "age");
+        if(!val("sex")) return setWizardError("Select the patient sex.", "sex");
+        if(!val("foundPosition")) return setWizardError("Select the found position.", "foundPosition");
+        if(!val("foundLocation")) return setWizardError("Enter the found location.", "foundLocation");
+        if(!val("movement") && !val("movementOther")){
+          return setWizardError("Select movement to the stretcher or describe it in the movement text box.", "movement");
+        }
+
+        const mentalIds = ["mentalAlert","mentalVerbal","mentalPainful","mentalUnresponsive","mentalOther"];
+        if(!firstChecked(mentalIds)){
+          return setWizardError("Select the patient responsiveness / mental status.");
+        }
+
+        if(checked("mentalOther") && !val("mentalOtherDetails")){
+          return setWizardError("Describe the patient's responsiveness / mental status.", "mentalOtherDetails");
+        }
+
+        if(!checked("mentalUnresponsive") && !checked("mentalOther")){
+          const orientationIds = ["orientX4","orientX3","orientX2","orientX1","orientX0"];
+          if(!firstChecked(orientationIds)){
+            return setWizardError("Select the patient orientation.");
+          }
+        }
+
+        if(!val("assessmentComplaint")){
+          return setWizardError("Complete the Patient Complaint / Assessment Details.", "assessmentComplaint");
+        }
+      }
+
+      if(key === "secondary"){
+        if(!checked("secondaryAssessmentYes") && !checked("secondaryAssessmentNo")){
+          return setWizardError("Select Yes or No for Secondary Assessment.");
+        }
+      }
+
+      if(key === "ongoing"){
+        const mentalIds = ["ongoingMentalAlert","ongoingMentalVerbal","ongoingMentalPainful","ongoingMentalUnresponsive","ongoingMentalOther"];
+        if(!firstChecked(mentalIds)){
+          return setWizardError("Select the ongoing responsiveness / mental status.");
+        }
+        if(checked("ongoingMentalOther") && !val("ongoingMentalOtherDetails")){
+          return setWizardError("Describe the ongoing responsiveness / mental status.", "ongoingMentalOtherDetails");
+        }
+
+        if(!checked("ongoingMentalUnresponsive") && !checked("ongoingMentalOther")){
+          const orientationIds = ["ongoingOrientX4","ongoingOrientX3","ongoingOrientX2","ongoingOrientX1","ongoingOrientX0"];
+          if(!firstChecked(orientationIds)){
+            return setWizardError("Select the ongoing orientation.");
+          }
+        }
+        if(!val("ongoingAssessmentComplaint")){
+          return setWizardError("Complete the ongoing assessment details.", "ongoingAssessmentComplaint");
+        }
+      }
+
+      if(key === "refusal"){
+        if(!checked("refusalYes") && !checked("refusalNo")){
+          return setWizardError("Select Yes or No for refusal.");
+        }
+      }
+
+      if(key === "transport"){
+        if(!val("destination")){
+          return setWizardError("Select the transport destination.", "destination");
+        }
+        if(val("destination") === "OTHER" && !val("destinationOther")){
+          return setWizardError("Enter the destination.", "destinationOther");
+        }
+        if(val("destination") !== "CAMERON REGIONAL MEDICAL CENTER" && !val("destinationReason")){
+          return setWizardError("Enter the specialty service required.", "destinationReason");
+        }
+        if(!val("abnYN")){
+          return setWizardError("Select Yes or No for whether an ABN form was obtained.", "abnYN");
+        }
+      }
+
+      // Complications is intentionally optional.
+
+      if(key === "treatment"){
+        const treatments = [
+          "vitals","ekg","iv","oxygen","bgl","woundCare","splint","medication",
+          "advancedAirway","cpr","basicAirway","otherProcedure","allTreatmentRefused"
+        ];
+        if(!firstChecked(treatments)){
+          return setWizardError("Select at least one treatment item.");
+        }
+      }
+
+      if(key === "transfer"){
+        if(!val("transferLocation")){
+          return setWizardError("Enter the receiving bed / room.", "transferLocation");
+        }
+        if(!val("transferMethod")){
+          return setWizardError("Select the transfer method.", "transferMethod");
+        }
+      }
+
+      if(key === "signature"){
+        if(!val("crewName")) return setWizardError("Enter the crew member name.", "crewName");
+        if(!val("crewCredential")) return setWizardError("Enter the credential / license.", "crewCredential");
+      }
+
+      return true;
+    }
+
+    function wizardNext(){
+      if(!validateWizardStep(wizardCurrentKey)) return;
+
+      if(!wizardCompleted.includes(wizardCurrentKey)){
+        wizardCompleted.push(wizardCurrentKey);
+      }
+
+      updateLivePreview();
+
+      const steps = getWizardSteps();
+      const idx = wizardStepIndex();
+
+      if(idx >= steps.length - 1){
+        showReviewPage();
+        return;
+      }
+
+      showWizardStep(steps[idx + 1].key);
+    }
+
+    function wizardBack(){
+      const steps = getWizardSteps();
+      const idx = wizardStepIndex();
+      if(idx > 0){
+        showWizardStep(steps[idx - 1].key);
+      }
+    }
+
+    function reviewBack(){
+      const steps = getWizardSteps();
+      if(steps.length){
+        showWizardStep(steps[steps.length - 1].key);
+      }
+    }
+
+    function buildPartialNarrative(){
+      const reached = new Set(wizardCompleted);
+      reached.add(wizardCurrentKey);
+
+      const parts = [];
+
+      if(reached.has("scene")){
+        const scene = sceneText();
+        const unit = upper(val("unit"));
+        const delayYN = val("delayYN");
+        const responseDelay = upper(val("responseDelay"));
+
+        if(scene) parts.push("SCENE -\n" + scene);
+        if(unit){
+          parts.push(
+            "UNIT RESPONSE-\nCAD " + unit + " RESPONDED " +
+            (delayYN === "YES" && responseDelay ? "WITH DELAYS DUE TO " + responseDelay + "." : "WITHOUT DELAY.")
+          );
+        }
+      }
+
+      if(reached.has("nature") && val("chiefComplaint")){
+        parts.push("NATURE OF CALL\n" + upper(val("chiefComplaint")));
+      }
+
+      if(reached.has("hpi") && val("hpi")){
+        parts.push("HISTORY OF PRESENTING ILLNESS/INJURY-\n" + upper(val("hpi")));
+      }
+
+      if(reached.has("initial")){
+        const assessmentParts = [
+          buildAssessment(),
+          buildMentalStatus(),
+          upper(val("assessmentComplaint")) ? (upper(val("assessmentComplaint")).endsWith(".") ? upper(val("assessmentComplaint")) : upper(val("assessmentComplaint")) + ".") : ""
+        ];
+
+        if(reached.has("ongoing") || wizardCompleted.includes("ongoing")){
+          assessmentParts.push(buildOngoingAssessment());
+        }
+
+        const assessmentText = assessmentParts.filter(Boolean).join(" ");
+        if(assessmentText) parts.push("PT ASSESSMENT\n" + assessmentText);
+      }
+
+      if(reached.has("transport") || reached.has("refusal")){
+        if(checked("refusalYes")){
+          // Refusal language belongs in transfer of care in existing V39 logic.
+        } else if(reached.has("transport")){
+          const t = [buildTransport(), buildAdditionalTransportDocumentation()].filter(Boolean).join(" ");
+          if(t) parts.push("TRANSPORT –\n" + t);
+        }
+      }
+
+      if(reached.has("complications") && val("complications")){
+        const c = upper(val("complications"));
+        parts.push("COMPLICATIONS-\n" + (c.endsWith(".") ? c : c + "."));
+      }
+
+      if(reached.has("treatment")){
+        const t = buildTreatment();
+        if(t) parts.push("TREATMENT-\n" + t);
+      }
+
+      if(reached.has("transfer") || (reached.has("refusal") && checked("refusalYes"))){
+        const t = buildTransfer();
+        if(t) parts.push("TRANSFER OF CARE-\n" + t);
+      }
+
+      if(reached.has("signature") && (val("crewName") || val("crewCredential"))){
+        parts.push("EMS RETURNED TO SERVICE\n" + [upper(val("crewName")), upper(val("crewCredential"))].filter(Boolean).join(" "));
+      }
+
+      return parts.join("\n\n");
+    }
+
+    function updateLivePreview(){
+      const preview = buildPartialNarrative();
+      document.getElementById("livePreview").textContent =
+        preview || "Complete the current section to begin building the narrative.";
+    }
+
+    function buildCompleteNarrativeForReview(){
+      // Use the original V39 generator, then read its output.
+      generateNarrative();
+      return document.getElementById("output").textContent;
+    }
+
+    function showReviewPage(){
+      narrativeCopiedForReset = false;
+      const narrative = buildCompleteNarrativeForReview();
+      document.querySelectorAll(".wizard-step").forEach(el => el.classList.remove("wizard-active"));
+      document.getElementById("wizardNavigation").style.display = "none";
+      document.getElementById("reviewPage").classList.add("wizard-active");
+      document.getElementById("reviewOutput").textContent = narrative;
+      document.getElementById("wizardStepLabel").textContent = "Final Review";
+      document.getElementById("wizardStepTitle").textContent = "Complete Narrative";
+      document.getElementById("wizardProgressFill").style.width = "100%";
+      document.getElementById("reviewStatus").textContent = "";
+      document.getElementById("reviewPage").scrollIntoView({behavior:"smooth", block:"start"});
+    }
+
+    async function copyReviewNarrative(){
+      const text = document.getElementById("reviewOutput").textContent;
+      try{
+        await navigator.clipboard.writeText(text);
+        narrativeCopiedForReset = true;
+        document.getElementById("reviewStatus").textContent = "Narrative copied to clipboard. Finish & Reset is now available.";
+      } catch(err){
+        const temp = document.createElement("textarea");
+        temp.value = text;
+        document.body.appendChild(temp);
+        temp.select();
+        document.execCommand("copy");
+        temp.remove();
+        narrativeCopiedForReset = true;
+        document.getElementById("reviewStatus").textContent = "Narrative copied to clipboard. Finish & Reset is now available.";
+      }
+    }
+
+    function resetWizardUI(){
+      wizardCompleted = [];
+      wizardCurrentKey = "scene";
+      document.getElementById("reviewPage").classList.remove("wizard-active");
+      document.getElementById("wizardNavigation").style.display = "block";
+      showWizardStep("scene");
+      updateLivePreview();
+    }
+
+    function finishAndReset(){
+      if(!narrativeCopiedForReset){
+        document.getElementById("reviewStatus").textContent =
+          "You must copy the narrative before the form can be reset.";
+        return;
+      }
+
+      const confirmed = confirm(
+        "Are you sure you want to reset the form?\n\n" +
+        "This action cannot be reversed and the current narrative will be lost."
+      );
+
+      if(!confirmed) return;
+
+      document.querySelectorAll("input[type='text'], input[type='number'], textarea").forEach(el => el.value = "");
+      document.querySelectorAll("select").forEach(el => el.selectedIndex = 0);
+      document.querySelectorAll("input[type='checkbox']").forEach(el => el.checked = false);
+
+      document.getElementById("shoulderStraps").checked = true;
+      document.getElementById("bodyStraps").checked = true;
+      document.getElementById("assessmentOngoing").checked = true;
+      document.getElementById("monitoringOngoing").checked = true;
+      document.getElementById("reportGiven").checked = true;
+      document.getElementById("careTransferred").checked = true;
+
+      ["delayDetailWrap","destinationReasonWrap","providerJudgmentWrap","destinationOtherWrap",
+       "medicationDetailsWrap","splintDetailsWrap","advancedAirwayWrap","cprWrap",
+       "basicAirwayWrap","otherProcedureWrap","ongoingAssessmentWrap","mentalOtherWrap","ongoingMentalOtherWrap"].forEach(id => {
+          const el = document.getElementById(id);
+          if(el) el.style.display = "";
+       });
+
+      document.getElementById("orientationWrap").style.display = "block";
+      document.getElementById("ongoingOrientationWrap").style.display = "block";
+      document.getElementById("output").textContent = "Complete the form and select Generate Narrative.";
+      document.getElementById("status").textContent = "";
+      document.getElementById("reviewOutput").textContent = "";
+      document.getElementById("reviewStatus").textContent = "";
+
+      narrativeCopiedForReset = false;
+      resetWizardUI();
+    }
+
+    // Keep preview current while typing/selecting in the active section.
+    document.addEventListener("input", function(e){
+      if(e.target.closest(".wizard-step")){
+        updateLivePreview();
+      }
+    });
+
+    document.addEventListener("change", function(e){
+      if(e.target.closest(".wizard-step")){
+        updateLivePreview();
+      }
+    });
+
+
+    function clearReport(){
+      if(!confirm("Clear all entered patient/report information and start a new report?")){
+        return;
+      }
+
+      document.querySelectorAll("input[type='text'], input[type='number'], textarea").forEach(el => el.value = "");
+      document.querySelectorAll("select").forEach(el => el.selectedIndex = 0);
+      document.querySelectorAll("input[type='checkbox']").forEach(el => el.checked = false);
+
+      document.getElementById("shoulderStraps").checked = true;
+      document.getElementById("bodyStraps").checked = true;
+      document.getElementById("assessmentOngoing").checked = true;
+      document.getElementById("monitoringOngoing").checked = true;
+      document.getElementById("reportGiven").checked = true;
+      document.getElementById("careTransferred").checked = true;
+
+      document.getElementById("delayDetailWrap").style.display = "none";
+      document.getElementById("destinationReasonWrap").style.display = "none";
+      document.getElementById("providerJudgmentWrap").style.display = "none";
+      if(document.getElementById("destinationOtherWrap")) document.getElementById("destinationOtherWrap").style.display = "none";
+      ["medicationDetailsWrap","splintDetailsWrap","advancedAirwayWrap","cprWrap","basicAirwayWrap","otherProcedureWrap"].forEach(id => {
+        const el = document.getElementById(id);
+        if(el) el.style.display = "none";
+      });
+      if(document.getElementById("orientationWrap")) document.getElementById("orientationWrap").style.display = "block";
+      if(document.getElementById("ongoingAssessmentWrap")) document.getElementById("ongoingAssessmentWrap").style.display = "none";
+      if(document.getElementById("ongoingOrientationWrap")) document.getElementById("ongoingOrientationWrap").style.display = "block";
+      if(document.getElementById("transportSection")) document.getElementById("transportSection").style.display = "none";
+      if(document.getElementById("transferOfCareSection")) document.getElementById("transferOfCareSection").style.display = "none";
+      document.getElementById("output").textContent = "Complete the form and select Generate Narrative.";
+      document.getElementById("status").textContent = "Report cleared.";
+    }
+    document.addEventListener("DOMContentLoaded", function(){
+      toggleLocationDetailsRequirement();
+      toggleDelayField();
+      toggleDestinationFields();
+      showWizardStep("scene");
+      updateLivePreview();
+    });
+  </script>
+</body>
+</html>
