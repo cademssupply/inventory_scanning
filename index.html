@@ -355,6 +355,38 @@
 
 }
     /* =========================
+       EMS NARRATIVE BUILDER
+    ========================= */
+
+    .narrative-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      min-height: 75px;
+      margin-top: 14px;
+      padding: 14px;
+      background: #292929;
+      color: white;
+      border: 1px solid var(--orange);
+      text-decoration: none;
+      text-align: center;
+      font-size: 20px;
+      font-weight: 800;
+      border-radius: 12px;
+      transition: .2s ease;
+    }
+
+    .narrative-button:hover {
+      background: #363636;
+      transform: translateY(-2px);
+    }
+
+    .narrative-button:active {
+      transform: scale(.98);
+    }
+
+    /* =========================
        EMPLOYEE RESOURCES
     ========================= */
 
@@ -560,6 +592,11 @@
         font-size: 19px;
       }
 
+      .narrative-button {
+        min-height: 70px;
+        font-size: 19px;
+      }
+
       .resource-grid {
         grid-template-columns:
           1fr 1fr;
@@ -668,6 +705,14 @@
   href="expiration.html"
 >
   EXPIRATION DATES
+</a>
+
+<!-- EMS NARRATIVE BUILDER -->
+<a
+  class="narrative-button"
+  href="narrative.html"
+>
+  EMS NARRATIVE BUILDER
 </a>
 
   <!-- EMPLOYEE RESOURCES -->
