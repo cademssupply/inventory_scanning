@@ -512,9 +512,9 @@
       <div class="hint">This section remains free text because it varies significantly from call to call.</div>
     </section>
 
-    <section class="section wizard-step" data-step="initial">
-      <h2>Initial Assessment</h2>
-      <div class="grid-3">
+    <section class="section wizard-step" data-step="ptinfo">
+      <h2>PT Info & Movement</h2>
+<div class="grid-3">
         <div>
           <label for="age">Age</label>
           <input id="age" type="number" min="0" max="120" placeholder="71" />
@@ -570,6 +570,11 @@
         </div>
       </div>
 
+      
+    </section>
+
+    <section class="section wizard-step" data-step="initial">
+      <h2>Initial Assessment</h2>
       <div class="grid">
         <div class="full">
           <label>Responsiveness / Mental Status</label>
@@ -732,8 +737,16 @@
 
     <section class="section wizard-step" data-step="complications">
       <h2>Complications</h2>
-      <label for="complications">Complications (Optional)</label>
-      <textarea id="complications" placeholder="Leave blank if there were no complications to document."></textarea>
+      <label>Were There Any Complications?</label>
+      <div class="check-grid">
+        <label class="check"><input type="checkbox" id="complicationsYes" onclick="selectComplications('YES')" /> Yes</label>
+        <label class="check"><input type="checkbox" id="complicationsNo" onclick="selectComplications('NO')" /> No</label>
+      </div>
+
+      <div id="complicationsDetailsWrap" style="display:none; margin-top:14px;">
+        <label for="complications">Describe Complications</label>
+        <textarea id="complications" placeholder="Describe the complication(s)."></textarea>
+      </div>
     </section>
 
     <section class="section wizard-step" data-step="treatment">
@@ -925,14 +938,20 @@
       const position = upper(val("foundPosition"));
       const location = upper(val("foundLocation"));
 
-      if(age || sex || position || location){
+      if(age || sex){
         let sentence = "PT IS";
         if(age) sentence += ` A ${age} Y/O`;
         if(sex) sentence += ` ${sex}`;
-        if(position) sentence += ` FOUND ${position}`;
-        if(location) sentence += ` IN THE ${location}`;
         sentence += ".";
         parts.push(sentence);
+      }
+
+      if(position || location){
+        let foundSentence = "PT FOUND";
+        if(position) foundSentence += ` ${position}`;
+        if(location) foundSentence += ` ${location}`;
+        foundSentence += ".";
+        parts.push(foundSentence);
       }
 
       const movement = movementText();
@@ -1221,6 +1240,33 @@
       return parts.join(" ");
     }
 
+    function selectComplications(choice){
+      const yes = document.getElementById("complicationsYes");
+      const no = document.getElementById("complicationsNo");
+      const wrap = document.getElementById("complicationsDetailsWrap");
+      const detail = document.getElementById("complications");
+
+      if(!yes || !no || !wrap || !detail) return;
+
+      if(choice === "YES"){
+        yes.checked = true;
+        no.checked = false;
+        wrap.style.display = "block";
+        detail.required = true;
+        setTimeout(() => detail.focus(), 0);
+      } else {
+        yes.checked = false;
+        no.checked = true;
+        wrap.style.display = "none";
+        detail.required = false;
+        detail.value = "";
+      }
+
+      if(typeof updateLivePreview === "function"){
+        updateLivePreview();
+      }
+    }
+
     function toggleProcedureDetail(checkboxId, wrapId){
       const box = document.getElementById(checkboxId);
       const wrap = document.getElementById(wrapId);
@@ -1272,7 +1318,7 @@
 
       if(checked("otherProcedure")){
         const detail = upper(val("otherProcedureDetails"));
-        parts.push(detail ? (detail.endsWith(".") ? detail : detail + ".") : "OTHER PROCEDURE PERFORMED.");
+        if(detail) parts.push(detail.endsWith(".") ? detail : detail + ".");
       }
 
       if(checked("splint")){
@@ -1377,7 +1423,7 @@
       const mentalStatus = buildMentalStatus();
       const ongoingAssessment = buildOngoingAssessment();
       const transport = checked("refusalYes") ? "" : buildTransport();
-      const complications = upper(val("complications"));
+      const complications = checked("complicationsYes") ? upper(val("complications")) : "";
       const treatment = buildTreatment();
       const additionalTransport = buildAdditionalTransportDocumentation();
       const transfer = buildTransfer();
@@ -1452,6 +1498,7 @@ ${[crewName, credential].filter(Boolean).join(" ")}`;
       { key:"scene", title:"Scene & Unit Response" },
       { key:"nature", title:"Nature of Call" },
       { key:"hpi", title:"History of Presenting Illness / Injury" },
+      { key:"ptinfo", title:"PT Info & Movement" },
       { key:"initial", title:"Initial Assessment" },
       { key:"secondary", title:"Secondary Assessment" },
       { key:"ongoing", title:"Ongoing Assessment", conditional:"secondary" },
@@ -1561,7 +1608,7 @@ ${[crewName, credential].filter(Boolean).join(" ")}`;
         return setWizardError("Complete the History of Presenting Illness / Injury.", "hpi");
       }
 
-      if(key === "initial"){
+      if(key === "ptinfo"){
         if(!val("age")) return setWizardError("Enter the patient age.", "age");
         if(!val("sex")) return setWizardError("Select the patient sex.", "sex");
         if(!val("foundPosition")) return setWizardError("Select the found position.", "foundPosition");
@@ -1569,7 +1616,9 @@ ${[crewName, credential].filter(Boolean).join(" ")}`;
         if(!val("movement") && !val("movementOther")){
           return setWizardError("Select movement to the stretcher or describe it in the movement text box.", "movement");
         }
+      }
 
+      if(key === "initial"){
         const mentalIds = ["mentalAlert","mentalVerbal","mentalPainful","mentalUnresponsive","mentalOther"];
         if(!firstChecked(mentalIds)){
           return setWizardError("Select the patient responsiveness / mental status.");
@@ -1638,7 +1687,14 @@ ${[crewName, credential].filter(Boolean).join(" ")}`;
         }
       }
 
-      // Complications is intentionally optional.
+      if(key === "complications"){
+        if(!checked("complicationsYes") && !checked("complicationsNo")){
+          return setWizardError("Select Yes or No for complications.");
+        }
+        if(checked("complicationsYes") && !val("complications")){
+          return setWizardError("Describe the complications.", "complications");
+        }
+      }
 
       if(key === "treatment"){
         const treatments = [
@@ -1647,6 +1703,9 @@ ${[crewName, credential].filter(Boolean).join(" ")}`;
         ];
         if(!firstChecked(treatments)){
           return setWizardError("Select at least one treatment item.");
+        }
+        if(checked("otherProcedure") && !val("otherProcedureDetails")){
+          return setWizardError("Describe the other procedure performed.", "otherProcedureDetails");
         }
       }
 
@@ -1731,11 +1790,11 @@ ${[crewName, credential].filter(Boolean).join(" ")}`;
         parts.push("HISTORY OF PRESENTING ILLNESS/INJURY-\n" + upper(val("hpi")));
       }
 
-      if(reached.has("initial")){
+      if(reached.has("ptinfo") || reached.has("initial")){
         const assessmentParts = [
           buildAssessment(),
-          buildMentalStatus(),
-          upper(val("assessmentComplaint")) ? (upper(val("assessmentComplaint")).endsWith(".") ? upper(val("assessmentComplaint")) : upper(val("assessmentComplaint")) + ".") : ""
+          reached.has("initial") ? buildMentalStatus() : "",
+          reached.has("initial") && upper(val("assessmentComplaint")) ? (upper(val("assessmentComplaint")).endsWith(".") ? upper(val("assessmentComplaint")) : upper(val("assessmentComplaint")) + ".") : ""
         ];
 
         if(reached.has("ongoing") || wizardCompleted.includes("ongoing")){
@@ -1755,7 +1814,7 @@ ${[crewName, credential].filter(Boolean).join(" ")}`;
         }
       }
 
-      if(reached.has("complications") && val("complications")){
+      if(reached.has("complications") && checked("complicationsYes") && val("complications")){
         const c = upper(val("complications"));
         parts.push("COMPLICATIONS-\n" + (c.endsWith(".") ? c : c + "."));
       }
@@ -1862,6 +1921,11 @@ ${[crewName, credential].filter(Boolean).join(" ")}`;
           if(el) el.style.display = "";
        });
 
+      const complicationsWrap = document.getElementById("complicationsDetailsWrap");
+      if(complicationsWrap) complicationsWrap.style.display = "none";
+      const complicationsDetail = document.getElementById("complications");
+      if(complicationsDetail) complicationsDetail.required = false;
+
       document.getElementById("orientationWrap").style.display = "block";
       document.getElementById("ongoingOrientationWrap").style.display = "block";
       document.getElementById("output").textContent = "Complete the form and select Generate Narrative.";
@@ -1907,7 +1971,7 @@ ${[crewName, credential].filter(Boolean).join(" ")}`;
       document.getElementById("destinationReasonWrap").style.display = "none";
       document.getElementById("providerJudgmentWrap").style.display = "none";
       if(document.getElementById("destinationOtherWrap")) document.getElementById("destinationOtherWrap").style.display = "none";
-      ["medicationDetailsWrap","splintDetailsWrap","advancedAirwayWrap","cprWrap","basicAirwayWrap","otherProcedureWrap"].forEach(id => {
+      ["medicationDetailsWrap","splintDetailsWrap","advancedAirwayWrap","cprWrap","basicAirwayWrap","otherProcedureWrap","complicationsDetailsWrap"].forEach(id => {
         const el = document.getElementById(id);
         if(el) el.style.display = "none";
       });
