@@ -1,524 +1,547 @@
 <!doctype html>
+
 <html lang="en">
 
 <head>
 
-  <meta charset="utf-8">
+<meta charset="utf-8">
 
-  <meta
-    name="viewport"
-    content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"
-  >
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1"
+>
 
-  <title>Cameron EMS Supply Removal</title>
+<title>
+  Cameron EMS Supply Removal
+</title>
 
-  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 
+<style>
 
-  <style>
+:root {
 
-    :root {
-      --bg: #1f2328;
-      --panel: #2b3036;
-      --panel2: #343a40;
-      --border: #4b535c;
+  --background:#171a1d;
+  --card:#272b30;
+  --card2:#30353b;
 
-      --text: #f3f4f6;
-      --muted: #b7bdc5;
+  --border:#4a5057;
 
-      --orange: #f97316;
-      --orange-light: #fb923c;
-      --orange-dark: #c2410c;
+  --text:#f5f5f5;
+  --muted:#aeb4bb;
 
-      --success: #14532d;
-      --success-border: #22c55e;
+  --orange:#f97316;
+  --orange2:#ea580c;
 
-      --danger: #7f1d1d;
-      --danger-border: #ef4444;
-    }
+  --green:#166534;
+  --green-border:#22c55e;
 
+  --red:#7f1d1d;
+  --red-border:#ef4444;
 
-    * {
-      box-sizing: border-box;
-    }
+}
 
 
-    body {
-      margin: 0;
+* {
+  box-sizing:border-box;
+}
 
-      background:
-        linear-gradient(
-          180deg,
-          #171a1e 0%,
-          var(--bg) 100%
-        );
 
-      color: var(--text);
+body {
 
-      font-family:
-        Arial,
-        Helvetica,
-        sans-serif;
+  margin:0;
 
-      min-height: 100vh;
-    }
+  background:
+    linear-gradient(
+      180deg,
+      #111315,
+      var(--background)
+    );
 
+  color:var(--text);
 
-    .wrap {
-      max-width: 640px;
-      margin: 0 auto;
-      padding: 18px;
-    }
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
 
+  min-height:100vh;
 
-    .card {
-      background: var(--panel);
+}
 
-      border:
-        1px solid
-        var(--border);
 
-      border-radius: 18px;
+.container {
 
-      padding: 20px;
+  width:min(
+    620px,
+    calc(100% - 24px)
+  );
 
-      box-shadow:
-        0 8px 28px
-        rgba(0,0,0,.28);
-    }
+  margin:0 auto;
 
+  padding:
+    24px 0 40px;
 
-    /* HEADER */
+}
 
-    .header {
-      text-align: center;
-      margin-bottom: 18px;
-    }
 
+.card {
 
-    .header h1 {
-      margin: 0;
-      font-size: 27px;
-    }
+  background:var(--card);
 
+  border:
+    1px solid
+    var(--border);
 
-    .accent {
-      color: var(--orange-light);
-    }
+  border-radius:20px;
 
+  padding:24px;
 
-    .sub {
-      margin-top: 7px;
-      color: var(--muted);
-      font-size: 14px;
-    }
+}
 
 
-    /* STATUS */
+/* =====================================
+   HEADER
+===================================== */
 
-    .status {
-      margin-top: 14px;
+.header {
 
-      padding: 14px;
+  text-align:center;
 
-      border-radius: 10px;
+  margin-bottom:22px;
 
-      background: #20252a;
+}
 
-      border:
-        1px solid
-        var(--border);
 
-      text-align: center;
+.header h1 {
 
-      font-weight: 700;
-    }
+  margin:0;
 
+  font-size:30px;
 
-    .status.success {
-      background: var(--success);
+  line-height:1.1;
 
-      border-color:
-        var(--success-border);
-    }
+}
 
 
-    .status.error {
-      background: var(--danger);
+.header h1 span {
 
-      border-color:
-        var(--danger-border);
-    }
+  color:var(--orange);
 
+}
 
-    /* INPUTS */
 
-    label {
-      display: block;
+.header p {
 
-      margin-bottom: 7px;
+  margin:
+    9px 0 0;
 
-      font-weight: 700;
-    }
+  color:var(--muted);
 
+  font-size:15px;
 
-    input {
-      width: 100%;
+}
 
-      padding: 16px;
 
-      border:
-        1px solid
-        var(--border);
+/* =====================================
+   START BUTTON
+===================================== */
 
-      border-radius: 10px;
+.start-button {
 
-      background: #171a1e;
+  width:100%;
 
-      color: white;
+  min-height:92px;
 
-      font-size: 20px;
+  border:0;
 
-      outline: none;
-    }
+  border-radius:15px;
 
+  background:
+    linear-gradient(
+      180deg,
+      var(--orange),
+      var(--orange2)
+    );
 
-    input:focus {
-      border-color: var(--orange);
+  color:white;
 
-      box-shadow:
-        0 0 0 3px
-        rgba(249,115,22,.20);
-    }
+  font-size:28px;
 
+  font-weight:900;
 
-    input::placeholder {
-      color: #7f8790;
-    }
+  cursor:pointer;
 
+}
 
-    .barcode-section {
-      margin-top: 18px;
-    }
 
+.start-button.active {
 
-    /* ITEM */
+  background:#202428;
 
-    .item {
-      display: none;
+  border:
+    2px solid
+    var(--orange);
 
-      margin-top: 18px;
+  color:var(--orange);
 
-      padding: 18px;
+}
 
-      background: var(--panel2);
 
-      border:
-        1px solid
-        var(--border);
+.start-button:active {
 
-      border-left:
-        5px solid
-        var(--orange);
+  transform:
+    scale(.985);
 
-      border-radius: 12px;
-    }
+}
 
 
-    .item-name {
-      font-size: 25px;
+/* =====================================
+   STATUS
+===================================== */
 
-      font-weight: 800;
+.status {
 
-      margin-bottom: 7px;
-    }
+  margin-top:18px;
 
+  padding:18px;
 
-    .barcode-display {
-      color: var(--muted);
+  border-radius:12px;
 
-      font-size: 14px;
+  text-align:center;
 
-      margin-bottom: 14px;
-    }
+  font-size:20px;
 
+  font-weight:900;
 
-    .current-qty {
-      margin-bottom: 20px;
+  background:#1c2024;
 
-      padding: 12px;
+  border:
+    1px solid
+    var(--border);
 
-      border-radius: 9px;
+}
 
-      background: #20252a;
 
-      text-align: center;
+.status.ready {
 
-      font-size: 18px;
+  border-color:
+    var(--orange);
 
-      font-weight: 800;
-    }
+}
 
 
-    .current-qty span {
-      color: var(--orange-light);
+.status.working {
 
-      font-size: 24px;
-    }
+  border-color:
+    #fbbf24;
 
+}
 
-    .qty-label {
-      color: var(--orange-light);
 
-      font-size: 15px;
+.status.success {
 
-      text-transform: uppercase;
+  background:
+    var(--green);
 
-      letter-spacing: .5px;
-    }
+  border:
+    2px solid
+    var(--green-border);
 
+}
 
-    /* CONFIRMATION */
 
-    .result-box {
-      display: none;
+.status.error {
 
-      margin-top: 16px;
+  background:
+    var(--red);
 
-      padding: 16px;
+  border:
+    2px solid
+    var(--red-border);
 
-      border-radius: 12px;
+}
 
-      text-align: center;
-    }
 
+/* =====================================
+   BARCODE INPUT
+===================================== */
 
-    .result-box.success {
-      display: block;
+.scan-area {
 
-      background: var(--success);
+  margin-top:20px;
 
-      border:
-        2px solid
-        var(--success-border);
-    }
+}
 
 
-    .result-box.error {
-      display: block;
+.scan-area label {
 
-      background: var(--danger);
+  display:block;
 
-      border:
-        2px solid
-        var(--danger-border);
-    }
+  margin-bottom:7px;
 
+  font-size:14px;
 
-    .result-title {
-      font-size: 21px;
+  font-weight:700;
 
-      font-weight: 900;
+  color:var(--muted);
 
-      margin-bottom: 12px;
-    }
+}
 
 
-    .result-grid {
-      display: grid;
+#barcode {
 
-      grid-template-columns:
-        repeat(3, 1fr);
+  width:100%;
 
-      gap: 8px;
-    }
+  height:60px;
 
+  padding:
+    0 15px;
 
-    .result-value {
-      padding: 8px;
+  background:#111315;
 
-      background:
-        rgba(0,0,0,.18);
+  border:
+    2px solid
+    var(--border);
 
-      border-radius: 8px;
-    }
+  border-radius:11px;
 
+  color:white;
 
-    .result-value small {
-      display: block;
+  font-size:21px;
 
-      margin-bottom: 4px;
+  outline:none;
 
-      font-size: 11px;
+}
 
-      text-transform: uppercase;
-    }
 
+#barcode:focus {
 
-    .result-value strong {
-      font-size: 21px;
-    }
+  border-color:
+    var(--orange);
 
+}
 
-    /* BUTTONS */
 
-    button,
-    .home-button {
-      width: 100%;
+/* =====================================
+   RESULT
+===================================== */
 
-      padding: 15px;
+.result {
 
-      border: 0;
+  display:none;
 
-      border-radius: 11px;
+  margin-top:18px;
 
-      font-size: 17px;
+  padding:20px;
 
-      font-weight: 700;
+  background:var(--card2);
 
-      cursor: pointer;
+  border-radius:13px;
 
-      text-align: center;
-    }
+  text-align:center;
 
+}
 
-    .save-btn {
-      margin-top: 15px;
 
-      min-height: 60px;
+.result.show {
 
-      background:
-        linear-gradient(
-          180deg,
-          var(--orange-light),
-          var(--orange-dark)
-        );
+  display:block;
 
-      color: white;
+}
 
-      font-size: 20px;
-    }
 
+.item-name {
 
-    .save-btn:disabled {
-      opacity: .55;
+  font-size:27px;
 
-      cursor: default;
-    }
+  font-weight:900;
 
+}
 
-    .wrong-btn {
-      margin-top: 10px;
 
-      background: transparent;
+.barcode-text {
 
-      color: #ffd7c2;
+  margin-top:6px;
 
-      border:
-        1px solid
-        var(--orange-dark);
-    }
+  color:var(--muted);
 
+  font-size:13px;
 
-    .retry-btn {
-      display: none;
+}
 
-      margin-top: 12px;
 
-      background: #ef4444;
+.quantity-change {
 
-      color: white;
-    }
+  display:grid;
 
+  grid-template-columns:
+    1fr auto 1fr;
 
-    .camera-btn {
-      margin-top: 20px;
+  align-items:center;
 
-      background: var(--panel2);
+  gap:12px;
 
-      color: var(--text);
+  margin-top:18px;
 
-      border:
-        1px solid
-        var(--border);
-    }
+}
 
 
-    .home-button {
-      display: block;
+.qty {
 
-      margin-top: 15px;
+  padding:13px 8px;
 
-      background: #171a1e;
+  background:
+    rgba(
+      0,
+      0,
+      0,
+      .22
+    );
 
-      color: #d1d5db;
+  border-radius:10px;
 
-      border:
-        1px solid
-        var(--border);
+}
 
-      text-decoration: none;
-    }
 
+.qty-label {
 
-    #reader {
-      width: 100%;
+  display:block;
 
-      overflow: hidden;
+  margin-bottom:5px;
 
-      border-radius: 12px;
+  color:var(--muted);
 
-      background: #111;
+  font-size:11px;
 
-      margin-top: 12px;
-    }
+  text-transform:uppercase;
 
+}
 
-    .workflow {
-      margin-top: 16px;
 
-      padding: 12px;
+.qty-value {
 
-      background: #20252a;
+  font-size:28px;
 
-      border-radius: 10px;
+  font-weight:900;
 
-      color: var(--muted);
+}
 
-      font-size: 13px;
 
-      text-align: center;
+.arrow {
 
-      line-height: 1.5;
-    }
+  color:var(--orange);
 
+  font-size:27px;
 
-    .workflow strong {
-      color: var(--orange-light);
-    }
+  font-weight:900;
 
+}
 
-    @media(max-width:520px) {
 
-      .wrap {
-        padding: 12px;
-      }
+/* =====================================
+   INSTRUCTIONS
+===================================== */
 
-      .card {
-        padding: 16px;
-      }
+.instructions {
 
-      .header h1 {
-        font-size: 24px;
-      }
+  margin-top:20px;
 
-      .result-grid {
-        grid-template-columns: 1fr;
-      }
+  padding:15px;
 
-    }
+  background:#1c2024;
 
-  </style>
+  border-radius:11px;
+
+  color:var(--muted);
+
+  text-align:center;
+
+  line-height:1.55;
+
+  font-size:14px;
+
+}
+
+
+.instructions strong {
+
+  color:var(--orange);
+
+}
+
+
+/* =====================================
+   HOME
+===================================== */
+
+.home {
+
+  display:block;
+
+  margin-top:16px;
+
+  padding:16px;
+
+  background:#15181b;
+
+  border:
+    1px solid
+    var(--border);
+
+  border-radius:11px;
+
+  color:#ddd;
+
+  text-align:center;
+
+  text-decoration:none;
+
+  font-weight:700;
+
+}
+
+
+/* =====================================
+   MOBILE
+===================================== */
+
+@media (
+  max-width:480px
+) {
+
+  .card {
+
+    padding:17px;
+
+  }
+
+
+  .header h1 {
+
+    font-size:25px;
+
+  }
+
+
+  .quantity-change {
+
+    grid-template-columns:
+      1fr auto 1fr;
+
+    gap:7px;
+
+  }
+
+
+  .qty-value {
+
+    font-size:23px;
+
+  }
+
+}
+
+</style>
 
 </head>
 
@@ -526,762 +549,442 @@
 <body>
 
 
-<div class="wrap">
+<div class="container">
 
-  <div class="card">
+<div class="card">
 
 
-    <div class="header">
+  <!-- HEADER -->
 
-      <h1>
-        Cameron EMS
-        <span class="accent">
-          Supply Removal
-        </span>
-      </h1>
+  <div class="header">
 
-      <div class="sub">
-        Scan barcode • Enter quantity • Press Enter
-      </div>
+    <h1>
+      Cameron EMS
+      <span>
+        Supply Removal
+      </span>
+    </h1>
 
-    </div>
-
-
-    <div
-      id="status"
-      class="status"
-    >
-      READY TO SCAN
-    </div>
-
-
-    <div class="barcode-section">
-
-      <label for="barcodeInput">
-        Barcode Scanner / Entry
-      </label>
-
-      <input
-        id="barcodeInput"
-        type="text"
-        autocomplete="off"
-        spellcheck="false"
-        placeholder="Scan or type barcode"
-        onkeydown="barcodeKey(event)"
-      >
-
-    </div>
-
-
-    <div
-      id="itemBox"
-      class="item"
-    >
-
-
-      <div
-        id="itemName"
-        class="item-name"
-      ></div>
-
-
-      <div class="barcode-display">
-        Barcode:
-        <strong id="itemId"></strong>
-      </div>
-
-
-      <div class="current-qty">
-
-        Current Qty On Hand:
-
-        <span id="currentQtyDisplay">
-          0
-        </span>
-
-      </div>
-
-
-      <label
-        class="qty-label"
-        for="qty"
-      >
-        Quantity Removed
-      </label>
-
-
-      <input
-        id="qty"
-        type="number"
-        min="1"
-        step="1"
-        inputmode="numeric"
-        autocomplete="off"
-        placeholder="Enter quantity removed"
-        onkeydown="qtyKey(event)"
-      >
-
-
-      <button
-        id="saveBtn"
-        class="save-btn"
-        onclick="saveRemove()"
-      >
-        REMOVE INVENTORY
-      </button>
-
-
-      <button
-        class="wrong-btn"
-        onclick="resetForNextItem()"
-      >
-        ← Wrong Item — Scan Again
-      </button>
-
-
-    </div>
-
-
-    <!-- RESULT / VERIFICATION -->
-
-    <div
-      id="resultBox"
-      class="result-box"
-    >
-
-      <div
-        id="resultTitle"
-        class="result-title"
-      ></div>
-
-
-      <div class="result-grid">
-
-
-        <div class="result-value">
-
-          <small>
-            Previous
-          </small>
-
-          <strong id="resultOld">
-            -
-          </strong>
-
-        </div>
-
-
-        <div class="result-value">
-
-          <small>
-            Removed
-          </small>
-
-          <strong id="resultRemoved">
-            -
-          </strong>
-
-        </div>
-
-
-        <div class="result-value">
-
-          <small>
-            New Qty
-          </small>
-
-          <strong id="resultNew">
-            -
-          </strong>
-
-        </div>
-
-
-      </div>
-
-    </div>
-
-
-    <button
-      id="retryBtn"
-      class="retry-btn"
-      onclick="retryRemoval()"
-    >
-      RETRY REMOVAL
-    </button>
-
-
-    <div class="workflow">
-
-      <strong>
-        Verified Workflow
-      </strong>
-
-      <br>
-
-      Scan → Enter quantity → System verifies new quantity → Next scan
-
-    </div>
-
-
-    <button
-      id="cameraBtn"
-      class="camera-btn"
-      onclick="startCamera()"
-    >
-      Use Camera Scanner
-    </button>
-
-
-    <div id="reader"></div>
-
-
-    <a
-      href="index.html"
-      class="home-button"
-    >
-      ← Return to Employee Dashboard
-    </a>
-
+    <p>
+      Rapid one-item barcode removal
+    </p>
 
   </div>
+
+
+  <!-- START -->
+
+  <button
+    id="startButton"
+    class="start-button"
+    type="button"
+  >
+    START SCANNING
+  </button>
+
+
+  <!-- STATUS -->
+
+  <div
+    id="status"
+    class="status ready"
+  >
+    CLICK START SCANNING
+  </div>
+
+
+  <!-- BARCODE -->
+
+  <div class="scan-area">
+
+    <label for="barcode">
+      Barcode
+    </label>
+
+    <input
+      id="barcode"
+      type="text"
+      inputmode="none"
+      autocomplete="off"
+      spellcheck="false"
+      placeholder="Scan item barcode"
+      disabled
+    >
+
+  </div>
+
+
+  <!-- RESULT -->
+
+  <div
+    id="result"
+    class="result"
+  >
+
+    <div
+      id="itemName"
+      class="item-name"
+    >
+    </div>
+
+
+    <div
+      id="barcodeText"
+      class="barcode-text"
+    >
+    </div>
+
+
+    <div class="quantity-change">
+
+      <div class="qty">
+
+        <span class="qty-label">
+          Previous
+        </span>
+
+        <span
+          id="previousQty"
+          class="qty-value"
+        >
+          -
+        </span>
+
+      </div>
+
+
+      <div class="arrow">
+        →
+      </div>
+
+
+      <div class="qty">
+
+        <span class="qty-label">
+          New QOH
+        </span>
+
+        <span
+          id="newQty"
+          class="qty-value"
+        >
+          -
+        </span>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- INSTRUCTIONS -->
+
+  <div class="instructions">
+
+    <strong>
+      EACH SCAN REMOVES 1
+    </strong>
+
+    <br>
+
+    Double ding =
+    removal verified.
+
+    <br>
+
+    Honk =
+    removal failed.
+
+    <br><br>
+
+    Negative inventory is allowed
+    when the physical count is different
+    from the spreadsheet.
+
+  </div>
+
+
+  <a
+    href="index.html"
+    class="home"
+  >
+    ← Return to Employee Dashboard
+  </a>
+
+
+</div>
 
 </div>
 
 
+<!-- POST TARGET -->
+
 <iframe
-  name="saveFrame"
-  id="saveFrame"
+  id="postFrame"
+  name="postFrame"
   style="display:none"
 ></iframe>
 
 
 <script>
 
-
-// =====================================================
-// IMPORTANT
-// Replace this with the NEW Apps Script /exec URL
-// currently being used by your working system.
-// =====================================================
+// ======================================================
+// CONFIGURATION
+// ======================================================
 
 const API_URL =
   "https://script.google.com/macros/s/AKfycbxOSkgybcG2mTC-0m26GXX1M6ZQgnjq2V7lqQ4R9Y8aJE-stqALUkVmZL6cZR8pRvLv5w/exec";
 
 
+const VERIFY_DELAY =
+  700;
 
-// =====================================================
+
+const SUCCESS_DISPLAY_TIME =
+  900;
+
+
+const FAILURE_DISPLAY_TIME =
+  1800;
+
+
+// ======================================================
 // STATE
-// =====================================================
+// ======================================================
 
-let currentBarcode = "";
-
-let currentItemName = "";
-
-let startingQty = 0;
-
-let requestedRemoval = 0;
-
-let expectedQty = 0;
-
-let scanLocked = false;
-
-let scanner = null;
-
-let transactionInProgress = false;
+let scanningActive =
+  false;
 
 
+let busy =
+  false;
 
-// =====================================================
-// ELEMENT HELPERS
-// =====================================================
 
-function barcodeBox() {
-  return document.getElementById(
-    "barcodeInput"
+let audioContext =
+  null;
+
+
+let transaction = {
+
+  barcode:"",
+
+  itemName:"",
+
+  previousQty:0,
+
+  expectedQty:0
+
+};
+
+
+// ======================================================
+// ELEMENTS
+// ======================================================
+
+const startButton =
+  document.getElementById(
+    "startButton"
   );
-}
 
 
-function quantityBox() {
-  return document.getElementById(
-    "qty"
+const barcodeInput =
+  document.getElementById(
+    "barcode"
   );
-}
 
 
+const statusBox =
+  document.getElementById(
+    "status"
+  );
 
-// =====================================================
-// STATUS
-// =====================================================
 
-function setStatus(
-  message,
-  type = ""
-) {
+const resultBox =
+  document.getElementById(
+    "result"
+  );
 
-  const box =
-    document.getElementById(
-      "status"
+
+// ======================================================
+// START SCANNING
+// ======================================================
+
+startButton.addEventListener(
+  "click",
+  function() {
+
+    initializeAudio();
+
+
+    scanningActive =
+      true;
+
+
+    busy =
+      false;
+
+
+    barcodeInput.disabled =
+      false;
+
+
+    startButton.textContent =
+      "SCANNER ACTIVE";
+
+
+    startButton.classList.add(
+      "active"
     );
 
-  box.className =
-    "status" +
-    (
-      type
-        ? " " + type
-        : ""
-    );
-
-  box.textContent =
-    message;
-
-}
-
-
-
-// =====================================================
-// BARCODE ENTER
-// =====================================================
-
-function barcodeKey(event) {
-
-  if (
-    event.key !== "Enter"
-  ) {
-    return;
-  }
-
-
-  event.preventDefault();
-
-
-  const barcode =
-    barcodeBox()
-      .value
-      .trim();
-
-
-  if (!barcode) {
 
     setStatus(
-      "Scan or enter a barcode.",
-      "error"
+      "READY — SCAN ITEM",
+      "ready"
     );
 
-    barcodeBox().focus();
 
-    return;
+    barcodeInput.value =
+      "";
+
+
+    barcodeInput.focus();
+
   }
+);
 
 
-  if (
-    scanLocked ||
-    transactionInProgress
-  ) {
-    return;
-  }
+// ======================================================
+// SCANNER ENTER
+// ======================================================
 
+barcodeInput.addEventListener(
+  "keydown",
+  function(event) {
 
-  scanLocked = true;
+    if (
+      event.key !== "Enter"
+    ) {
 
-
-  lookupItemAndQty(
-    barcode,
-    1
-  );
-
-}
-
-
-
-// =====================================================
-// INITIAL ITEM + QUANTITY LOOKUP
-// =====================================================
-//
-// Uses mode=qty because the backend returns:
-// item name + current quantity
-//
-// This avoids doing two separate requests.
-// =====================================================
-
-function lookupItemAndQty(
-  barcode,
-  attempt
-) {
-
-
-  setStatus(
-    attempt === 1
-      ? "Looking up item..."
-      : "Connection delayed — retrying..."
-  );
-
-
-  jsonpRequest(
-
-    {
-      mode: "qty",
-      item: barcode,
-      t: Date.now()
-    },
-
-
-    data => {
-
-
-      if (
-        !data ||
-        !data.success
-      ) {
-
-        scanLocked = false;
-
-        currentBarcode = "";
-
-        setStatus(
-          (
-            data &&
-            data.message
-          ) ||
-          "Item not found.",
-          "error"
-        );
-
-        barcodeBox().value = "";
-
-        barcodeBox().focus();
-
-        return;
-
-      }
-
-
-      currentBarcode =
-        barcode;
-
-
-      currentItemName =
-        data.name;
-
-
-      startingQty =
-        Number(
-          data.currentQty || 0
-        );
-
-
-      document.getElementById(
-        "itemName"
-      ).textContent =
-        currentItemName;
-
-
-      document.getElementById(
-        "itemId"
-      ).textContent =
-        currentBarcode;
-
-
-      document.getElementById(
-        "currentQtyDisplay"
-      ).textContent =
-        startingQty;
-
-
-      document.getElementById(
-        "itemBox"
-      ).style.display =
-        "block";
-
-
-      barcodeBox().value =
-        "";
-
-
-      hideResult();
-
-
-      setStatus(
-        "ITEM LOADED — ENTER QUANTITY",
-        "success"
-      );
-
-
-      setTimeout(
-        () => {
-
-          quantityBox().focus();
-
-          quantityBox().select();
-
-        },
-        75
-      );
-
-    },
-
-
-    () => {
-
-
-      if (
-        attempt < 3
-      ) {
-
-        const delay =
-          attempt === 1
-            ? 300
-            : 800;
-
-
-        setTimeout(
-          () => {
-
-            lookupItemAndQty(
-              barcode,
-              attempt + 1
-            );
-
-          },
-          delay
-        );
-
-
-        return;
-
-      }
-
-
-      scanLocked = false;
-
-      currentBarcode = "";
-
-
-      setStatus(
-        "Unable to reach inventory service. Scan again.",
-        "error"
-      );
-
-
-      barcodeBox().value = "";
-
-      barcodeBox().focus();
+      return;
 
     }
 
-  );
 
-}
-
+    event.preventDefault();
 
 
-// =====================================================
-// QUANTITY ENTER
-// =====================================================
+    if (
+      !scanningActive ||
+      busy
+    ) {
 
-function qtyKey(event) {
+      return;
 
-  if (
-    event.key !== "Enter"
-  ) {
-    return;
-  }
+    }
 
 
-  event.preventDefault();
+    const barcode =
+      barcodeInput
+        .value
+        .trim();
 
 
-  if (
-    !document.getElementById(
-      "saveBtn"
-    ).disabled
-  ) {
-
-    saveRemove();
-
-  }
-
-}
+    barcodeInput.value =
+      "";
 
 
+    if (!barcode) {
 
-// =====================================================
-// SAVE REMOVE
-// =====================================================
+      barcodeInput.focus();
 
-function saveRemove() {
+      return;
 
-
-  if (
-    transactionInProgress
-  ) {
-    return;
-  }
+    }
 
 
-  const qtyText =
-    quantityBox().value;
-
-
-  if (
-    !currentBarcode
-  ) {
-
-    setStatus(
-      "Scan an item first.",
-      "error"
+    beginRemoval(
+      barcode
     );
 
-    return;
-
   }
+);
 
 
-  if (
-    qtyText === "" ||
-    Number(qtyText) <= 0 ||
-    !Number.isFinite(
-      Number(qtyText)
-    )
-  ) {
+// ======================================================
+// BEGIN REMOVAL
+// ======================================================
 
-    setStatus(
-      "Enter a valid quantity.",
-      "error"
-    );
+function beginRemoval(
+  barcode
+) {
 
-    quantityBox().focus();
-
-    return;
-
-  }
-
-
-  requestedRemoval =
-    Number(
-      qtyText
-    );
-
-
-  if (
-    requestedRemoval >
-    startingQty
-  ) {
-
-    setStatus(
-      "Cannot remove " +
-      requestedRemoval +
-      ". Only " +
-      startingQty +
-      " currently on hand.",
-      "error"
-    );
-
-    quantityBox().focus();
-
-    quantityBox().select();
-
-    return;
-
-  }
-
-
-  expectedQty =
-    startingQty -
-    requestedRemoval;
-
-
-  transactionInProgress =
+  busy =
     true;
-
-
-  const button =
-    document.getElementById(
-      "saveBtn"
-    );
-
-
-  button.disabled =
-    true;
-
-
-  document.getElementById(
-    "retryBtn"
-  ).style.display =
-    "none";
 
 
   hideResult();
 
 
+  transaction = {
+
+    barcode:
+      barcode,
+
+    itemName:
+      "",
+
+    previousQty:
+      0,
+
+    expectedQty:
+      0
+
+  };
+
+
   setStatus(
-    "Removing inventory..."
+    "CHECKING ITEM...",
+    "working"
   );
 
 
-  submitPost(
-    currentBarcode,
-    "Remove",
-    requestedRemoval
-  );
-
-
-  /*
-    Give Apps Script enough time
-    to write Column G before checking.
-  */
-
-  setTimeout(
-    () => {
-
-      verifyRemoval(
-        1
-      );
-
-    },
-    700
+  lookupStartingQuantity(
+    barcode
   );
 
 }
 
 
+// ======================================================
+// GET STARTING QUANTITY
+// ======================================================
 
-// =====================================================
-// VERIFY REMOVAL
-// =====================================================
-
-function verifyRemoval(
-  attempt
+function lookupStartingQuantity(
+  barcode
 ) {
-
-
-  setStatus(
-    attempt === 1
-      ? "Verifying inventory..."
-      : "Verifying again..."
-  );
-
 
   jsonpRequest(
 
     {
-      mode: "qty",
-      item: currentBarcode,
-      t: Date.now()
+      mode:"qty",
+      item:barcode,
+      t:Date.now()
     },
 
 
-    data => {
-
+    function(data) {
 
       if (
         !data ||
-        !data.success
+        data.success !== true
       ) {
 
-        verificationRetry(
-          attempt
+        failTransaction(
+          data &&
+          data.message
+            ? data.message
+            : "ITEM NOT FOUND"
         );
 
         return;
@@ -1289,23 +992,20 @@ function verifyRemoval(
       }
 
 
-      const actualQty =
+      const currentQty =
         Number(
           data.currentQty
         );
 
 
-      /*
-        EXACT MATCH
-      */
-
       if (
-        actualQty ===
-        expectedQty
+        !Number.isFinite(
+          currentQty
+        )
       ) {
 
-        removalConfirmed(
-          actualQty
+        failTransaction(
+          "INVALID INVENTORY QUANTITY"
         );
 
         return;
@@ -1313,50 +1013,58 @@ function verifyRemoval(
       }
 
 
-      /*
-        If the sheet still has the old
-        quantity, give Apps Script more
-        time before declaring failure.
-      */
+      transaction.itemName =
+        data.name ||
+        "Inventory Item";
 
-      if (
-        actualQty ===
-        startingQty &&
-        attempt < 4
-      ) {
 
-        setTimeout(
-          () => {
-
-            verifyRemoval(
-              attempt + 1
-            );
-
-          },
-          attempt * 500
-        );
-
-        return;
-
-      }
+      transaction.previousQty =
+        currentQty;
 
 
       /*
-        Quantity changed, but not to
-        what this transaction expected.
+        Negative quantities are intentionally
+        allowed.
+
+        1 -> 0
+        0 -> -1
+       -1 -> -2
       */
 
-      removalFailed(
-        actualQty
+      transaction.expectedQty =
+        currentQty - 1;
+
+
+      showItem();
+
+
+      setStatus(
+        "REMOVING 1...",
+        "working"
+      );
+
+
+      submitRemoval();
+
+
+      setTimeout(
+        function() {
+
+          verifyRemoval(
+            1
+          );
+
+        },
+        VERIFY_DELAY
       );
 
     },
 
 
-    () => {
+    function() {
 
-      verificationRetry(
-        attempt
+      failTransaction(
+        "INVENTORY SERVICE NOT AVAILABLE"
       );
 
     }
@@ -1366,441 +1074,11 @@ function verifyRemoval(
 }
 
 
-
-// =====================================================
-// VERIFICATION RETRY
-// =====================================================
-
-function verificationRetry(
-  attempt
-) {
-
-
-  if (
-    attempt < 4
-  ) {
-
-    setTimeout(
-      () => {
-
-        verifyRemoval(
-          attempt + 1
-        );
-
-      },
-      attempt * 500
-    );
-
-    return;
-
-  }
-
-
-  removalCommunicationFailure();
-
-}
-
-
-
-// =====================================================
-// CONFIRMED
-// =====================================================
-
-function removalConfirmed(
-  actualQty
-) {
-
-
-  transactionInProgress =
-    false;
-
-
-  document.getElementById(
-    "saveBtn"
-  ).disabled =
-    false;
-
-
-  setStatus(
-    "✓ REMOVAL CONFIRMED",
-    "success"
-  );
-
-
-  showResult(
-    "success",
-    "✓ REMOVAL CONFIRMED",
-    startingQty,
-    requestedRemoval,
-    actualQty
-  );
-
-
-  /*
-    Keep confirmation visible briefly.
-    Then prepare for next barcode.
-  */
-
-  setTimeout(
-    () => {
-
-      resetForNextItem();
-
-    },
-    2500
-  );
-
-}
-
-
-
-// =====================================================
-// FAILED — QUANTITY DID NOT MATCH
-// =====================================================
-
-function removalFailed(
-  actualQty
-) {
-
-
-  transactionInProgress =
-    false;
-
-
-  document.getElementById(
-    "saveBtn"
-  ).disabled =
-    false;
-
-
-  setStatus(
-    "REMOVAL FAILED — INVENTORY DID NOT MATCH",
-    "error"
-  );
-
-
-  showResult(
-    "error",
-    "REMOVAL NOT VERIFIED",
-    startingQty,
-    requestedRemoval,
-    actualQty
-  );
-
-
-  document.getElementById(
-    "retryBtn"
-  ).style.display =
-    "block";
-
-
-  /*
-    Do NOT reset.
-    Keep item on screen.
-  */
-
-}
-
-
-
-// =====================================================
-// COMMUNICATION FAILURE
-// =====================================================
-
-function removalCommunicationFailure() {
-
-
-  transactionInProgress =
-    false;
-
-
-  document.getElementById(
-    "saveBtn"
-  ).disabled =
-    false;
-
-
-  setStatus(
-    "Unable to verify inventory. Do not rescan yet.",
-    "error"
-  );
-
-
-  showResult(
-    "error",
-    "UPDATE COULD NOT BE VERIFIED",
-    startingQty,
-    requestedRemoval,
-    "?"
-  );
-
-
-  document.getElementById(
-    "retryBtn"
-  ).style.display =
-    "block";
-
-}
-
-
-
-// =====================================================
-// RETRY BUTTON
-// =====================================================
-//
-// IMPORTANT:
-// We first reread the current quantity.
-// We do NOT blindly submit the removal again,
-// because the original removal may have actually
-// succeeded even though verification failed.
-// =====================================================
-
-function retryRemoval() {
-
-
-  if (
-    transactionInProgress
-  ) {
-    return;
-  }
-
-
-  transactionInProgress =
-    true;
-
-
-  document.getElementById(
-    "retryBtn"
-  ).style.display =
-    "none";
-
-
-  setStatus(
-    "Checking inventory before retry..."
-  );
-
-
-  jsonpRequest(
-
-    {
-      mode: "qty",
-      item: currentBarcode,
-      t: Date.now()
-    },
-
-
-    data => {
-
-
-      if (
-        !data ||
-        !data.success
-      ) {
-
-        transactionInProgress =
-          false;
-
-
-        setStatus(
-          "Unable to check inventory. Try again.",
-          "error"
-        );
-
-
-        document.getElementById(
-          "retryBtn"
-        ).style.display =
-          "block";
-
-
-        return;
-
-      }
-
-
-      const actualQty =
-        Number(
-          data.currentQty
-        );
-
-
-      /*
-        The original transaction DID succeed.
-      */
-
-      if (
-        actualQty ===
-        expectedQty
-      ) {
-
-        removalConfirmed(
-          actualQty
-        );
-
-        return;
-
-      }
-
-
-      /*
-        Nothing changed. Safe to resend.
-      */
-
-      if (
-        actualQty ===
-        startingQty
-      ) {
-
-        transactionInProgress =
-          false;
-
-        saveRemove();
-
-        return;
-
-      }
-
-
-      /*
-        Quantity is different from both.
-        Something else changed inventory.
-        Don't automatically remove again.
-      */
-
-      transactionInProgress =
-        false;
-
-
-      setStatus(
-        "Inventory quantity changed. Rescan item before removing.",
-        "error"
-      );
-
-
-      showResult(
-        "error",
-        "QUANTITY CHANGED",
-        startingQty,
-        requestedRemoval,
-        actualQty
-      );
-
-
-      document.getElementById(
-        "retryBtn"
-      ).style.display =
-        "none";
-
-
-      quantityBox().disabled =
-        true;
-
-    },
-
-
-    () => {
-
-
-      transactionInProgress =
-        false;
-
-
-      setStatus(
-        "Unable to reach inventory service.",
-        "error"
-      );
-
-
-      document.getElementById(
-        "retryBtn"
-      ).style.display =
-        "block";
-
-    }
-
-  );
-
-}
-
-
-
-// =====================================================
-// RESULT DISPLAY
-// =====================================================
-
-function showResult(
-  type,
-  title,
-  oldQty,
-  removedQty,
-  newQty
-) {
-
-
-  const box =
-    document.getElementById(
-      "resultBox"
-    );
-
-
-  box.className =
-    "result-box " +
-    type;
-
-
-  document.getElementById(
-    "resultTitle"
-  ).textContent =
-    title;
-
-
-  document.getElementById(
-    "resultOld"
-  ).textContent =
-    oldQty;
-
-
-  document.getElementById(
-    "resultRemoved"
-  ).textContent =
-    removedQty;
-
-
-  document.getElementById(
-    "resultNew"
-  ).textContent =
-    newQty;
-
-}
-
-
-
-function hideResult() {
-
-
-  const box =
-    document.getElementById(
-      "resultBox"
-    );
-
-
-  box.className =
-    "result-box";
-
-}
-
-
-
-// =====================================================
-// POST TRANSACTION
-// =====================================================
-
-function submitPost(
-  barcode,
-  action,
-  qty
-) {
-
+// ======================================================
+// POST REMOVE
+// ======================================================
+
+function submitRemoval() {
 
   const form =
     document.createElement(
@@ -1817,7 +1095,7 @@ function submitPost(
 
 
   form.target =
-    "saveFrame";
+    "postFrame";
 
 
   form.style.display =
@@ -1826,22 +1104,24 @@ function submitPost(
 
   const fields = {
 
-    mode: "save",
+    mode:"save",
 
-    item: barcode,
+    item:
+      transaction.barcode,
 
-    action: action,
+    action:
+      "Remove",
 
-    qty: String(qty)
+    qty:
+      "1"
 
   };
 
 
-  Object.entries(
+  Object.keys(
     fields
   ).forEach(
-    ([key,value]) => {
-
+    function(key) {
 
       const input =
         document.createElement(
@@ -1858,7 +1138,7 @@ function submitPost(
 
 
       input.value =
-        value;
+        fields[key];
 
 
       form.appendChild(
@@ -1878,220 +1158,627 @@ function submitPost(
 
 
   setTimeout(
-    () => {
+    function() {
 
       form.remove();
 
     },
-    2000
+    2500
   );
 
 }
 
 
+// ======================================================
+// VERIFY
+// ======================================================
 
-// =====================================================
-// RESET
-// =====================================================
+function verifyRemoval(
+  attempt
+) {
 
-function resetForNextItem() {
-
-
-  currentBarcode = "";
-
-  currentItemName = "";
-
-  startingQty = 0;
-
-  requestedRemoval = 0;
-
-  expectedQty = 0;
-
-  scanLocked = false;
-
-  transactionInProgress = false;
+  setStatus(
+    "VERIFYING REMOVAL...",
+    "working"
+  );
 
 
-  document.getElementById(
-    "itemName"
-  ).textContent =
-    "";
+  jsonpRequest(
+
+    {
+      mode:"qty",
+      item:
+        transaction.barcode,
+
+      t:Date.now()
+    },
 
 
-  document.getElementById(
-    "itemId"
-  ).textContent =
-    "";
+    function(data) {
+
+      if (
+        !data ||
+        data.success !== true
+      ) {
+
+        retryVerification(
+          attempt
+        );
+
+        return;
+
+      }
 
 
-  document.getElementById(
-    "currentQtyDisplay"
-  ).textContent =
-    "0";
+      const actualQty =
+        Number(
+          data.currentQty
+        );
 
 
-  document.getElementById(
-    "itemBox"
-  ).style.display =
-    "none";
+      if (
+        !Number.isFinite(
+          actualQty
+        )
+      ) {
+
+        retryVerification(
+          attempt
+        );
+
+        return;
+
+      }
 
 
-  quantityBox().value =
-    "";
+      // ----------------------------------------------
+      // VERIFIED SUCCESS
+      // ----------------------------------------------
+
+      if (
+        actualQty ===
+        transaction.expectedQty
+      ) {
+
+        successfulTransaction(
+          actualQty
+        );
+
+        return;
+
+      }
 
 
-  quantityBox().disabled =
+      // ----------------------------------------------
+      // SPREADSHEET HAS NOT CHANGED YET
+      // ----------------------------------------------
+
+      if (
+        actualQty ===
+        transaction.previousQty
+      ) {
+
+        retryVerification(
+          attempt
+        );
+
+        return;
+
+      }
+
+
+      // ----------------------------------------------
+      // QUANTITY CHANGED TO SOMETHING UNEXPECTED
+      // ----------------------------------------------
+
+      failTransaction(
+        "UNEXPECTED INVENTORY COUNT",
+        actualQty
+      );
+
+    },
+
+
+    function() {
+
+      retryVerification(
+        attempt
+      );
+
+    }
+
+  );
+
+}
+
+
+// ======================================================
+// RETRY VERIFICATION
+// ======================================================
+
+function retryVerification(
+  attempt
+) {
+
+  if (
+    attempt < 5
+  ) {
+
+    setTimeout(
+      function() {
+
+        verifyRemoval(
+          attempt + 1
+        );
+
+      },
+      500
+    );
+
+
+    return;
+
+  }
+
+
+  failTransaction(
+    "REMOVAL NOT VERIFIED"
+  );
+
+}
+
+
+// ======================================================
+// SUCCESS
+// ======================================================
+
+function successfulTransaction(
+  actualQty
+) {
+
+  showResult(
+    transaction.previousQty,
+    actualQty
+  );
+
+
+  setStatus(
+    "✓ REMOVED 1 — VERIFIED",
+    "success"
+  );
+
+
+  playDoubleDing();
+
+
+  setTimeout(
+    function() {
+
+      resetForNextScan();
+
+    },
+    SUCCESS_DISPLAY_TIME
+  );
+
+}
+
+
+// ======================================================
+// FAILURE
+// ======================================================
+
+function failTransaction(
+  message,
+  actualQty
+) {
+
+  setStatus(
+    "✕ " + message,
+    "error"
+  );
+
+
+  if (
+    typeof actualQty !==
+    "undefined"
+  ) {
+
+    showResult(
+      transaction.previousQty,
+      actualQty
+    );
+
+  }
+
+
+  playHonk();
+
+
+  setTimeout(
+    function() {
+
+      resetForNextScan();
+
+    },
+    FAILURE_DISPLAY_TIME
+  );
+
+}
+
+
+// ======================================================
+// RESET FOR NEXT SCAN
+// ======================================================
+
+function resetForNextScan() {
+
+  busy =
     false;
 
 
-  barcodeBox().value =
+  transaction = {
+
+    barcode:"",
+
+    itemName:"",
+
+    previousQty:0,
+
+    expectedQty:0
+
+  };
+
+
+  barcodeInput.value =
     "";
-
-
-  document.getElementById(
-    "retryBtn"
-  ).style.display =
-    "none";
 
 
   hideResult();
 
 
   setStatus(
-    "READY TO SCAN"
+    "READY — SCAN NEXT ITEM",
+    "ready"
   );
 
 
   setTimeout(
-    () => {
+    function() {
 
-      barcodeBox().focus();
+      barcodeInput.focus();
 
     },
-    75
+    50
   );
 
 }
 
 
+// ======================================================
+// ITEM DISPLAY
+// ======================================================
 
-// =====================================================
-// CAMERA
-// =====================================================
+function showItem() {
 
-function startCamera() {
-
-
-  const button =
-    document.getElementById(
-      "cameraBtn"
-    );
+  document.getElementById(
+    "itemName"
+  ).textContent =
+    transaction.itemName;
 
 
-  button.disabled =
-    true;
+  document.getElementById(
+    "barcodeText"
+  ).textContent =
+    "Barcode: " +
+    transaction.barcode;
 
 
-  setStatus(
-    "Requesting camera permission..."
-  );
+  document.getElementById(
+    "previousQty"
+  ).textContent =
+    transaction.previousQty;
 
 
-  scanner =
-    new Html5Qrcode(
-      "reader"
-    );
+  document.getElementById(
+    "newQty"
+  ).textContent =
+    transaction.expectedQty;
 
 
-  scanner.start(
-
-    {
-      facingMode:
-        "environment"
-    },
-
-    {
-      fps: 12
-    },
-
-
-    decodedText => {
-
-
-      if (
-        scanLocked ||
-        transactionInProgress
-      ) {
-        return;
-      }
-
-
-      scanLocked =
-        true;
-
-
-      lookupItemAndQty(
-        String(
-          decodedText
-        ).trim(),
-        1
-      );
-
-    },
-
-
-    () => {}
-
-
-  )
-
-
-  .then(
-    () => {
-
-      setStatus(
-        "Point camera at item barcode"
-      );
-
-    }
-  )
-
-
-  .catch(
-    error => {
-
-
-      button.disabled =
-        false;
-
-
-      setStatus(
-        "Camera error: " +
-        error,
-        "error"
-      );
-
-    }
+  resultBox.classList.add(
+    "show"
   );
 
 }
 
 
+// ======================================================
+// RESULT DISPLAY
+// ======================================================
 
-// =====================================================
-// JSONP REQUEST WITH TIMEOUT
-// =====================================================
-
-function jsonpRequest(
-  params,
-  success,
-  failure
+function showResult(
+  previousQty,
+  newQty
 ) {
 
+  document.getElementById(
+    "itemName"
+  ).textContent =
+    transaction.itemName;
+
+
+  document.getElementById(
+    "barcodeText"
+  ).textContent =
+    "Barcode: " +
+    transaction.barcode;
+
+
+  document.getElementById(
+    "previousQty"
+  ).textContent =
+    previousQty;
+
+
+  document.getElementById(
+    "newQty"
+  ).textContent =
+    newQty;
+
+
+  resultBox.classList.add(
+    "show"
+  );
+
+}
+
+
+function hideResult() {
+
+  resultBox.classList.remove(
+    "show"
+  );
+
+}
+
+
+// ======================================================
+// STATUS
+// ======================================================
+
+function setStatus(
+  message,
+  type
+) {
+
+  statusBox.className =
+    "status " +
+    type;
+
+
+  statusBox.textContent =
+    message;
+
+}
+
+
+// ======================================================
+// AUDIO
+// ======================================================
+
+function initializeAudio() {
+
+  if (
+    audioContext
+  ) {
+
+    if (
+      audioContext.state ===
+      "suspended"
+    ) {
+
+      audioContext.resume();
+
+    }
+
+    return;
+
+  }
+
+
+  const AudioContextClass =
+    window.AudioContext ||
+    window.webkitAudioContext;
+
+
+  if (
+    !AudioContextClass
+  ) {
+
+    return;
+
+  }
+
+
+  audioContext =
+    new AudioContextClass();
+
+
+  if (
+    audioContext.state ===
+    "suspended"
+  ) {
+
+    audioContext.resume();
+
+  }
+
+}
+
+
+// ======================================================
+// TONE
+// ======================================================
+
+function tone(
+  frequency,
+  delay,
+  duration,
+  volume,
+  type
+) {
+
+  if (
+    !audioContext
+  ) {
+
+    return;
+
+  }
+
+
+  const oscillator =
+    audioContext
+      .createOscillator();
+
+
+  const gain =
+    audioContext
+      .createGain();
+
+
+  const startTime =
+    audioContext.currentTime +
+    delay;
+
+
+  oscillator.type =
+    type || "sine";
+
+
+  oscillator.frequency
+    .setValueAtTime(
+      frequency,
+      startTime
+    );
+
+
+  gain.gain
+    .setValueAtTime(
+      0.0001,
+      startTime
+    );
+
+
+  gain.gain
+    .exponentialRampToValueAtTime(
+      volume,
+      startTime + 0.015
+    );
+
+
+  gain.gain
+    .exponentialRampToValueAtTime(
+      0.0001,
+      startTime + duration
+    );
+
+
+  oscillator.connect(
+    gain
+  );
+
+
+  gain.connect(
+    audioContext.destination
+  );
+
+
+  oscillator.start(
+    startTime
+  );
+
+
+  oscillator.stop(
+    startTime +
+    duration +
+    0.05
+  );
+
+}
+
+
+// ======================================================
+// DOUBLE DING
+// ======================================================
+
+function playDoubleDing() {
+
+  initializeAudio();
+
+
+  tone(
+    880,
+    0,
+    0.16,
+    0.25,
+    "sine"
+  );
+
+
+  tone(
+    1175,
+    0.20,
+    0.20,
+    0.25,
+    "sine"
+  );
+
+}
+
+
+// ======================================================
+// HONK
+// ======================================================
+
+function playHonk() {
+
+  initializeAudio();
+
+
+  tone(
+    210,
+    0,
+    0.55,
+    0.28,
+    "sawtooth"
+  );
+
+
+  tone(
+    175,
+    0.03,
+    0.55,
+    0.16,
+    "square"
+  );
+
+}
+
+
+// ======================================================
+// JSONP REQUEST
+// ======================================================
+
+function jsonpRequest(
+  parameters,
+  onSuccess,
+  onFailure
+) {
 
   const callbackName =
 
-    "__remove_" +
+    "__cameronEMS_" +
 
     Date.now() +
 
@@ -2109,7 +1796,7 @@ function jsonpRequest(
     );
 
 
-  let finished =
+  let completed =
     false;
 
 
@@ -2118,13 +1805,16 @@ function jsonpRequest(
 
   function cleanup() {
 
+    if (
+      completed
+    ) {
 
-    if (finished) {
       return;
+
     }
 
 
-    finished =
+    completed =
       true;
 
 
@@ -2141,10 +1831,19 @@ function jsonpRequest(
 
     }
 
-    catch(e) {}
+    catch (error) {}
 
 
-    script.remove();
+    if (
+      script.parentNode
+    ) {
+
+      script.parentNode
+        .removeChild(
+          script
+        );
+
+    }
 
   }
 
@@ -2152,13 +1851,12 @@ function jsonpRequest(
   window[
     callbackName
   ] =
-    data => {
-
+    function(data) {
 
       cleanup();
 
 
-      success(
+      onSuccess(
         data
       );
 
@@ -2167,7 +1865,7 @@ function jsonpRequest(
 
   const query =
     new URLSearchParams(
-      params
+      parameters
     );
 
 
@@ -2178,38 +1876,31 @@ function jsonpRequest(
 
 
   script.src =
-
     API_URL +
-
     "?" +
-
     query.toString();
 
 
   script.onerror =
-    () => {
-
+    function() {
 
       cleanup();
 
-
-      failure();
+      onFailure();
 
     };
 
 
   timeout =
     setTimeout(
-      () => {
-
+      function() {
 
         cleanup();
 
-
-        failure();
+        onFailure();
 
       },
-      5000
+      6000
     );
 
 
@@ -2218,23 +1909,6 @@ function jsonpRequest(
   );
 
 }
-
-
-
-// =====================================================
-// DEFAULT USB SCANNER FOCUS
-// =====================================================
-
-window.addEventListener(
-  "load",
-  () => {
-
-
-    barcodeBox().focus();
-
-  }
-);
-
 
 </script>
 
