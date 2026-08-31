@@ -1,0 +1,707 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="utf-8">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1"
+>
+
+<title>
+  Cameron EMS Inventory Management
+</title>
+
+
+<style>
+
+:root {
+
+  --background:#171a1d;
+  --card:#272b30;
+  --card2:#30353b;
+
+  --border:#4a5057;
+
+  --text:#f5f5f5;
+  --muted:#aeb4bb;
+
+  --orange:#f97316;
+  --orange-dark:#ea580c;
+
+  --red:#7f1d1d;
+  --red-border:#ef4444;
+
+}
+
+
+* {
+  box-sizing:border-box;
+}
+
+
+body {
+
+  margin:0;
+
+  background:
+    linear-gradient(
+      180deg,
+      #111315,
+      var(--background)
+    );
+
+  color:var(--text);
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  min-height:100vh;
+
+}
+
+
+.container {
+
+  width:min(
+    620px,
+    calc(100% - 24px)
+  );
+
+  margin:0 auto;
+
+  padding:
+    30px 0 40px;
+
+}
+
+
+.card {
+
+  background:var(--card);
+
+  border:
+    1px solid
+    var(--border);
+
+  border-radius:20px;
+
+  padding:24px;
+
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.header {
+
+  text-align:center;
+
+  margin-bottom:25px;
+
+}
+
+
+.header h1 {
+
+  margin:0;
+
+  font-size:29px;
+
+}
+
+
+.header h1 span {
+
+  color:var(--orange);
+
+}
+
+
+.header p {
+
+  margin:
+    9px 0 0;
+
+  color:var(--muted);
+
+}
+
+
+/* =========================
+   PIN PANEL
+========================= */
+
+#pinPanel {
+
+  display:block;
+
+}
+
+
+.pin-label {
+
+  display:block;
+
+  margin-bottom:8px;
+
+  font-weight:700;
+
+}
+
+
+#pinInput {
+
+  width:100%;
+
+  height:64px;
+
+  padding:0 15px;
+
+  background:#111315;
+
+  border:
+    2px solid
+    var(--border);
+
+  border-radius:11px;
+
+  color:white;
+
+  font-size:28px;
+
+  text-align:center;
+
+  letter-spacing:8px;
+
+  outline:none;
+
+}
+
+
+#pinInput:focus {
+
+  border-color:
+    var(--orange);
+
+}
+
+
+.unlock-button {
+
+  width:100%;
+
+  min-height:64px;
+
+  margin-top:15px;
+
+  border:0;
+
+  border-radius:11px;
+
+  background:
+    linear-gradient(
+      180deg,
+      var(--orange),
+      var(--orange-dark)
+    );
+
+  color:white;
+
+  font-size:20px;
+
+  font-weight:900;
+
+  cursor:pointer;
+
+}
+
+
+.error {
+
+  min-height:25px;
+
+  margin-top:12px;
+
+  color:#fca5a5;
+
+  text-align:center;
+
+  font-weight:700;
+
+}
+
+
+/* =========================
+   MANAGEMENT PANEL
+========================= */
+
+#managementPanel {
+
+  display:none;
+
+}
+
+
+.unlocked {
+
+  margin-bottom:18px;
+
+  padding:13px;
+
+  background:#1c2024;
+
+  border:
+    1px solid
+    var(--orange);
+
+  border-radius:10px;
+
+  color:var(--orange);
+
+  text-align:center;
+
+  font-weight:900;
+
+}
+
+
+/* =========================
+   MANAGEMENT BUTTONS
+========================= */
+
+.management-button {
+
+  display:block;
+
+  width:100%;
+
+  margin-top:13px;
+
+  padding:21px 16px;
+
+  background:
+    linear-gradient(
+      180deg,
+      #383e44,
+      #292e33
+    );
+
+  border:
+    1px solid
+    var(--border);
+
+  border-left:
+    5px solid
+    var(--orange);
+
+  border-radius:12px;
+
+  color:white;
+
+  text-decoration:none;
+
+}
+
+
+.management-button:active {
+
+  transform:
+    scale(.985);
+
+}
+
+
+.button-title {
+
+  font-size:21px;
+
+  font-weight:900;
+
+}
+
+
+.button-subtitle {
+
+  margin-top:5px;
+
+  color:var(--muted);
+
+  font-size:13px;
+
+}
+
+
+/* =========================
+   HOME
+========================= */
+
+.home {
+
+  display:block;
+
+  width:100%;
+
+  margin-top:20px;
+
+  padding:16px;
+
+  background:#15181b;
+
+  border:
+    1px solid
+    var(--border);
+
+  border-radius:11px;
+
+  color:#ddd;
+
+  text-align:center;
+
+  text-decoration:none;
+
+  font-weight:700;
+
+}
+
+
+@media (
+  max-width:480px
+) {
+
+  .card {
+
+    padding:17px;
+
+  }
+
+
+  .header h1 {
+
+    font-size:24px;
+
+  }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+<div class="card">
+
+
+  <!-- HEADER -->
+
+  <div class="header">
+
+    <h1>
+
+      Cameron EMS
+
+      <span>
+        Inventory Management
+      </span>
+
+    </h1>
+
+    <p>
+      Authorized inventory functions
+    </p>
+
+  </div>
+
+
+
+  <!-- ======================================
+       PIN SCREEN
+  ======================================= -->
+
+  <div id="pinPanel">
+
+
+    <label
+      for="pinInput"
+      class="pin-label"
+    >
+      Enter Inventory PIN
+    </label>
+
+
+    <input
+      id="pinInput"
+      type="password"
+      inputmode="numeric"
+      autocomplete="off"
+      maxlength="8"
+      placeholder="PIN"
+    >
+
+
+    <button
+      id="unlockButton"
+      class="unlock-button"
+      type="button"
+    >
+      UNLOCK INVENTORY MANAGEMENT
+    </button>
+
+
+    <div
+      id="pinError"
+      class="error"
+    >
+    </div>
+
+
+  </div>
+
+
+
+  <!-- ======================================
+       MANAGEMENT FUNCTIONS
+  ======================================= -->
+
+  <div id="managementPanel">
+
+
+    <div class="unlocked">
+      ✓ INVENTORY MANAGEMENT UNLOCKED
+    </div>
+
+
+
+    <!-- ADD -->
+
+    <a
+      href="add.html"
+      class="management-button"
+    >
+
+      <div class="button-title">
+        ADD INVENTORY
+      </div>
+
+      <div class="button-subtitle">
+        Add received supplies to inventory
+      </div>
+
+    </a>
+
+
+
+    <!-- COUNT -->
+
+    <a
+      href="count.html"
+      class="management-button"
+    >
+
+      <div class="button-title">
+        COUNT INVENTORY
+      </div>
+
+      <div class="button-subtitle">
+        Perform and verify physical inventory counts
+      </div>
+
+    </a>
+
+
+
+    <!-- EXPIRATION -->
+
+    <a
+      href="expiration.html"
+      class="management-button"
+    >
+
+      <div class="button-title">
+        EXPIRATION DATES
+      </div>
+
+      <div class="button-subtitle">
+        Scan and update supply expiration dates
+      </div>
+
+    </a>
+
+
+  </div>
+
+
+
+  <!-- HOME -->
+
+  <a
+    href="index.html"
+    class="home"
+  >
+    ← Return to Employee Dashboard
+  </a>
+
+
+</div>
+
+</div>
+
+
+<script>
+
+
+// ======================================================
+// INVENTORY MANAGEMENT PIN
+//
+// CHANGE THIS TO WHATEVER PIN YOU WANT.
+// ======================================================
+
+const INVENTORY_PIN =
+  "64429";
+
+
+
+// ======================================================
+// ELEMENTS
+// ======================================================
+
+const pinInput =
+  document.getElementById(
+    "pinInput"
+  );
+
+
+const unlockButton =
+  document.getElementById(
+    "unlockButton"
+  );
+
+
+const pinPanel =
+  document.getElementById(
+    "pinPanel"
+  );
+
+
+const managementPanel =
+  document.getElementById(
+    "managementPanel"
+  );
+
+
+const pinError =
+  document.getElementById(
+    "pinError"
+  );
+
+
+
+// ======================================================
+// UNLOCK
+// ======================================================
+
+function unlockInventory() {
+
+
+  const enteredPin =
+    pinInput
+      .value
+      .trim();
+
+
+  if (
+    enteredPin ===
+    INVENTORY_PIN
+  ) {
+
+
+    pinError.textContent =
+      "";
+
+
+    pinPanel.style.display =
+      "none";
+
+
+    managementPanel.style.display =
+      "block";
+
+
+    return;
+
+  }
+
+
+  pinError.textContent =
+    "Incorrect PIN — please try again.";
+
+
+  pinInput.value =
+    "";
+
+
+  pinInput.focus();
+
+}
+
+
+
+// ======================================================
+// BUTTON
+// ======================================================
+
+unlockButton.addEventListener(
+  "click",
+  unlockInventory
+);
+
+
+
+// ======================================================
+// ENTER KEY
+// ======================================================
+
+pinInput.addEventListener(
+  "keydown",
+  function(event) {
+
+
+    if (
+      event.key ===
+      "Enter"
+    ) {
+
+
+      event.preventDefault();
+
+
+      unlockInventory();
+
+    }
+
+  }
+);
+
+
+
+pinInput.focus();
+
+
+</script>
+
+
+</body>
+
+</html>
