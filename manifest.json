@@ -1,0 +1,10 @@
+{
+  "name": "Cameron EMS Narrative Builder",
+  "short_name": "EMS Narrative",
+  "description": "Offline-capable Cameron EMS Narrative Builder",
+  "start_url": "./narrative.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#111417",
+  "theme_color": "#16181b"
+}
