@@ -4,11 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cameron EMS Narrative Builder</title>
-
-  <meta name="theme-color" content="#16181b" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <link rel="manifest" href="manifest.json" />
   <style>
     :root{
       --bg:#16181b;
@@ -433,31 +428,6 @@
       }
     }
 
-
-    /* OFFLINE / ONLINE STATUS */
-    .connection-badge{
-      display:inline-block;
-      margin-top:10px;
-      padding:6px 10px;
-      border-radius:999px;
-      font-size:12px;
-      font-weight:800;
-      letter-spacing:.3px;
-      border:1px solid #3b424a;
-      background:#2b3036;
-      color:#f4f4f4;
-    }
-
-    .connection-badge.online{
-      border-color:#2f9e44;
-      color:#9be7aa;
-    }
-
-    .connection-badge.offline{
-      border-color:#f28c28;
-      color:#ffb56a;
-    }
-
   </style>
 </head>
 <body>
@@ -465,9 +435,6 @@
     <header>
       <h1>CAD EMS Narrative Builder <span class="beta-badge">BETA TEST</span></h1>
       <p class="subtitle">Non-AI narrative builder — information is processed only in this browser and is not saved.</p>
-      <div id="connectionBadge" class="connection-badge">
-        CHECKING CONNECTION...
-      </div>
     </header>
 
     <div class="wizard-progress">
@@ -1455,13 +1422,18 @@
       const assessment = buildAssessment();
       const mentalStatus = buildMentalStatus();
       const ongoingAssessment = buildOngoingAssessment();
-      const transport = checked("refusalYes") ? "" : buildTransport();
+      const isRefusal = checked("refusalYes");
+      const transport = isRefusal ? "" : buildTransport();
       const complications = checked("complicationsYes") ? upper(val("complications")) : "";
       const treatment = buildTreatment();
-      const additionalTransport = buildAdditionalTransportDocumentation();
+      const additionalTransport = isRefusal ? "" : buildAdditionalTransportDocumentation();
       const transfer = buildTransfer();
       const crewName = upper(val("crewName"));
       const credential = upper(val("crewCredential"));
+
+      const transportSection = isRefusal
+        ? "TRANSPORT –\nPT REFUSED TRANSPORT BY EMS.\n\n"
+        : `TRANSPORT –\n${[transport, additionalTransport].filter(Boolean).join(" ")}\n\n`;
 
       const narrative = `SCENE -
 ${scene}
@@ -1483,10 +1455,7 @@ ${[
   ongoingAssessment
 ].filter(Boolean).join(" ")}
 
-TRANSPORT –
-${[transport, additionalTransport].filter(Boolean).join(" ")}
-
-${complications ? "COMPLICATIONS-\n" + (complications.endsWith(".") ? complications : complications + ".") + "\n\n" : ""}TREATMENT-
+${transportSection}${complications ? "COMPLICATIONS-\n" + (complications.endsWith(".") ? complications : complications + ".") + "\n\n" : ""}TREATMENT-
 ${treatment}
 
 TRANSFER OF CARE-
@@ -2024,40 +1993,5 @@ ${[crewName, credential].filter(Boolean).join(" ")}`;
       updateLivePreview();
     });
   </script>
-
-  <script>
-    // =========================================================
-    // OFFLINE / PWA SUPPORT
-    // =========================================================
-    function updateConnectionBadge(){
-      const badge = document.getElementById("connectionBadge");
-      if(!badge) return;
-
-      if(navigator.onLine){
-        badge.textContent = "● ONLINE";
-        badge.className = "connection-badge online";
-      } else {
-        badge.textContent = "● OFFLINE — NARRATIVE BUILDER STILL AVAILABLE";
-        badge.className = "connection-badge offline";
-      }
-    }
-
-    window.addEventListener("online", updateConnectionBadge);
-    window.addEventListener("offline", updateConnectionBadge);
-    document.addEventListener("DOMContentLoaded", updateConnectionBadge);
-
-    if("serviceWorker" in navigator){
-      window.addEventListener("load", function(){
-        navigator.serviceWorker.register("./service-worker.js")
-          .then(function(registration){
-            console.log("Offline support ready:", registration.scope);
-          })
-          .catch(function(error){
-            console.log("Offline support registration failed:", error);
-          });
-      });
-    }
-  </script>
-
 </body>
 </html>
