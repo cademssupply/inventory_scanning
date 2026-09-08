@@ -460,13 +460,15 @@
             <option>PUBLIC LOCATION</option>
             <option>ROADWAY</option>
             <option>BUSINESS</option>
+            <option>CAMERON REGIONAL MEDICAL CENTER</option>
+            <option>OTHER HOSPITAL</option>
             <option>OTHER</option>
           </select>
         </div>
 
-        <div>
+        <div id="sceneOtherWrap">
           <label for="sceneOther" id="sceneOtherLabel">Location Details</label>
-          <input id="sceneOther" type="text" placeholder="Ex. I-35 SB @ 35mm or Scene Address" />
+          <input id="sceneOther" type="text" placeholder="Ex. I-35 SB @ 35mm, Scene Address, or Hospital Name" />
         </div>
 
         <div>
@@ -539,6 +541,7 @@
             <option>LYING ON LATERAL RIGHT SIDE</option>
             <option>SITTING UP</option>
             <option>SEATED</option>
+            <option>STANDING</option>
           </select>
         </div>
 
@@ -902,20 +905,51 @@
       const scene = val("scene");
       const locationInput = document.getElementById("sceneOther");
       const locationLabel = document.getElementById("sceneOtherLabel");
-      const required = scene !== "" && scene !== "PT RESIDENCE";
+      const locationWrap = document.getElementById("sceneOtherWrap");
 
-      if(locationInput) locationInput.required = required;
-      if(locationLabel) locationLabel.textContent = required ? "Location Details *" : "Location Details";
+      const hideLocationDetails =
+        scene === "PT RESIDENCE" ||
+        scene === "CAMERON REGIONAL MEDICAL CENTER";
+
+      const required =
+        scene !== "" &&
+        !hideLocationDetails;
+
+      if(locationWrap) locationWrap.style.display = hideLocationDetails ? "none" : "block";
+      if(locationInput){
+        locationInput.required = required;
+        if(hideLocationDetails) locationInput.value = "";
+      }
+
+      if(locationLabel){
+        locationLabel.textContent =
+          scene === "OTHER HOSPITAL"
+            ? "Hospital Name *"
+            : (required ? "Location Details *" : "Location Details");
+      }
+
+      if(typeof updateLivePreview === "function"){
+        updateLivePreview();
+      }
     }
 
     function sceneText(){
       const scene = val("scene");
 
       if(scene === "PT RESIDENCE"){
-        return upper(scene);
+        return "PT RESIDENCE";
       }
 
-      return upper(val("sceneOther"));
+      if(scene === "CAMERON REGIONAL MEDICAL CENTER"){
+        return "CAMERON REGIONAL MEDICAL CENTER";
+      }
+
+      if(scene === "OTHER HOSPITAL"){
+        return upper(val("sceneOther"));
+      }
+
+      const details = upper(val("sceneOther"));
+      return details ? `${upper(scene)} - ${details}` : upper(scene);
     }
 
     function destinationText(){
@@ -949,6 +983,7 @@
       if(position || location){
         let foundSentence = "PT FOUND";
         if(position) foundSentence += ` ${position}`;
+        if(position === "STANDING" && location) foundSentence += " IN THE";
         if(location) foundSentence += ` ${location}`;
         foundSentence += ".";
         parts.push(foundSentence);
@@ -1402,7 +1437,12 @@
       const scene = sceneText();
       const unit = upper(val("unit"));
 
-      if(sceneSelection && sceneSelection !== "PT RESIDENCE" && !val("sceneOther")){
+      if(sceneSelection === "OTHER HOSPITAL" && !val("sceneOther")){
+        document.getElementById("status").textContent = "Enter the hospital name.";
+        document.getElementById("sceneOther").focus();
+        return;
+      }
+      if(sceneSelection && sceneSelection !== "PT RESIDENCE" && sceneSelection !== "CAMERON REGIONAL MEDICAL CENTER" && sceneSelection !== "OTHER HOSPITAL" && !val("sceneOther")){
         document.getElementById("status").textContent = "Location Details are required for the selected scene.";
         document.getElementById("sceneOther").focus();
         return;
@@ -1432,7 +1472,7 @@
       const credential = upper(val("crewCredential"));
 
       const transportSection = isRefusal
-        ? "TRANSPORT –\nPT REFUSED TRANSPORT BY EMS.\n\n"
+        ? ""
         : `TRANSPORT –\n${[transport, additionalTransport].filter(Boolean).join(" ")}\n\n`;
 
       const narrative = `SCENE -
@@ -1592,7 +1632,13 @@ ${[crewName, credential].filter(Boolean).join(" ")}`;
       if(key === "scene"){
         const scene = val("scene");
         if(!scene) return setWizardError("Select the scene type.", "scene");
-        if(scene !== "PT RESIDENCE" && !val("sceneOther")){
+        if(scene === "OTHER HOSPITAL" && !val("sceneOther")){
+          return setWizardError("Enter the hospital name.", "sceneOther");
+        }
+        if(scene !== "PT RESIDENCE" &&
+           scene !== "CAMERON REGIONAL MEDICAL CENTER" &&
+           scene !== "OTHER HOSPITAL" &&
+           !val("sceneOther")){
           return setWizardError("Enter Location Details for this scene.", "sceneOther");
         }
         if(!val("unit")) return setWizardError("Select the responding unit.", "unit");
