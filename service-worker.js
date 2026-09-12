@@ -1,8 +1,9 @@
-const CACHE_NAME = "cameron-ems-narrative-v1";
+const CACHE_NAME = "cameron-ems-dashboard-v2";
 
 const CORE_FILES = [
-  "./narrative.html",
-  "./manifest.json"
+  "./index.html",
+  "./manifest.json",
+  "./logo.png"
 ];
 
 self.addEventListener("install", event => {
@@ -26,49 +27,65 @@ self.addEventListener("activate", event => {
 });
 
 self.addEventListener("fetch", event => {
-
   if (event.request.method !== "GET") return;
 
   const requestURL = new URL(event.request.url);
 
   if (requestURL.origin !== self.location.origin) return;
 
-  event.respondWith(
+  // NEVER CACHE NARRATIVE BUILDER PAGES
+  if (
+    requestURL.pathname.endsWith("/narrative.html") ||
+    /\/narrative-v.*\.html$/i.test(requestURL.pathname)
+  ) {
+    event.respondWith(
+      fetch(event.request, { cache: "no-store" })
+    );
+    return;
+  }
 
-    caches.match(event.request).then(cached => {
-
-      if (cached) {
-        return cached;
-      }
-
-      return fetch(event.request)
-
+  // HTML PAGES: NETWORK FIRST
+  if (
+    event.request.mode === "navigate" ||
+    requestURL.pathname.endsWith(".html")
+  ) {
+    event.respondWith(
+      fetch(event.request)
         .then(response => {
+          if (response && response.status === 200) {
+            const copy = response.clone();
 
-          if (!response || response.status !== 200) {
-            return response;
+            caches.open(CACHE_NAME).then(cache => {
+              cache.put(event.request, copy);
+            });
           }
-
-          const copy = response.clone();
-
-          caches.open(CACHE_NAME).then(cache => {
-            cache.put(event.request, copy);
-          });
 
           return response;
-
         })
+        .catch(() => caches.match(event.request))
+    );
 
-        .catch(() => {
+    return;
+  }
 
-          if (event.request.mode === "navigate") {
-            return caches.match("./narrative.html");
-          }
+  // STATIC FILES: CACHE FIRST
+  event.respondWith(
+    caches.match(event.request).then(cached => {
+      if (cached) return cached;
 
+      return fetch(event.request).then(response => {
+        if (!response || response.status !== 200) {
+          return response;
+        }
+
+        const copy = response.clone();
+
+        caches.open(CACHE_NAME).then(cache => {
+          cache.put(event.request, copy);
         });
 
+        return response;
+      });
     })
-
   );
-
 });
