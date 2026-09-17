@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Cameron EMS Bulk Supply Removal</title>
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+<style>
+:root{--bg:#171717;--panel:#262626;--orange:#f28c18;--text:#f5f5f5;--muted:#bbb;--border:#444}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}.wrap{max-width:850px;margin:auto;padding:16px}
+h1{margin:5px 0}.accent{color:var(--orange)}.sub{color:var(--muted);margin-bottom:16px}.panel{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:14px}
+button,input{font:inherit}button{border:0;border-radius:10px;padding:13px 16px;font-weight:800;cursor:pointer}.primary{background:var(--orange);color:#111}.secondary{background:#444;color:#fff}.big{width:100%;font-size:18px;padding:16px}
+.actions,.submitarea{display:grid;grid-template-columns:1fr 1fr;gap:10px}.scanrow{display:flex;gap:8px;margin-top:12px}#barcode{flex:1;min-width:0;background:#111;color:#fff;border:2px solid #555;border-radius:10px;padding:14px;font-size:18px}
+#reader{margin-top:12px}.status{min-height:24px;margin-top:10px;font-weight:bold}.ok{color:#79dc7d}.err{color:#ff7777}.head{display:flex;justify-content:space-between;align-items:center}.counts{color:var(--muted);font-size:14px}
+.empty{text-align:center;color:var(--muted);padding:25px}.item{background:#303030;border:1px solid var(--border);border-radius:12px;padding:13px;margin-top:10px}.name{font-size:17px;font-weight:bold}.code{font-size:13px;color:var(--muted);margin-top:3px}
+.qtyrow{display:flex;gap:8px;align-items:center;margin-top:12px}.qtybtn{width:44px;height:42px;padding:0;background:#4a4a4a;color:white;font-size:22px}.qty{width:65px;text-align:center;background:#111;color:#fff;border:1px solid #555;border-radius:8px;padding:10px}.remove{margin-left:auto;background:#4a4a4a;color:white}
+.submitarea{margin-top:14px}button:disabled{opacity:.45}.overlay{position:fixed;inset:0;background:#000c;display:none;align-items:center;justify-content:center;padding:20px}.modal{max-width:480px;width:100%;background:#292929;border:1px solid #555;border-radius:16px;padding:22px;text-align:center}
+@media(max-width:600px){.actions,.submitarea{grid-template-columns:1fr}.wrap{padding:12px}h1{font-size:24px}}
+</style></head><body><div class="wrap">
+<h1>Cameron EMS <span class="accent">Bulk Supply Removal</span></h1><div class="sub">TEST VERSION — scan everything first, then submit the entire cart.</div>
+<div class="panel"><div class="actions"><button class="primary" id="cameraBtn" onclick="toggleCamera()">Start Camera Scanner</button><button class="secondary" onclick="focusScanner()">Use Barcode Scanner</button></div>
+<div id="reader"></div><div class="scanrow"><input id="barcode" autocomplete="off" placeholder="Scan barcode or type barcode + Enter"><button class="primary" onclick="manualScan()">Add</button></div><div id="status" class="status"></div></div>
+<div class="panel"><div class="head"><div><strong style="font-size:20px">Removal Cart</strong><div id="counts" class="counts">0 items • 0 units</div></div></div><div id="cart"></div>
+<div class="submitarea"><button class="primary big" id="submitBtn" onclick="submitCart()" disabled>SUBMIT ALL REMOVALS</button><button class="secondary big" id="clearBtn" onclick="clearCart()" disabled>CLEAR CART</button></div></div></div>
+<div class="overlay" id="overlay"><div class="modal"><h2 id="modalTitle"></h2><p id="modalText"></p><button class="primary big" id="modalBtn" onclick="closeModal()">OK</button></div></div>
+<form id="postForm" method="POST" target="submitFrame" style="display:none"><input name="mode" value="bulkRemove"><input id="postItems" name="items"></form><iframe name="submitFrame" id="submitFrame" style="display:none"></iframe>
+<script>
+const API_URL="https://script.google.com/macros/s/AKfycbxyLARYoiBuClKT_pS4Yujl2JWiRWFFYcdeJXR7D-pWhNvcCdAJJTsWAYscTmEeJeBgFw/exec";
+let cart={},qr=null,camera=false,locked=false,submitting=false;
+const input=document.getElementById("barcode");
+input.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();manualScan()}});
+function status(m,t=""){let e=document.getElementById("status");e.textContent=m;e.className="status "+t}
+function focusScanner(){input.value="";input.focus();status("Ready for hardware scanner.")}
+function manualScan(){let c=input.value.trim();input.value="";if(c)lookup(c);input.focus()}
+function lookup(code){if(locked||submitting)return;locked=true;status("Looking up "+code+"...");
+ let cb="cb_"+Date.now()+"_"+Math.floor(Math.random()*1e5),s=document.createElement("script"),timer=setTimeout(()=>{clean();locked=false;status("Lookup timed out. Scan again.","err")},8000);
+ window[cb]=d=>{clean();if(d&&d.success){add(d.item||code,d.name||"Unnamed Item");status("Added: "+(d.name||code),"ok")}else status(d&&d.message?d.message:"Item not found.","err");setTimeout(()=>locked=false,250);input.focus()};
+ function clean(){clearTimeout(timer);try{delete window[cb]}catch(e){}s.remove()} s.onerror=()=>{clean();locked=false;status("Unable to contact inventory system.","err")};
+ s.src=API_URL+"?mode=item&item="+encodeURIComponent(code)+"&prefix="+encodeURIComponent(cb)+"&_="+Date.now();document.body.appendChild(s)}
+function add(code,name){if(cart[code])cart[code].qty++;else cart[code]={item:String(code),name:String(name),qty:1};render()}
+function change(code,n){if(!cart[code])return;cart[code].qty+=n;if(cart[code].qty<=0)delete cart[code];render()}
+function setQty(code,v){let n=Math.floor(Number(v));if(!cart[code])return;if(!Number.isFinite(n)||n<=0)delete cart[code];else cart[code].qty=n;render()}
+function removeItem(code){delete cart[code];render()}
+function clearCart(){if(Object.keys(cart).length&&confirm("Clear every item from the removal cart?")){cart={};render();status("Cart cleared.");input.focus()}}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]))}
+function q(s){return String(s).replace(/\\/g,"\\\\").replace(/'/g,"\\'")}
+function render(){let a=Object.values(cart),u=a.reduce((s,x)=>s+x.qty,0);document.getElementById("counts").textContent=a.length+(a.length===1?" item":" items")+" • "+u+(u===1?" unit":" units");
+ document.getElementById("cart").innerHTML=a.length?a.map(x=>`<div class="item"><div class="name">${esc(x.name)}</div><div class="code">${esc(x.item)}</div><div class="qtyrow"><button class="qtybtn" onclick="change('${q(x.item)}',-1)">−</button><input class="qty" type="number" min="1" value="${x.qty}" onchange="setQty('${q(x.item)}',this.value)"><button class="qtybtn" onclick="change('${q(x.item)}',1)">+</button><button class="remove" onclick="removeItem('${q(x.item)}')">Remove</button></div></div>`).join(""):'<div class="empty">No items scanned yet.</div>';
+ document.getElementById("submitBtn").disabled=!a.length||submitting;document.getElementById("clearBtn").disabled=!a.length||submitting}
+async function toggleCamera(){let b=document.getElementById("cameraBtn");if(camera){try{await qr.stop();await qr.clear()}catch(e){}camera=false;b.textContent="Start Camera Scanner";return}
+ try{if(!qr)qr=new Html5Qrcode("reader");await qr.start({facingMode:"environment"},{fps:10,qrbox:{width:280,height:150}},t=>lookup(t),()=>{});camera=true;b.textContent="Stop Camera Scanner";status("Camera scanner ready.","ok")}catch(e){status("Camera could not start: "+(e.message||e),"err")}}
+function modal(title,text){document.getElementById("modalTitle").textContent=title;document.getElementById("modalText").textContent=text;document.getElementById("overlay").style.display="flex"}
+function closeModal(){document.getElementById("overlay").style.display="none";input.focus()}
+function submitCart(){if(submitting)return;let items=Object.values(cart).map(x=>({item:x.item,qty:x.qty}));if(!items.length)return;let units=items.reduce((s,x)=>s+x.qty,0);if(!confirm("Remove "+units+" total units from inventory?"))return;
+ submitting=true;render();modal("Submitting...","Updating inventory. Please do not close this page.");document.getElementById("modalBtn").style.display="none";
+ let form=document.getElementById("postForm"),frame=document.getElementById("submitFrame"),done=false;document.getElementById("postItems").value=JSON.stringify(items);form.action=API_URL;
+ frame.onload=()=>{if(done)return;done=true;setTimeout(()=>{cart={};submitting=false;render();status("Bulk removal submitted.","ok");modal("✓ SUBMITTED","The removal batch was sent to inventory.");document.getElementById("modalBtn").style.display="block"},450)};
+ setTimeout(()=>{if(done)return;done=true;submitting=false;render();modal("Unable to Confirm","The request may or may not have completed. The cart was kept. Check Item Master before submitting again.");document.getElementById("modalBtn").style.display="block"},12000);form.submit()}
+render();
+</script></body></html>
