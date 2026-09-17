@@ -29,9 +29,28 @@ input.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();manu
 function status(m,t=""){let e=document.getElementById("status");e.textContent=m;e.className="status "+t}
 function focusScanner(){input.value="";input.focus();status("Ready for hardware scanner.")}
 function manualScan(){let c=input.value.trim();input.value="";if(c)lookup(c);input.focus()}
+function successDing(){
+ try{
+  const AudioCtx=window.AudioContext||window.webkitAudioContext;
+  if(!AudioCtx)return;
+  const ctx=new AudioCtx();
+  const osc=ctx.createOscillator();
+  const gain=ctx.createGain();
+  osc.type="sine";
+  osc.frequency.setValueAtTime(880,ctx.currentTime);
+  osc.frequency.setValueAtTime(1175,ctx.currentTime+0.08);
+  gain.gain.setValueAtTime(0.18,ctx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.18);
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+  osc.start();
+  osc.stop(ctx.currentTime+0.18);
+  osc.onended=()=>ctx.close();
+ }catch(e){}
+}
 function lookup(code){if(locked||submitting)return;locked=true;status("Looking up "+code+"...");
  let cb="cb_"+Date.now()+"_"+Math.floor(Math.random()*1e5),s=document.createElement("script"),timer=setTimeout(()=>{clean();locked=false;status("Lookup timed out. Scan again.","err")},8000);
- window[cb]=d=>{clean();if(d&&d.success){add(d.item||code,d.name||"Unnamed Item");status("Added: "+(d.name||code),"ok")}else status(d&&d.message?d.message:"Item not found.","err");setTimeout(()=>locked=false,250);input.focus()};
+ window[cb]=d=>{clean();if(d&&d.success){add(d.item||code,d.name||"Unnamed Item");successDing();status("Added: "+(d.name||code),"ok")}else status(d&&d.message?d.message:"Item not found.","err");setTimeout(()=>locked=false,250);input.focus()};
  function clean(){clearTimeout(timer);try{delete window[cb]}catch(e){}s.remove()} s.onerror=()=>{clean();locked=false;status("Unable to contact inventory system.","err")};
  s.src=API_URL+"?mode=item&item="+encodeURIComponent(code)+"&prefix="+encodeURIComponent(cb)+"&_="+Date.now();document.body.appendChild(s)}
 function add(code,name){if(cart[code])cart[code].qty++;else cart[code]={item:String(code),name:String(name),qty:1};render()}
